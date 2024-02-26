@@ -1,0 +1,107 @@
+.mentionEntry {
+    /* Custom styles for each entry */
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 999;
+    background-color: #fff;
+    /* background-color: red; */
+}
+
+.mentionEntry img {
+    min-width: 25px;
+    min-width: 25px;
+    max-width: 25px;
+    max-height: 25px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 100%;
+}
+
+.mentionEntry:hover {
+    background-color: #f0f0f0;
+}
+
+.DraftEditor-root {
+    position: relative;
+}
+
+.DraftEditor-root .public-DraftEditorPlaceholder-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.5;
+}
+
+/* *** Rich Utilts */
+.DraftEditor-root {
+    /* Editor container styles */
+}
+
+.public-DraftStyleDefault-bold {
+    font-weight: bold;
+}
+
+.public-DraftStyleDefault-italic {
+    font-style: italic;
+}
+
+.public-DraftStyleDefault-underline {
+    text-decoration: underline;
+}
+
+/* *** Toolbar */
+.toolbar {
+    border: 1px solid #111;
+    background: #333;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px 0px rgba(220, 220, 220, 1);
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+.toolbar:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-top-color: #333;
+    border-width: 4px;
+    margin-left: -4px;
+}
+
+.toolbar:before {
+    border-color: rgba(221, 221, 221, 0);
+    border-top-color: #111;
+    border-width: 6px;
+    margin-left: -6px;
+}
+
+.buttonWrapper {
+    display: inline-block;
+}
+
+.DraftEditor-root ol,
+.DraftEditor-root menu,
+#TaskChatMentions ol {
+    list-style: auto;
+    margin-left: 15px;
+}
+
+.DraftEditor-root ul, 
+#TaskChatMentions ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.mention {
+    color: #1e3a8a;
+    background-color: #eff6ff;
+    font-weight: bold;
+}
+
+.mentionedCurrentUser {
+    color: #881337;;
+    background-color: #fff1f2;
+    font-weight: bold;
+}
