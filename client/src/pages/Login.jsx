@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast'
 
 import backgroundImage from "../assets/pexels-feyza-yıldırım-15795337.jpg"
 import { UserContext } from '../context/UserContext';
@@ -58,7 +59,18 @@ function Login() {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
                 navigate('/dashboard');
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.log("HELLO");
+                toast('Incorrect credentials. Please try again.', {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#ef4444',
+                        color: "#fff"
+                    }
+                })
+                // console.error(err)
+            });
 
         setEmail('');
         setPassword('');
@@ -115,6 +127,8 @@ function Login() {
                     alt=""
                     loading="lazy" />
             </section>
+
+            <Toaster />
         </div>
     );
 }

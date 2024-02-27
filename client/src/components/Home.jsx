@@ -1,18 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Home() {
-    return (
-        <div>
-            <section>
-                <h1>Hello World - Welcome</h1>
-            </section>
+    const navigate = useNavigate()
 
-            <section>
-                <Link to="/register">Register</Link>
-                <Link to="/login">Login</Link>
-            </section>
-        </div>
+    useEffect(() => {
+        navigate("/login")
+    }, [navigate])
+    return (
+        <>
+        </>
     )
 }
 
