@@ -72,7 +72,6 @@ const DraftEditor = ({ editorState, setEditorState }) => {
     }, [suggestions]);
 
     const onSearchChange = useCallback(({ value }) => {
-        console.log("SEARCH");
         setSuggestions(customSuggestionsFilter(value, allUsers));
         // setSuggestions(defaultSuggestionsFilter(value, suggestions));
     }, [allUsers]);
