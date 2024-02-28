@@ -45,8 +45,8 @@ const CreateTask = () => {
 
     const { baseURL } = useContext(ConfigContext);
 
-    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-violet-500"
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
+    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
     const imageSrc = baseURL + "/uploads/"
 
     const handleInputChange = (e) => {
@@ -420,7 +420,7 @@ const CreateTask = () => {
 
                         {/* <p>Current sprint: {activeSprint.sprintId}</p> */}
 
-                        <button type="submit" className='button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-violet-800'>Create Task</button>
+                        <button type="submit" className='button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Create Task</button>
                     </form>
                 </span>
 
@@ -459,7 +459,7 @@ const CreateTask = () => {
                         <span>
                             {displayCount < tasks.length && (
                                 <button onClick={handleLoadMore}
-                                className='bg-white text-slate-900 mt-5 h-fit whitespace-nowrap button border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-violet-800'>
+                                className='bg-white text-slate-900 mt-5 h-fit whitespace-nowrap button border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>
                                     Load More Tasks
                                 </button>
                             )}

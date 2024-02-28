@@ -88,7 +88,7 @@ const TaskVerticalsOverview = () => {
 
                                     <Table.Body className="divide-y">
                                         {isLoading ? (
-                                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                            <Table.Row className="bg-white  ">
                                                 <Table.Cell>
                                                     <div className="absolute top-5 left-0 w-full h-full flex items-center justify-center">
                                                         <FaSpinner className="animate-spin text-rose-500 text-4xl" />
@@ -98,12 +98,12 @@ const TaskVerticalsOverview = () => {
                                         ) : (
                                             timeRegistrations &&
                                             timeRegistrations.map((regs) => (
-                                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={regs.vertical}>
-                                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                <Table.Row className="bg-white  " key={regs.vertical}>
+                                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                                         {regs.vertical}
                                                     </Table.Cell>
 
-                                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                                         {regs.hoursRegistered}
                                                     </Table.Cell>
                                                 </Table.Row>

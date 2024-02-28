@@ -26,7 +26,7 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
     return (
         <div
             id={taskId}
-            className={`task-card block p-3 mb-2 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer ${taskType === "quickTask" ? "bg-amber-50 border-amber-500" : "bg-white"}`}>
+            className={`task-card block p-3 mb-2 border border-gray-200 rounded-lg shadow hover:bg-gray-100    cursor-pointer ${taskType === "quickTask" ? "bg-amber-50 border-amber-500" : "bg-white"}`}>
             <span>
                 <section className='flex gap-2'>
                     <span

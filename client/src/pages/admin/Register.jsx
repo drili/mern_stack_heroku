@@ -44,10 +44,10 @@ function Register() {
 
                 <form onSubmit={onSubmit}>
                     <div className='mb-6'>
-                        <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>Username</label>
+                        <label className='block mb-2 text-sm font-medium text-gray-900 '>Username</label>
                         <input 
                             placeholder='Enter your username'
-                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-violet-500'
+                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      '
                             type="text"
                             required
                             value={username}
@@ -56,9 +56,9 @@ function Register() {
                     </div>
 
                     <div className='mb-6'>
-                        <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>Email</label>
+                        <label className='block mb-2 text-sm font-medium text-gray-900 '>Email</label>
                         <input 
-                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-violet-500'
+                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      '
                             placeholder='Enter your email'
                             type="email"
                             required
@@ -68,9 +68,9 @@ function Register() {
                     </div>
 
                     <div className='mb-6'>
-                        <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>Password</label>
+                        <label className='block mb-2 text-sm font-medium text-gray-900 '>Password</label>
                         <input
-                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-violet-500'
+                            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      '
                             placeholder='Enter your password' 
                             type="password"
                             required
@@ -81,7 +81,7 @@ function Register() {
 
                     <div>
                         <input 
-                            className='button text-white mt-10 bg-rose-500 hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-violet-800'
+                            className='button text-white mt-10 bg-rose-500 hover:bg-rose-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '
                             type="submit" 
                             value="Register Account" />
                     </div>

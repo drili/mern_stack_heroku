@@ -52,7 +52,7 @@ const DashboardTeamEfforts = ({ registrationData, activeSprint }) => {
 
                         <Table.Body className="divide-y">
                             {isLoading ? (
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Row className="bg-white  ">
                                     <Table.Cell>
                                         <div className="absolute top-5 left-0 w-full h-full flex items-center justify-center">
                                             <FaSpinner className="animate-spin text-rose-500 text-4xl" />
@@ -62,8 +62,8 @@ const DashboardTeamEfforts = ({ registrationData, activeSprint }) => {
                             ) : (
                                 registrationData &&
                                 registrationData.map((regs) => (
-                                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={regs._id}>
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    <Table.Row className="bg-white  " key={regs._id}>
+                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                             <div className='flex gap-4 items-center'>
                                                 <span className='w-[40px] h-[40px]'>
                                                     <img
@@ -77,23 +77,23 @@ const DashboardTeamEfforts = ({ registrationData, activeSprint }) => {
                                             </div>
                                         </Table.Cell>
 
-                                        <Table.Cell className="whitespace-nowrap text-gray-900 dark:text-white font-bold underline">
+                                        <Table.Cell className="whitespace-nowrap text-gray-900  font-bold underline">
                                             {regs.totalTime} hours
                                         </Table.Cell>
 
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                             {regs.internTime} hours
                                         </Table.Cell>
 
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                             {regs.clientTime} hours
                                         </Table.Cell>
 
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                             {regs.restTime} hours
                                         </Table.Cell>
 
-                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                             <div className='max-h-[50px]'>
                                                 {regs.totalTime > 0 ? (
                                                     <DashboardTeamEffortsDoughnutChart
