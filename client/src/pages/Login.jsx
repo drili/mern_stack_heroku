@@ -128,7 +128,6 @@ function Login() {
                     loading="lazy" />
             </section>
 
-            <Toaster />
         </div>
     );
 }

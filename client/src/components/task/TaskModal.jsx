@@ -322,7 +322,6 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                 ) : null}
             </>
 
-            <Toaster />
         </div>
     )
 }

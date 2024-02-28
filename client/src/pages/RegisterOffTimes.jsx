@@ -136,7 +136,6 @@ const RegisterOffTimes = () => {
                 </Card>
             </section>
 
-            <Toaster />
         </div>
     )
 }

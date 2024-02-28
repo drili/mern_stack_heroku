@@ -251,7 +251,6 @@ const PersonsOverview = () => {
                 </Accordion>
             </div>
 
-            <Toaster/>
         </div >
     )
 }

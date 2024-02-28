@@ -176,7 +176,6 @@ const Profile = () => {
                 </span>
             </section>
 
-            <Toaster />
         </div>
     )
 }

@@ -187,7 +187,6 @@ const CreateCustomer = () => {
                 </span>
             </section>
 
-            <Toaster />
         </div>
     )
 }

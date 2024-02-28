@@ -468,8 +468,6 @@ const CreateTask = () => {
                 </span>
             </section>
 
-            <Toaster />
-
             {selectedTaskId && (
                 <TaskModal
                     taskID={selectedTaskId}

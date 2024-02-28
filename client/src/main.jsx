@@ -1,6 +1,7 @@
 import React from 'react'
 import * as ReactDOM from "react-dom/client";
 import { initFlowbite } from 'flowbite';
+import { Toaster } from 'react-hot-toast';
 
 import './tailwind.css';
 import './index.css'
@@ -16,5 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 		<UserProvider>
 			<Routes />
 		</UserProvider>
+
+		<Toaster/>
 	</ConfigProvider>
 )

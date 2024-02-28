@@ -155,7 +155,6 @@ const TimeRegistrations = () => {
                 </div>
             </section>
 
-            <Toaster />
         </div>
     )
 }

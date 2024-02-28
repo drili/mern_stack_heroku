@@ -134,7 +134,6 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                 </div>
             </span>
 
-            {/* <Toaster /> */}
         </div>
     )
 }
