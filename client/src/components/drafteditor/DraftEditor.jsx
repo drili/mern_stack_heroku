@@ -27,6 +27,7 @@ const DraftEditor = ({ editorState, setEditorState }) => {
     const ref = useRef(null);
     // const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [open, setOpen] = useState(false);
+    const [allUsers, setAllUsers] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
 
     const { baseURL } = useContext(ConfigContext);
@@ -40,11 +41,20 @@ const DraftEditor = ({ editorState, setEditorState }) => {
                 link: `${baseURL}/profile?${user._id}`,
                 avatar: user.profileImage,
             }))
-            setSuggestions(transformedUsers)
+            setAllUsers(transformedUsers);
         } catch (error) {
             console.error('Failed to fetch users', error);
         }
     }
+
+    const customSuggestionsFilter = (searchValue, suggestions) => {
+        const value = searchValue.toLowerCase();
+        const filteredSuggestions = suggestions.filter((suggestion) => (
+            !value || suggestion.name.toLowerCase().includes(value)
+        ));
+        const length = Math.min(filteredSuggestions.length, 20);
+        return filteredSuggestions.slice(0, length);
+    };
 
     // Initialize the mention plugin
     const mentionPlugin = useMemo(() => createMentionPlugin(), []);
@@ -62,8 +72,10 @@ const DraftEditor = ({ editorState, setEditorState }) => {
     }, [suggestions]);
 
     const onSearchChange = useCallback(({ value }) => {
-        setSuggestions(defaultSuggestionsFilter(value, suggestions));
-    }, [suggestions]);
+        console.log("SEARCH");
+        setSuggestions(customSuggestionsFilter(value, allUsers));
+        // setSuggestions(defaultSuggestionsFilter(value, suggestions));
+    }, [allUsers]);
 
     const MentionEntry = (props) => {
         const { isFocused, searchValue, selectMention, ...parentProps } = props;

@@ -1,5 +1,5 @@
 function processHtmlContent(htmlContent, currentUserId) {
-    console.log({htmlContent, currentUserId});
+    // console.log({htmlContent, currentUserId});
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
 

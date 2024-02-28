@@ -16,7 +16,7 @@ const options = {
         const entityType = entity.get('type').toLowerCase();
         if (entityType === 'mention') {
             const data = entity.getData();
-            console.log({ data });
+            // console.log({ data });
             return {
                 element: 'span',
                 attributes: {
