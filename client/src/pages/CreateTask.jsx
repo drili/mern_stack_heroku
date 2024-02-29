@@ -122,7 +122,14 @@ const CreateTask = () => {
     const fetchLabels = async () => {
         try {
             const response = await axios.get(baseURL + "/labels/fetch-labels")
+            const labelsData = response.data;
+            const defaultLabelId = labelsData.find(label => label.labelName === "Ingen label")?._id;
+
             setLabels(response.data)
+            setTaskData(prevData => ({
+                ...prevData,
+                taskLabel: prevData.taskLabel || defaultLabelId
+            }));
         } catch (error) {
             console.error('Failed to fetch labels', error);
         }
@@ -132,6 +139,14 @@ const CreateTask = () => {
         try {
             const response = await axios.get(baseURL + "/verticals/fetch-verticals")
             setVerticals(response.data)
+
+            if (response.data.length > 0) {
+                const firstVerticalId = response.data[0]._id;
+                setTaskData(prevData => ({
+                    ...prevData,
+                    taskVertical: firstVerticalId,
+                }));
+            }
         } catch (error) {
             console.error('Failed to fetch verticals', error);
         }
@@ -151,8 +166,8 @@ const CreateTask = () => {
     }, [])
 
     const handleFormChange = (e) => {
-        const { name, value } = e.target
-        setTaskData((prevData) => ({
+        const { name, value } = e.target;
+        setTaskData(prevData => ({
             ...prevData,
             [name]: value
         }))
@@ -361,11 +376,15 @@ const CreateTask = () => {
                                     name="taskLabel"
                                     placeholder='Task Label'
                                     required
+                                    value={taskData.taskLabel}
                                     className={inputClasses}>
-                                        <option>Select Label</option>
+                                        <option disabled>Select Label</option>
                                         {labels
                                             .map((label) => (
-                                                <option value={label._id} key={label._id}>{label.labelName}</option>
+                                                <option 
+                                                    value={label._id} 
+                                                    key={label._id}
+                                                >{label.labelName}</option>
                                             ))
                                         }
                                 </select>
@@ -378,7 +397,7 @@ const CreateTask = () => {
                                     placeholder='Task Vertical'
                                     required
                                     className={inputClasses}>
-                                        <option>Select Vertical</option>
+                                        <option disabled>Select Vertical</option>
                                         {verticals
                                             .map((vertical) => (
                                                 <option value={vertical._id} key={vertical._id}>{vertical.verticalName}</option>
