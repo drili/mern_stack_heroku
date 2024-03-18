@@ -84,6 +84,9 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
                     <Table.HeadCell className='text-left'>
                         Task Name
                     </Table.HeadCell>
+                    <Table.HeadCell className='text-left p-0'>
+                        Task Customer
+                    </Table.HeadCell>
                     {/* <Table.HeadCell className='text-left'>
                         Client
                     </Table.HeadCell> */}
@@ -102,11 +105,16 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
                     {eventObjState &&
                         eventObjState.map(event => (
                             <Table.Row className="bg-white  " key={event._id}>
-                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-xs leading-3">
+                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-[10px] leading-3">
                                     {event.taskId ? event.taskId.taskName : "Off- & Sicktime"}
                                     {/* {event.taskId ? event.taskId.taskName : (event.registrationType === "offtime" ? "offtime" : "sicktime")} */}
                                 </Table.Cell>
-                                <Table.Cell className='whitespace-break-spaces text-xs'>
+                                
+                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-[10px] leading-3 p-0">
+                                    {event.taskId?.taskCustomer?.customerName}
+                                </Table.Cell>
+
+                                <Table.Cell className='whitespace-break-spaces text-xs max-w-[120px]'>
                                     <input
                                         step="0.25"
                                         className={inputClasses}
@@ -116,22 +124,22 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
                                     />
                                 </Table.Cell>
 
-                                <Table.Cell className='whitespace-break-spaces text-xs'>
+                                <Table.Cell className='whitespace-break-spaces text-[10px]'>
                                     <a
-                                        className="font-medium text-cyan-600 hover:underline  text-xs"
+                                        className="font-medium text-cyan-600 hover:underline  text-[10px]"
                                         onClick={() => handleSaveTime(event)}
                                     >
-                                    <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-xs'>
+                                    <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-[10px]'>
                                         Save
                                     </p>
                                     </a>
                                 </Table.Cell>
-                                <Table.Cell className='whitespace-break-spaces text-xs'>
+                                <Table.Cell className='whitespace-break-spaces text-[10px]'>
                                     <a
-                                        className="font-medium text-rose-950 hover:underline  text-xs"
+                                        className="font-medium text-rose-950 hover:underline  text-[10px]"
                                         onClick={() => handleDeleteTime(event._id)}
                                     >
-                                    <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-xs'>
+                                    <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-[10px]'>
                                         Delete
                                     </p>
                                     </a>

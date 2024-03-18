@@ -141,7 +141,13 @@ router.route("/time-registrations-by-date/:date/:userId").get(async (req, res) =
         const timeRegistrations = await TimeRegistration.find({
             currentTime: date,
             userId: userId
-        }).populate("taskId")
+        }).populate({
+            path: "taskId",
+            populate: {
+                path: "taskCustomer",
+                model: "Customer"
+            }
+        })
 
         return res.status(200).json(timeRegistrations)
     } catch (error) {

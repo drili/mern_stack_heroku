@@ -60,7 +60,6 @@ const TimeRegistrations = () => {
             const response = await axios.get(`${baseURL}/time-registrations/time-registrations-by-date/${date}/${user.id}`)
             setEventsByDate(response.data)
 
-            console.log(response.data)
         } catch (error) {
             console.error('Failed to fetch time registrations by date', error)
         }
@@ -85,7 +84,7 @@ const TimeRegistrations = () => {
             />
 
             <section className='grid grid-cols-10 gap-10 mb-10'>
-                <div className='col-span-6'>
+                <div className='col-span-5'>
                     <div style={{ height: 500 }}>
                         <Calendar
                             localizer={localizer}
@@ -135,7 +134,7 @@ const TimeRegistrations = () => {
                     </div>
                 </div>
 
-                <div className='col-span-4'>
+                <div className='col-span-5'>
                     <Card className='h-auto'>
                         <h3 className="font-bold">Your time registrations</h3>
                         <span className='flex gap-1 items-center flex-row'>

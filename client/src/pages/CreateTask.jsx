@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { BiSolidTimeFive } from "react-icons/bi"
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { BsFillLightningChargeFill } from "react-icons/bs";
+import { FaDivide } from "react-icons/fa";
 
 import { UserContext } from '../context/UserContext'
 import TaskModal from '../components/task/TaskModal'
@@ -40,12 +41,14 @@ const CreateTask = () => {
     const [selectedSprints, setSelectedSprints] = useState([]);
     const [displayCount, setDisplayCount] = useState(5)
     const [toggleViewState, setToggleViewState] = useState("timedTask")
+    const [toggleShowAdjustPercentages, setToggleShowAdjustPercentages] = useState(false)
+    const [percentageAllocations, setPercentageAllocations] = useState([]);
 
     const activeSprint = getCurrentSprint()
 
     const { baseURL } = useContext(ConfigContext);
 
-    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
+    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
     const imageSrc = baseURL + "/uploads/"
 
@@ -55,6 +58,10 @@ const CreateTask = () => {
             ...taskData,
             [name]: value
         })
+    }
+
+    const handleTogglePercentAlloc = () => {
+        setToggleShowAdjustPercentages(!toggleShowAdjustPercentages)
     }
 
     const handleViewState = (value) => {
@@ -186,7 +193,7 @@ const CreateTask = () => {
 
         const personsWithPercentage = selectedOptions.map((option) => ({
             user: option.value,
-            percentage:  100 / numberOfUsers,
+            percentage: Number((100 / numberOfUsers).toFixed(0)),
         }))
 
         setTaskData((prevData) => ({
@@ -198,10 +205,20 @@ const CreateTask = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        console.log({taskData});
+        let finalTaskData = { ...taskData }
+
+        if (toggleShowAdjustPercentages) {
+            const updatedTaskPersons = updateTaskDataWithNewPercentages()
+            finalTaskData = {
+                ...taskData,
+                taskPersons: updatedTaskPersons
+            }
+        }
+
+        console.log({finalTaskData})
 
         try {
-            const response = await axios.post(baseURL + "/tasks/create", taskData)
+            const response = await axios.post(baseURL + "/tasks/create", finalTaskData)
             setTasks([])
 
             if (response.status === 200) {
@@ -257,10 +274,29 @@ const CreateTask = () => {
             }));
         }
     }, [activeSprint, sprints]);
+
+    const handlePercentageChange = (userId, newPercentage) => {
+        setPercentageAllocations(currentAllocations =>
+            currentAllocations.map(allocation =>
+                allocation.user === userId ? { ...allocation, percentage: newPercentage === "" ? "" : Number(newPercentage) } : allocation
+            )
+        );
+    }
     
+    const updateTaskDataWithNewPercentages = () => {
+        return percentageAllocations
+    }
+
+    useEffect(() => {
+        setPercentageAllocations(taskData.taskPersons.map(person => ({
+            user: person.user,
+            percentage: person.percentage || Number((100 / taskData.taskPersons.length).toFixed(0))
+        })))
+    }, [taskData.taskPersons])
+
     return (
         <div id='createTaskPage'>
-            <PageHeading 
+            <PageHeading
                 heading="Create Task"
                 subHeading={`Create a new task.`}
                 suffix="Complete the form and submit the data"
@@ -274,47 +310,47 @@ const CreateTask = () => {
                                 <div>
                                     <h2 className='font-bold mb-0'>Create new <span className={`${toggleViewState === "timedTask" ? "text-slate-500" : "text-amber-500"}`}>
                                         {toggleViewState === "timedTask" ? "timed" : "quick"}</span> task
-                                        </h2>
+                                    </h2>
                                 </div>
 
                                 <div className='flex items-start pb-0 rounded-t'>
-                                    <button 
-                                        className={`${toggleViewState === "timedTask" ? "bg-slate-500 text-white font-bold border-slate-200" : "" } rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100 flex gap-2 items-center`} 
+                                    <button
+                                        className={`${toggleViewState === "timedTask" ? "bg-slate-500 text-white font-bold border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100 flex gap-2 items-center`}
                                         onClick={() => handleViewState("timedTask")}
                                         type='button'
-                                        >
+                                    >
                                         Timed Task <AiOutlineClockCircle />
                                     </button>
-                                    <button 
-                                        className={`${toggleViewState === "quickTask" ? "bg-amber-500 text-white font-bold border-amber-200" : "" } rounded-none border-amber-100 focus:outline-none hover:border-amber-100 flex gap-2 items-center`} 
+                                    <button
+                                        className={`${toggleViewState === "quickTask" ? "bg-amber-500 text-white font-bold border-amber-200" : ""} rounded-none border-amber-100 focus:outline-none hover:border-amber-100 flex gap-2 items-center`}
                                         onClick={() => handleViewState("quickTask")}
                                         type='button'
-                                        >
+                                    >
                                         Quick Task <BsFillLightningChargeFill />
                                     </button>
                                 </div>
                             </section>
 
-                            <hr className='mb-5'/>
+                            <hr className='mb-5' />
                         </span>
 
                         <div>
                             <label htmlFor="taskName" className={labelClasses}>Task Name</label>
-                            <input type="text" name="taskName" value={taskData.taskName} onChange={handleFormChange} placeholder="Task Name" required 
-                            className={inputClasses} />
+                            <input type="text" name="taskName" value={taskData.taskName} onChange={handleFormChange} placeholder="Task Name" required
+                                className={inputClasses} />
                         </div>
 
                         {toggleViewState === "timedTask" ? (
                             <span className='grid grid-cols-2 gap-4'>
                                 <div>
                                     <label className={labelClasses} htmlFor="taskTimeLow">Task Time Low</label>
-                                    <input type="number" name="taskTimeLow" value={taskData.taskTimeLow} onChange={handleFormChange} placeholder="Task Time Low" required 
-                                    className={inputClasses} />
+                                    <input type="number" name="taskTimeLow" value={taskData.taskTimeLow} onChange={handleFormChange} placeholder="Task Time Low" required
+                                        className={inputClasses} />
                                 </div>
                                 <div>
                                     <label className={labelClasses} htmlFor="taskTimeHigh">Task Time High</label>
-                                    <input type="number" name="taskTimeHigh" value={taskData.taskTimeHigh} onChange={handleFormChange} placeholder="Task Time High" required 
-                                    className={inputClasses} />
+                                    <input type="number" name="taskTimeHigh" value={taskData.taskTimeHigh} onChange={handleFormChange} placeholder="Task Time High" required
+                                        className={inputClasses} />
                                 </div>
 
                                 <span className='hidden'>
@@ -335,8 +371,8 @@ const CreateTask = () => {
                                 </span>
                                 <div>
                                     <label className={labelClasses} htmlFor="estimatedTime">Estimated Time <span className='text-slate-300'>optional</span></label>
-                                    <input type="number" name="estimatedTime" value={taskData.estimatedTime} onChange={handleFormChange} placeholder="Estimated Task Time" 
-                                    className={inputClasses} />
+                                    <input type="number" name="estimatedTime" value={taskData.estimatedTime} onChange={handleFormChange} placeholder="Estimated Task Time"
+                                        className={inputClasses} />
                                 </div>
 
                                 <span className='hidden'>
@@ -347,24 +383,24 @@ const CreateTask = () => {
 
                         <div>
                             <label className={labelClasses} htmlFor="taskDescription">Task Description</label>
-                            <textarea required={false} name="taskDescription" value={taskData.taskDescription} onChange={handleFormChange} placeholder="Task Description" 
-                            className={inputClasses} />
+                            <textarea required={false} name="taskDescription" value={taskData.taskDescription} onChange={handleFormChange} placeholder="Task Description"
+                                className={inputClasses} />
                         </div>
                         <div>
                             <label className={labelClasses} htmlFor="taskCustomer">Task Customer</label>
-                            <select 
+                            <select
                                 name="taskCustomer"
                                 onChange={handleFormChange}
-                                placeholder="Task Customer" 
+                                placeholder="Task Customer"
                                 required
-                                className={inputClasses} 
-                                >
+                                className={inputClasses}
+                            >
                                 <option>Select Customer</option>
                                 {customers
                                     .filter((customer) => !customer.archived)
                                     .map((customer) => (
                                         <option value={customer._id} key={customer._id}>{customer.customerName}</option>
-                                    ))    
+                                    ))
                                 }
                             </select>
                         </div>
@@ -378,15 +414,15 @@ const CreateTask = () => {
                                     required
                                     value={taskData.taskLabel}
                                     className={inputClasses}>
-                                        <option disabled>Select Label</option>
-                                        {labels
-                                            .map((label) => (
-                                                <option 
-                                                    value={label._id} 
-                                                    key={label._id}
-                                                >{label.labelName}</option>
-                                            ))
-                                        }
+                                    <option disabled>Select Label</option>
+                                    {labels
+                                        .map((label) => (
+                                            <option
+                                                value={label._id}
+                                                key={label._id}
+                                            >{label.labelName}</option>
+                                        ))
+                                    }
                                 </select>
                             </div>
                             <div>
@@ -397,17 +433,17 @@ const CreateTask = () => {
                                     placeholder='Task Vertical'
                                     required
                                     className={inputClasses}>
-                                        <option disabled>Select Vertical</option>
-                                        {verticals
-                                            .map((vertical) => (
-                                                <option value={vertical._id} key={vertical._id}>{vertical.verticalName}</option>
-                                            ))
-                                        }
+                                    <option disabled>Select Vertical</option>
+                                    {verticals
+                                        .map((vertical) => (
+                                            <option value={vertical._id} key={vertical._id}>{vertical.verticalName}</option>
+                                        ))
+                                    }
                                 </select>
                             </div>
                         </span>
-                        
-                        <div>
+
+                        <div className='mt-0'>
                             <label className={labelClasses} htmlFor="taskPersons">Task Persons</label>
                             <Select
                                 name="taskPersons"
@@ -419,8 +455,40 @@ const CreateTask = () => {
                                 isMulti
                                 required
                             ></Select>
+
+                            {taskData?.taskPersons?.length > 1 && (
+                                <p
+                                    onClick={handleTogglePercentAlloc}
+                                    className='text-blue-700 text-sm cursor-pointer mt-2 flex align-center items-center gap-1'>
+                                    Adjust percentage allocations <FaDivide className='text-xs' />
+                                </p>
+                            )}
+
+                            {toggleShowAdjustPercentages && (
+                                <div className='mt-5'>
+                                    {percentageAllocations.map((allocation, index) => {
+                                        const matchingUser = activeUsers.find(user => user._id === allocation.user);
+                                        const displayName = matchingUser ? matchingUser.username : allocation.user;
+
+                                        return (
+                                            <div key={index} className='grid grid-cols-12 items-center mb-2'>
+                                                <p className='col-span-4 text-sm'>{displayName}</p>
+                                                <input
+                                                    type="number"
+                                                    value={allocation.percentage}
+                                                    max="100"
+                                                    min="1"
+                                                    onChange={(e) => handlePercentageChange(allocation.user, e.target.value)}
+                                                    className={`mb-0 col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5`}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
-                        <div>
+
+                        <div className='mt-4'>
                             <label className={labelClasses} htmlFor="taskSprints">Task Sprints</label>
                             {activeSprint && selectedSprints && sprints && (
                                 <Select
@@ -447,9 +515,9 @@ const CreateTask = () => {
                     <div className='shadow-md p-10 rounded-lg mb-10 bg-slate-50'>
                         <span>
                             <h2 className='font-bold mb-5'>Your Recent Created Tasks</h2>
-                            <hr className='mb-5'/>
+                            <hr className='mb-5' />
                         </span>
-                        
+
                         <span id='tasksList'>
                             {tasks.slice(0, displayCount).map((task) => (
                                 <span
@@ -478,7 +546,7 @@ const CreateTask = () => {
                         <span>
                             {displayCount < tasks.length && (
                                 <button onClick={handleLoadMore}
-                                className='bg-white text-slate-900 mt-5 h-fit whitespace-nowrap button border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>
+                                    className='bg-white text-slate-900 mt-5 h-fit whitespace-nowrap button border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>
                                     Load More Tasks
                                 </button>
                             )}
@@ -496,7 +564,7 @@ const CreateTask = () => {
                     fetchTasks={fetchTasks}
                 />
             )}
-            
+
         </div>
     )
 }

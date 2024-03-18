@@ -1,0 +1,70 @@
+[
+    {
+        "releaseVersion": "2.0.1",
+        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-jan-van-der-wolf-20207148.jpg",
+        "releaseDate": "18-03-2024",
+        "releaseObject": [
+            {
+                "name": "Manual Percent Allocation",
+                "description": [
+                    "Introduced a dynamic percent allocation feature for task assignments, allowing for the precise distribution of task responsibilities among team members. Upon selecting users for a task, the system automatically calculates and assigns an equal percentage of task involvement to each individual. Additionally, a new adjustment option enables manual reallocation of these percentages, providing the flexibility to specify exact involvement levels per user.",
+                    "Manual percentage allocation is only available when more than 1 user has been selected to a task",
+                    "Example: https://gyazo.com/3c402e2cf2ac024d4052a88dbbffcdf1"
+                ]
+            },
+            {
+                "name": "Enhanced Customer Visibility on Time Registrations",
+                "description": [
+                    "Enhanced the time registration overview by integrating customer details, allowing for immediate identification and access to customer-specific tasks upon selection."
+                ]
+            },
+            {
+                "name": "Customer Information in Task Modals",
+                "description": [
+                    "Improved task modals with the inclusion of customer names, providing users with a quick reference to the associated customer for each task, streamlining task management."
+                ]
+            },
+            {
+                "name": "Interactive Sound Alerts for Notifications",
+                "description": [
+                    "Introduced sound notifications to alert users of new tags in task chats, ensuring timely responses and maintaining engagement, even when the application is not in the foreground."
+                ]
+            },
+            {
+                "name": "Release Notes Page",
+                "description": [
+                    "Launched a dedicated page for release notes, showcasing the latest updates, features, and improvements in an easily accessible format, keeping users informed about the application's evolution."
+                ]
+            },
+            {
+                "name": "UI Enhancements and Optimizations",
+                "description": [
+                    "Implemented a series of UI refinements, including the addition of a comprehensive footer, optimization of layout width for improved readability, and adjustments to the time registrations overview for enhanced usability."
+                ]
+            }
+        ]
+    },
+    {
+        "releaseVersion": "2.0.0",
+        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-fabrizio-miyashiro-17046473-1.jpg",
+        "releaseDate": "28-02-2024",
+        "releaseObject": [
+            {
+                "name": "Official 2.0.0 Release of TaskAlloc8or",
+                "description": [
+                    "We are thrilled to announce the official release of TaskAlloc8or version 2.0.0, marking a significant milestone in the evolution of our project management platform. This update introduces a suite of new features designed to enhance user productivity and streamline task management processes.",
+                    "Highlights include an intuitive drag-and-drop interface for task assignments, real-time collaboration tools, and customizable dashboards for a more personalized user experience.",
+                    "Additionally, we've implemented a comprehensive redesign of the UI, incorporating modern design principles for improved usability and aesthetics.",
+                    "TaskAlloc8or 2.0.0 also brings improved notification systems, ensuring users stay informed of task updates and deadlines. This release represents our commitment to providing a powerful, user-friendly platform for managing tasks, projects, and teams more effectively."
+                ]
+            },
+            {
+                "name": "Updated Codebase, Server & Database Architecture",
+                "description": [
+                    "With the latest update, we've undertaken a significant overhaul of TaskAlloc8or's technical foundation, transitioning our platform from a PHP-based architecture to the modern, efficient MERN stack (MongoDB, Express.js, React, and Node.js). This move not only enhances the application's performance and scalability but also aligns our development process with current industry standards for more agile and responsive updates in the future.",
+                    "Hosting on Heroku's cloud platform further improves our server reliability and enables seamless scaling options as our user base grows. The updated database architecture optimizes data retrieval and storage, ensuring a smoother user experience across all features, from task creation and time registration to user management and reporting. These improvements lay the groundwork for a robust, scalable web application that meets the evolving needs of project teams and managers."
+                ]
+            }
+        ]
+    }
+]

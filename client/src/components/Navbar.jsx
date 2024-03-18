@@ -8,6 +8,9 @@ import { UserContext } from '../context/UserContext';
 import userImage from "../assets/profile-pics/default-image.jpg"
 import Logo from '../components/Logo';
 import { ConfigContext } from '../context/ConfigContext';
+import notificationSoundFile from "../assets/sounds/short-success-sound-glockenspiel-treasure-video-game-6346.mp3";
+
+const notificationSound = new Audio(notificationSoundFile);
 
 const Navbar = () => {
     const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
@@ -87,6 +90,14 @@ const Navbar = () => {
 
         socket.on('new-notification', (data) => {
             setHasUnreadNotifications(true);
+
+            notificationSound.play()
+                .then(() => {
+                    console.log("Notification sound played.");
+                })
+                .catch(error => {
+                    console.error("Error playing the notification sound", error)
+                })
             // console.log("NEW NOTIFICATION");
         });
 

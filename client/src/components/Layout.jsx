@@ -6,6 +6,7 @@ import { AiOutlineMenu } from "react-icons/ai"
 import SidebarLink from './navbar/SidebarLink'
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext'
+import Footer from './Footer'
 
 const Layout = ({ children }) => {
     const [showSidebar, setShowSidebar] = useState(true)
@@ -161,10 +162,14 @@ const Layout = ({ children }) => {
                     </button>
                 )}
 
-                <section id="mainSection" className='max-w-screen-xl flex mx-auto p-4"'>
+                <section id="mainSection" className='max-w-[1400px] flex mx-auto p-4'>
                     <div className='w-full'>
                         {children}
                     </div>
+                </section>
+
+                <section id='footerSection' className='max-w-[1400px] flex mx-auto p-4'>
+                    <Footer />
                 </section>
             </main>
         </div>
