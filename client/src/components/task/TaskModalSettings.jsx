@@ -96,9 +96,6 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const handleRemoveUser = async (e) => {
         e.preventDefault()
 
-        console.log({activeFilterUser});
-        console.log({sprintToUse});
-
         const taskPersonId = e.target.elements.taskPersonId.value
         if (!taskPersonId) {
             console.log('No taskPersonId')
@@ -229,15 +226,15 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                 <span id='sprints'>
                     <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateSprint}>
                         <span className='w-[50%]'>
-                            <label className={labelClasses} htmlFor="taskCustomer">Change Task Sprint</label>
+                            <label className={labelClasses} htmlFor="taskCustomer">Change Task Month</label>
                             <select
                                 name="taskSprintId"
-                                placeholder="Select Sprint"
+                                placeholder="Select Month"
                                 required
                                 className={`${inputClasses} min-w-[200px]`}
                                 onChange={(e) => handleInputChange(e)}
                             >
-                                <option>Select Sprint</option>
+                                <option>Select Month</option>
                                 {sprints
                                     .map((sprint) => (
                                         <option value={sprint._id} key={sprint._id}>{sprint.sprintName}</option>
@@ -247,7 +244,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                         </span>
 
                         <span>
-                            <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Sprint</button>
+                            <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Month</button>
                         </span>
                     </form>
                 </span>

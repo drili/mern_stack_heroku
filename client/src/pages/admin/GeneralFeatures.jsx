@@ -6,12 +6,12 @@ const GeneralFeatures = () => {
         <div id='GeneralFeaturesPage'>
             <PageHeading
                 heading="Admin General Features"
-                subHeading={`Create new sprint(s)/sprint-years, view archived tasks and more`}
+                subHeading={`Create new month(s)/month-years, view archived tasks and more`}
                 suffix=""
             />
 
             {/* // TODO: Add the following options:
-                1. Ability to create new sprints
+                1. Ability to create new months
                 3. ... figure out what else */}
         </div>
     )

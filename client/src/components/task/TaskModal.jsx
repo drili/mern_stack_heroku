@@ -198,7 +198,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
                                     <div className='flex items-start px-4 pt-5 pb-0 rounded-t md:px-10'>
                                         <button className={`${toggleViewState === "task" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100`} onClick={() => handleViewState("task")}>Task</button>
-                                        <button className={`${toggleViewState === "taskChat" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:border-slate-100`} onClick={() => handleViewState("taskChat")}>Task Chat</button>
+                                        <button className={`${toggleViewState === "taskChat" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:border-slate-100`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
                                     </div>
 
                                     {toggleViewState === "task" ? (
@@ -208,7 +208,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                             <div className='grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10'>
                                                 <section className='mt-5'>
                                                     {task[0]?.taskType !== "quickTask" && (
-                                                        <section>
+                                                        <div className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full'>
                                                             {task && (
                                                                 <TaskTimeRegistration
                                                                     labelClasses={labelClasses}
@@ -219,10 +219,12 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                                     verticalId={task[0]?.taskVertical}
                                                                 ></TaskTimeRegistration>
                                                             )}
-                                                        </section>
+                                                        </div>
                                                     )}
-
-                                                    <form className='mt-5 py-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none' onSubmit={handleUpdateTask}>
+                                                </section>
+                                                
+                                                <section id='taskModalUpdate' className='mt-5'>
+                                                    <form className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full' onSubmit={handleUpdateTask}>
                                                         <div>
                                                             <h2 className='font-semibold mb-5'>Update Task</h2>
                                                         </div>
@@ -285,7 +287,25 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task</button>
                                                     </form>
                                                 </section>
+                                            </div>
 
+                                            <div className="grid grid-cols-1 gap-5 md:grid-cols-1 md:gap-5 mt-10 pt-10">
+                                                <>
+                                                    <h2 className='font-semibold'>Task Chat</h2>
+                                                    {taskID && (
+                                                        <TaskChat 
+                                                            taskID={taskID} 
+                                                            taskCustomer={task[0]?.taskCustomer?._id}
+                                                        />
+                                                    )}
+                                                </>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
+                                            <hr />
+
+                                            <div className='grid grid-cols-1 gap-5 md:gap-10'>
                                                 <section id='taskModalSettings' className='mt-5'>
                                                     <TaskModalSettings
                                                         inputClasses={inputClasses}
@@ -303,20 +323,9 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         newSprintArray={newSprintArray}
                                                     />
                                                 </section>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
-                                            <hr />
 
-                                            <div className='grid grid-cols-1 gap-5 md:gap-10'>
                                                 <section className='mt-5'>
-                                                    {taskID && (
-                                                        <TaskChat 
-                                                            taskID={taskID} 
-                                                            taskCustomer={task[0]?.taskCustomer?._id}
-                                                            />
-                                                    )}
+                                                    
                                                 </section>
                                             </div>
                                         </div>

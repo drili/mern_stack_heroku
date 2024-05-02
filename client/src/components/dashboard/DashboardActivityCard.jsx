@@ -23,7 +23,7 @@ const DashboardActivityCard = ({ data }) => {
 
     return (
         <>
-            <h3 className="font-bold">Your recent activity this sprint</h3>
+            <h3 className="font-bold">Your recent activity this month</h3>
             <div id="recentActivity" className="grid grid-cols-2 place-items-center text-center">
                 <div className="w-full py-5 px-2 border-r border-b border-solid border-gray-100">
                     <h2 className={`${accumulatedTime.intern > 0 ? "text-amber-400" : "text-slate-500"} font-bold`}>{accumulatedTime.intern} hours</h2>
