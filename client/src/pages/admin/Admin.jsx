@@ -26,7 +26,7 @@ const Admin = () => {
                         </span>
                         <span>
                             <h2 className="text-lg font-bold text-gray-900">General Features</h2>
-                            <h2 className="text-sm font-light text-zinc-500">Create new <b className='font-bold'>Sprints</b>, and more. (new features TBA)</h2>
+                            <h2 className="text-sm font-light text-zinc-500">Create new <b className='font-bold'>Months</b>, and more. (new features TBA)</h2>
                         </span>
                     </div>
 

@@ -72,7 +72,7 @@ const SprintOverviewFilters = ({ onSelectedSprint }) => {
                             // onChange={(e) => handleSprintChange(e.target.value)}
                             onChange={handleSprintChange}
                             >
-                            <option disabled value="">Select sprint</option>
+                            <option disabled value="">Select month</option>
                             {sprints && sprints.map((sprint) => (
                                 <option 
                                     key={sprint?._id} 

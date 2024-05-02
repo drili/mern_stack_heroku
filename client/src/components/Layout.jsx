@@ -80,7 +80,7 @@ const Layout = ({ children }) => {
 
                             <SidebarLink
                                 menuLink="/sprint-overview"
-                                linkText="Sprint Overview"
+                                linkText="Month Overview"
                                 currentPath={currentPath}
                                 iconComponent={BsCalendar}
                             />

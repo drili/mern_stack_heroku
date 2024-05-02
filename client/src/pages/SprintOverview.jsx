@@ -44,9 +44,9 @@ const SprintOverview = () => {
     return (
         <div id="SprintOverviewPage">
             <PageHeading
-                heading="Sprint Overview"
-                subHeading={`An overview of your sprint`}
-                suffix="Toggle between persons & customers, and filter by sprint."
+                heading="Month Overview"
+                subHeading={`An overview of your month`}
+                suffix="Toggle between persons & customers, and filter by month."
             />
 
             <SprintOverviewFilters

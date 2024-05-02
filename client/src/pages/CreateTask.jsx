@@ -489,7 +489,7 @@ const CreateTask = () => {
                         </div>
 
                         <div className='mt-4'>
-                            <label className={labelClasses} htmlFor="taskSprints">Task Sprints</label>
+                            <label className={labelClasses} htmlFor="taskSprints">Task Month</label>
                             {activeSprint && selectedSprints && sprints && (
                                 <Select
                                     name="taskSprints"
