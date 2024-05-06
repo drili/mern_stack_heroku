@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FaWindowClose } from "react-icons/fa"
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai"
@@ -29,6 +29,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
 
     const { baseURL } = useContext(ConfigContext);
+    const modalContentRef = useRef(null)
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(taskID)
@@ -82,6 +83,11 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
         toast.dismiss()
     }
 
+    // TODO: Finish function
+    const handleClickOutside = (event) => {
+        
+    }
+
     useEffect(() => {
         if (showModalState) {
             setTimeout(() => {
@@ -98,6 +104,9 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
         setShowModal(showModalState)
         fetchTaskData(taskID)
+
+        // FIXME: Use state to check whether handleClickOutside function is active or not
+        // document.addEventListener("mousedown", handleClickOutside)
     }, [showModalState])
 
     const handleUpdateTask = async (event) => {
@@ -204,8 +213,8 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                     {toggleViewState === "task" ? (
                                         <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
                                             <hr />
-
-                                            <div className='grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-10'>
+                                            
+                                            <div className={`${task[0]?.taskType !== "quickTask" ? "md:grid-cols-2 gap-5 md:gap-10" : "md:grid-cols-0"} grid`}>
                                                 <section className='mt-5'>
                                                     {task[0]?.taskType !== "quickTask" && (
                                                         <div className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full'>
@@ -223,7 +232,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                     )}
                                                 </section>
                                                 
-                                                <section id='taskModalUpdate' className='mt-5'>
+                                                <section id='taskModalUpdate' className="mt-5">
                                                     <form className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full' onSubmit={handleUpdateTask}>
                                                         <div>
                                                             <h2 className='font-semibold mb-5'>Update Task</h2>
