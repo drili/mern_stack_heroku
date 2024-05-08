@@ -55,7 +55,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                 })
 
                 fetchTaskData(taskID)
-                fetchTasks(sprintToUse, activeFilterUser)
+                if (fetchTasks) {
+                    fetchTasks(sprintToUse, activeFilterUser)
+                }
                 // updateFunc()
             }
         } catch (error) {
@@ -84,7 +86,10 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                 const response = await axios.put(`${baseURL}/tasks/assign-user/${taskID}`, { assignedUserId })
                 if (response.status === 200) {
                     fetchTaskData(taskID)
-                    fetchTasks(sprintToUse, activeFilterUser)
+                    if (fetchTasks) {
+                        fetchTasks(sprintToUse, activeFilterUser)
+                    }
+                    
                     // updateFunc()
                 }
             } catch (error) {
@@ -105,7 +110,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
             const response = await axios.put(`${baseURL}/tasks/remove-user/${taskID}/${taskPersonId}`)
             if (response.status === 200) {
                 fetchTaskData(taskID)
-                fetchTasks(sprintToUse, activeFilterUser)
+                if (fetchTasks) {
+                    fetchTasks(sprintToUse, activeFilterUser)
+                }
             }
         } catch (error) {
             console.error('Failed to remove user from task:', error)
@@ -185,7 +192,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                     }
                 })
 
-                fetchTasks(sprintToUse, activeFilterUser)
+                if (fetchTasks) {
+                    fetchTasks(sprintToUse, activeFilterUser)
+                }
                 // updateFunc()
                 closeModal()
             }

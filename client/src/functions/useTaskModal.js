@@ -5,6 +5,7 @@ const useTaskModal = () => {
     const [showModal, setShowModal] = useState(false)
 
     const handleTaskModal = (taskId) => {
+        console.log({taskId});
         setShowModal(true)
         setSelectedTaskId(taskId)
     }
@@ -16,6 +17,7 @@ const useTaskModal = () => {
     return {
         selectedTaskId,
         showModal,
+        setShowModal,
         handleTaskModal,
         onCloseModal,
     }
