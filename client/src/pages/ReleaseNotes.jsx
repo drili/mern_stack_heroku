@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import PageHeading from '../components/PageHeading'
 import releaseNotesData from "../data/release-notes.json";
 
 const ReleaseNotes = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     return (
         <div id='ReleaseNotesComponent'>
             <PageHeading
