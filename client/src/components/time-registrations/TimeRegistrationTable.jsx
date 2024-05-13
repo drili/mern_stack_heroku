@@ -13,17 +13,17 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
 
     const handleTimeChange = (eventId, time) => {
-        setEditedTimes({
-            ...editedTimes,
+        setEditedTimes(prevTimes => ({
+            ...prevTimes,
             [eventId]: time
-        })
+        }))
     }
 
     const handleSaveTime = async (event) => {
         const eventId = event._id
         const editedTime = editedTimes[eventId] || event.timeRegistered
         
-        if (eventId && editedTime && editedTime > 0) {
+        if (eventId && editedTime && editedTime > 0 && editedTime != "") {
             console.log({eventId, editedTime});
             try {
                 const response = await axios.post(`${baseURL}/time-registrations/time-registration-update`, { eventId, editedTime })
@@ -119,7 +119,7 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
                                         step="0.25"
                                         className={inputClasses}
                                         type="number"
-                                        value={editedTimes[event._id] || event.timeRegistered}
+                                        value={editedTimes[event._id] !== undefined ? editedTimes[event._id] : event.timeRegistered}
                                         onChange={(e) => handleTimeChange(event._id, e.target.value)}
                                     />
                                 </Table.Cell>
