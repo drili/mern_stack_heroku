@@ -151,6 +151,9 @@ const PersonsOverview = () => {
                                         <Table.HeadCell className='text-left'>
                                             Role
                                         </Table.HeadCell>
+                                        <Table.HeadCell className='text-left'>
+                                            Slack ID
+                                        </Table.HeadCell>
                                     </Table.Head>
 
                                     <Table.Body className="divide-y">
@@ -227,6 +230,15 @@ const PersonsOverview = () => {
 
                                                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                                         {user.userRole === 1 ? "admin" : "default"}
+                                                    </Table.Cell>
+
+                                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
+                                                        <input
+                                                            className={inputClasses}
+                                                            name='slackId'
+                                                            value={editedUsers[user._id]?.slackId || user.slackId}
+                                                            onChange={(e) => handleInputChange(e, user._id)}
+                                                        />
                                                     </Table.Cell>
 
                                                     <Table.Cell>
