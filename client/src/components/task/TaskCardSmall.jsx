@@ -1,7 +1,7 @@
 import React from 'react'
 import { BsFillLightningChargeFill } from "react-icons/bs";
 
-const TaskCardSmall = ({ taskId, taskName, taskDeadline }) => {
+const TaskCardSmall = ({ taskId, taskName, taskDeadline, toggleSmallCards }) => {
     const MAX_DESC_LENGTH = 80
     const truncatedTaskName =
     taskName.length > MAX_DESC_LENGTH
