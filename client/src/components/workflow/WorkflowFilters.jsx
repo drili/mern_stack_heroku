@@ -25,7 +25,6 @@ const WorkflowFilters = ({
     const [users, setUsers] = useState([])
     const [currentSprint, setCurrentSprint] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
-    const [toggleSmallCardsState, setToggleSmallCardsState] = useState(null)
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
@@ -107,8 +106,6 @@ const WorkflowFilters = ({
         setCurrentSprint(activeSprint)
 
         setActiveFilterUser(user._id)
-        setToggleSmallCardsState(toggleSmallCards)
-        console.log({toggleSmallCards});
     }, [activeSprint])
 
     return (
