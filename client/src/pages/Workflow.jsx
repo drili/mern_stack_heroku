@@ -43,7 +43,9 @@ const Workflow = () => {
     const [newSprintArray, setNewSprintArray] = useState(null)
     const [deadlineTasks, setDeadlineTasks] = useState([]);
     const [activeFilterUser, setActiveFilterUser] = useState("");
-    const [toggleSmallCards, setToggleSmallCards] = useState(true)
+    const [toggleSmallCards, setToggleSmallCards] = useState(
+        JSON.parse(localStorage.getItem("toggleSmallCards")) || false
+    )
 
     const { baseURL } = useContext(ConfigContext);
 
@@ -206,6 +208,7 @@ const Workflow = () => {
                 activeFilterUser={activeFilterUser}
                 setActiveFilterUser={setActiveFilterUser}
                 toggleSmallCards={toggleSmallCards}
+                setToggleSmallCards={setToggleSmallCards}
             ></WorkflowFilters>
 
             <DragDropContext onDragEnd={onDragEnd}>
