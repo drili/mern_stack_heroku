@@ -6,14 +6,18 @@ import { ConfigContext } from '../../context/ConfigContext'
 
 const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, fetchTasks, task, closeModal, updateFunc, sprintOverviewFetch, fetchWorkflow, taskType, activeSprint, activeFilterUser, newSprintArray }) => {
     const [sprints, setSprints] = useState([])
+    const [customers, setCustomers] = useState([])
     const [usersNot, setUsersNot] = useState([])
     const [taskPersons, setTaskPersons] = useState([])
     const [percentageValues, setPercentageValues] = useState({})
     const [totalPercentage, setTotalPercentage] = useState(0)
     const [errorPercentage, setErrorPercentage] = useState(false)
-    
+
     const [formDataSprint, setFormDataSprint] = useState({
         taskSprintId: ""
+    })
+    const [formDataSprintCustomer, setFormDataSprintCustomer] = useState({
+        customerId: ""
     })
     const [sprintToUse, setSprintToUse] = useState([])
 
@@ -29,13 +33,56 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         }
     }
 
+    const fetchCustomers = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/customers/fetch`)
+            setTimeout(() => {
+                setCustomers(response.data)
+            }, 250)
+        } catch (error) {
+            console.error('Failed to fetch customers', error)
+        }
+    }
+
     const fetchUsersNotInTask = async (taskPersons) => {
         try {
             const response = await axios.post(baseURL + "/users/users-not-in-task", { taskPersons })
-            // console.log(response.data);
             setUsersNot(response.data)
         } catch (error) {
             console.error('Failed to fetch users not in task', error);
+        }
+    }
+
+    const handleUpdateCustomers = async (event) => {
+        event.preventDefault()
+
+        try {
+            const response = await axios.put(`${baseURL}/tasks/update-customers/${taskID}`, formDataSprintCustomer)
+            if (response.status === 200) {
+                toast('Task customer updated successfully', {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#22c55e',
+                        color: "#fff"
+                    }
+                })
+
+                fetchTaskData(taskID)
+                if (fetchTasks) {
+                    fetchTasks(sprintToUse, activeFilterUser)
+                }
+            }
+        } catch (error) {
+            console.error('Failed to update task', error)
+            toast('There was an error updating task', {
+                duration: 4000,
+                position: 'top-center',
+                style: {
+                    background: '#ef4444',
+                    color: "#fff"
+                }
+            })
         }
     }
 
@@ -80,6 +127,13 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         }))
     }
 
+    const handleInputChangeCustomer = async (e) => {
+        setFormDataSprintCustomer((formDataSprintCustomer) => ({
+            ...formDataSprintCustomer,
+            [e.target.name]: e.target.value
+        }))
+    }
+
     const handleAddTaskUser = async (assignedUserId) => {
         if (assignedUserId) {
             try {
@@ -89,7 +143,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                     if (fetchTasks) {
                         fetchTasks(sprintToUse, activeFilterUser)
                     }
-                    
+
                     // updateFunc()
                 }
             } catch (error) {
@@ -171,8 +225,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const handleArchiveTask = async (e) => {
         e.preventDefault()
 
-        console.log({activeFilterUser});
-        console.log({sprintToUse});
+        console.log({ activeFilterUser });
+        console.log({ sprintToUse });
 
         if (!confirm("Are you sure you want to archive this task?")) {
             return
@@ -210,6 +264,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
             setTaskPersons(taskPersons)
             fetchUsersNotInTask(taskPersons)
             fetchSprints()
+            fetchCustomers()
 
             const newPercentageValues = { ...percentageValues }
             taskPersons.forEach((person) => {
@@ -227,132 +282,161 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     return (
         <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none'>
-            <span>
-                <h2 className='font-semibold mb-5'>
-                    Task Settings
-                </h2>
-
-                <span id='sprints'>
-                    <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateSprint}>
-                        <span className='w-[50%]'>
-                            <label className={labelClasses} htmlFor="taskCustomer">Change Task Month</label>
-                            <select
-                                name="taskSprintId"
-                                placeholder="Select Month"
-                                required
-                                className={`${inputClasses} min-w-[200px]`}
-                                onChange={(e) => handleInputChange(e)}
-                            >
-                                <option>Select Month</option>
-                                {sprints
-                                    .map((sprint) => (
-                                        <option value={sprint._id} key={sprint._id}>{sprint.sprintName}</option>
-                                    ))
-                                }
-                            </select>
-                        </span>
-
-                        <span>
-                            <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Month</button>
-                        </span>
-                    </form>
-                </span>
-
-                <span id='taskUsers'>
-                    <form onSubmit={(e) => e.preventDefault()}>
-                        <span>
-                            <label className={labelClasses} htmlFor="taskCustomer">Task user(s)</label>
-                            <span>
+            <h2 className='font-semibold mb-5'>
+                Task Settings 1
+            </h2>
+            <section className='flex gap-10'>
+                <span className='w-full'>
+                    <span id='sprints'>
+                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateSprint}>
+                            <span className='w-[50%]'>
+                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Month</label>
                                 <select
-                                    name="taskUsersNot"
-                                    placeholder="Add User"
+                                    name="taskSprintId"
+                                    placeholder="Select Month"
                                     required
                                     className={`${inputClasses} min-w-[200px]`}
-                                    onChange={(e) => handleAddTaskUser(e.target.value)}
+                                    onChange={(e) => handleInputChange(e)}
                                 >
-                                    <option>Add User</option>
-                                    {usersNot
-                                        .map((user) => (
-                                            <option value={user._id} key={user._id}>{user.email}</option>
+                                    <option>Select Month</option>
+                                    {sprints
+                                        .map((sprint) => (
+                                            <option value={sprint._id} key={sprint._id}>{sprint.sprintName}</option>
                                         ))
                                     }
                                 </select>
                             </span>
-                        </span>
-                    </form>
 
-                    <span id='assignedUsers' className='flex flex-col gap-1 mb-5'>
-                        {taskPersons
-                            .map((user) => (
-                                <div key={user.user._id} id={user.user._id}>
-                                    <span className='flex gap-2 items-center mb-1 border border-zinc-100 p-2 rounded-lg justify-between'>
-                                        <section className='flex gap-2 items-center'>
-                                            <img className='w-[25px] h-[25px] object-cover object-center rounded-full' src={`${imageSrc}${user.user.profileImage}`} />
-                                            <p className='font-bold text-sm whitespace-nowrap'>{user.user.username}</p>
-
-                                            {taskPersons.length > 1 && (
-                                                <form onSubmit={(e) => handleRemoveUser(e)}>
-                                                    <input type="hidden" name='taskPersonId' value={user.user._id} />
-                                                    <button type="submit" className='border-rose-950 px-2 py-0 text-sm'>Remove</button>
-                                                </form>
-                                            )}
-                                        </section>
-
-                                        <section className='flex gap-2 items-center'>
-                                            {taskPersons.length > 1 && (
-                                                <>
-                                                    <form
-                                                        className='flex items-center gap-2'
-                                                        onSubmit={(e) => handlePercentageUpdate(e, user.user._id)}
-                                                    >
-                                                        <input type="hidden" name='taskPersonId' value={user.user._id} />
-
-                                                        {taskType !== "quickTask" && (
-                                                            <>
-                                                                <span className='flex items-center gap-2 mr-2'>
-                                                                    <input
-                                                                        className="max-w-[100px] px-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0      "
-                                                                        type="number"
-                                                                        max="100"
-                                                                        min="1"
-                                                                        value={percentageValues[user.user._id] || ''}
-                                                                        onChange={(e) => handlePercentageChange(user.user._id, e.target.value)}
-                                                                        name="personPercentage"
-                                                                    />
-                                                                    <label className='text-xs font-normal whitespace-nowrap' htmlFor="personPercentage">% alloc</label>
-                                                                </span>
-                                                                <button type="submit" className='border-rose-500 px-2 py-0 text-sm'>Update</button>
-                                                            </>
-                                                        )}
-
-                                                    </form>
-                                                </>
-                                            )}
-                                        </section>
-                                    </span>
-                                </div>
-                            ))
-                        }
-
-                        {errorPercentage && (
-                            <div className='flex flex-col gap-1 text-right justify-end'>
-                                <p className='text-xs text-rose-950'>There was an error, total percent allocation is not equal 100%</p>
-                                <p className='text-xs underline'>Current total allocation percentage: {totalPercentage}%</p>
-                            </div>
-                        )}
-
+                            <span>
+                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Month</button>
+                            </span>
+                        </form>
                     </span>
 
-                    <span id='archiveTask'>
-                        <hr className='mb-5' />
-                        <form onSubmit={handleArchiveTask}>
-                            <label className={labelClasses} htmlFor="archiveTaskId">Archive Task</label>
-                            <input type="hidden" name='archiveTaskId' value={taskID} />
-                            <button type="submit" className='bg-rose-950 text-white px-5 py-2 text-sm'>Archive Task</button>
+                    <span id='taskUsers'>
+                        <form onSubmit={(e) => e.preventDefault()}>
+                            <span>
+                                <label className={labelClasses} htmlFor="taskCustomer">Task user(s)</label>
+                                <span>
+                                    <select
+                                        name="taskUsersNot"
+                                        placeholder="Add User"
+                                        required
+                                        className={`${inputClasses} min-w-[200px]`}
+                                        onChange={(e) => handleAddTaskUser(e.target.value)}
+                                    >
+                                        <option>Add User</option>
+                                        {usersNot
+                                            .map((user) => (
+                                                <option value={user._id} key={user._id}>{user.email}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </span>
+                            </span>
+                        </form>
+
+                        <span id='assignedUsers' className='flex flex-col gap-1 mb-5'>
+                            {taskPersons
+                                .map((user) => (
+                                    <div key={user.user._id} id={user.user._id}>
+                                        <span className='flex gap-2 items-center mb-1 border border-zinc-100 p-2 rounded-lg justify-between'>
+                                            <section className='flex gap-2 items-center'>
+                                                <img className='w-[25px] h-[25px] object-cover object-center rounded-full' src={`${imageSrc}${user.user.profileImage}`} />
+                                                <p className='font-bold text-sm whitespace-nowrap'>{user.user.username}</p>
+
+                                                {taskPersons.length > 1 && (
+                                                    <form onSubmit={(e) => handleRemoveUser(e)}>
+                                                        <input type="hidden" name='taskPersonId' value={user.user._id} />
+                                                        <button type="submit" className='border-rose-950 px-2 py-0 text-sm'>Remove</button>
+                                                    </form>
+                                                )}
+                                            </section>
+
+                                            <section className='flex gap-2 items-center'>
+                                                {taskPersons.length > 1 && (
+                                                    <>
+                                                        <form
+                                                            className='flex items-center gap-2'
+                                                            onSubmit={(e) => handlePercentageUpdate(e, user.user._id)}
+                                                        >
+                                                            <input type="hidden" name='taskPersonId' value={user.user._id} />
+
+                                                            {taskType !== "quickTask" && (
+                                                                <>
+                                                                    <span className='flex items-center gap-2 mr-2'>
+                                                                        <input
+                                                                            className="max-w-[100px] px-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-0      "
+                                                                            type="number"
+                                                                            max="100"
+                                                                            min="1"
+                                                                            value={percentageValues[user.user._id] || ''}
+                                                                            onChange={(e) => handlePercentageChange(user.user._id, e.target.value)}
+                                                                            name="personPercentage"
+                                                                        />
+                                                                        <label className='text-xs font-normal whitespace-nowrap' htmlFor="personPercentage">% alloc</label>
+                                                                    </span>
+                                                                    <button type="submit" className='border-rose-500 px-2 py-0 text-sm'>Update</button>
+                                                                </>
+                                                            )}
+
+                                                        </form>
+                                                    </>
+                                                )}
+                                            </section>
+                                        </span>
+                                    </div>
+                                ))
+                            }
+
+                            {errorPercentage && (
+                                <div className='flex flex-col gap-1 text-right justify-end'>
+                                    <p className='text-xs text-rose-950'>There was an error, total percent allocation is not equal 100%</p>
+                                    <p className='text-xs underline'>Current total allocation percentage: {totalPercentage}%</p>
+                                </div>
+                            )}
+
+                        </span>
+
+                        <span id='archiveTask'>
+                            <hr className='mb-5' />
+                            <form onSubmit={handleArchiveTask}>
+                                <label className={labelClasses} htmlFor="archiveTaskId">Archive Task</label>
+                                <input type="hidden" name='archiveTaskId' value={taskID} />
+                                <button type="submit" className='bg-rose-950 text-white px-5 py-2 text-sm'>Archive Task</button>
+                            </form>
+                        </span>
+                    </span>
+                </span>
+
+                <span className='w-full'>
+                    <span id='customers'>
+                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateCustomers}>
+                            <span className='w-[50%]'>
+                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Customer</label>
+                                <select
+                                    name="customerId"
+                                    placeholder="Select Customer"
+                                    required
+                                    className={`${inputClasses} min-w-[200px]`}
+                                    onChange={(e) => handleInputChangeCustomer(e)}
+                                >
+                                    <option>Select Customer</option>
+                                    {customers
+                                        .map((customer) => (
+                                            <option value={customer._id} key={customer._id}>{customer.customerName}</option>
+                                        ))
+                                    }
+                                </select>
+                            </span>
+
+                            <span>
+                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Customer</button>
+                            </span>
                         </form>
                     </span>
                 </span>
-            </span>
+            </section>
 
         </div>
     )
