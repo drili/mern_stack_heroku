@@ -288,6 +288,24 @@ router.route("/update/:taskId").put(async (req, res) => {
     }
 })
 
+router.route("/update-vertical/:taskId").put(async (req, res) => {
+    const { taskId } = req.params
+    const { taskVertical } = req.body
+
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(
+            taskId,
+            { taskVertical: taskVertical },
+            { new: true }
+        )
+        
+        res.json(updatedTask)
+    } catch (error) {
+        console.error("Failed to update task customer", error);
+        res.status(500).json({ error: "Failed to update task vertical" });
+    }
+})
+
 router.route("/update-customers/:taskId").put(async (req, res) => {
     const { taskId } = req.params
     const { customerId } = req.body

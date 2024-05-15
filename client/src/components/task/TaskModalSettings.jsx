@@ -7,6 +7,7 @@ import { ConfigContext } from '../../context/ConfigContext'
 const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, fetchTasks, task, closeModal, updateFunc, sprintOverviewFetch, fetchWorkflow, taskType, activeSprint, activeFilterUser, newSprintArray }) => {
     const [sprints, setSprints] = useState([])
     const [customers, setCustomers] = useState([])
+    const [verticals, setVerticals] = useState([])
     const [usersNot, setUsersNot] = useState([])
     const [taskPersons, setTaskPersons] = useState([])
     const [percentageValues, setPercentageValues] = useState({})
@@ -19,6 +20,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const [formDataSprintCustomer, setFormDataSprintCustomer] = useState({
         customerId: ""
     })
+    const [formDataVerticalId, setFormDataVerticalId] = useState({
+        taskVertical: ""
+    })
     const [sprintToUse, setSprintToUse] = useState([])
 
     const { baseURL } = useContext(ConfigContext);
@@ -30,6 +34,15 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
             setSprints(response.data)
         } catch (error) {
             console.error('Failed to fetch sprints', error);
+        }
+    }
+
+    const fetchVerticals = async () => {
+        try {
+            const response = await axios.get(baseURL + "/verticals/fetch-verticals")
+            setVerticals(response.data)
+        } catch (error) {
+            console.error('Failed to fetch verticals', error);
         }
     }
 
@@ -53,8 +66,50 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         }
     }
 
+    const handleInputChangeVertical = async (e) => {
+        setFormDataVerticalId((formDataVerticalId) => ({
+            ...formDataVerticalId,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleUpdateVertical = async (event) => {
+        event.preventDefault()
+        if (formDataVerticalId.taskVertical == "") return
+
+        try {
+            const response = await axios.put(`${baseURL}/tasks/update-vertical/${taskID}`, formDataVerticalId)
+            if (response.status === 200) {
+                toast('Task vertical updated successfully', {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#22c55e',
+                        color: "#fff"
+                    }
+                })
+
+                fetchTaskData(taskID)
+                if (fetchTasks) {
+                    fetchTasks(sprintToUse, activeFilterUser)
+                }
+            }
+        } catch (error) {
+            console.error('Failed to update task', error)
+            toast('There was an error updating task', {
+                duration: 4000,
+                position: 'top-center',
+                style: {
+                    background: '#ef4444',
+                    color: "#fff"
+                }
+            })
+        }
+    }
+
     const handleUpdateCustomers = async (event) => {
         event.preventDefault()
+        if (formDataSprintCustomer.customerId == "") return
 
         try {
             const response = await axios.put(`${baseURL}/tasks/update-customers/${taskID}`, formDataSprintCustomer)
@@ -88,7 +143,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     const handleUpdateSprint = async (event) => {
         event.preventDefault()
-
+        if (formDataSprint.taskSprintId == "") return
+        
         try {
             const response = await axios.put(`${baseURL}/tasks/update-sprint/${taskID}`, formDataSprint)
             if (response.status === 200) {
@@ -225,9 +281,6 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const handleArchiveTask = async (e) => {
         e.preventDefault()
 
-        console.log({ activeFilterUser });
-        console.log({ sprintToUse });
-
         if (!confirm("Are you sure you want to archive this task?")) {
             return
         }
@@ -265,6 +318,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
             fetchUsersNotInTask(taskPersons)
             fetchSprints()
             fetchCustomers()
+            fetchVerticals()
 
             const newPercentageValues = { ...percentageValues }
             taskPersons.forEach((person) => {
@@ -298,7 +352,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                     className={`${inputClasses} min-w-[200px]`}
                                     onChange={(e) => handleInputChange(e)}
                                 >
-                                    <option>Select Month</option>
+                                    <option value="">Select Month</option>
                                     {sprints
                                         .map((sprint) => (
                                             <option value={sprint._id} key={sprint._id}>{sprint.sprintName}</option>
@@ -307,12 +361,66 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                 </select>
                             </span>
 
-                            <span>
-                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Month</button>
+                            <span className='w-[50%]'>
+                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-slate-500 hover:border-slate-500 hover:bg-slate-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Month</button>
                             </span>
                         </form>
                     </span>
 
+                    <span id='customers'>
+                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateCustomers}>
+                            <span className='w-[50%]'>
+                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Customer</label>
+                                <select
+                                    name="customerId"
+                                    placeholder="Select Customer"
+                                    required
+                                    className={`${inputClasses} min-w-[200px]`}
+                                    onChange={(e) => handleInputChangeCustomer(e)}
+                                >
+                                    <option value="">Select Customer</option>
+                                    {customers
+                                        .map((customer) => (
+                                            <option value={customer._id} key={customer._id}>{customer.customerName}</option>
+                                        ))
+                                    }
+                                </select>
+                            </span>
+
+                            <span className='w-[50%]'>
+                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-slate-500 hover:border-slate-500 hover:bg-slate-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Customer</button>
+                            </span>
+                        </form>
+
+                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateVertical}>
+                            <span className='w-[50%]'>
+                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Vertical</label>
+                                <select
+                                    name="taskVertical"
+                                    placeholder="Select Customer"
+                                    required
+                                    className={`${inputClasses} min-w-[200px]`}
+                                    onChange={(e) => handleInputChangeVertical(e)}
+                                >
+                                    <option value="">Select Vertical</option>
+                                    {verticals
+                                        .map((vertical) => (
+                                            <option value={vertical._id} key={vertical._id}>{vertical.verticalName}</option>
+                                        ))
+                                    }
+                                </select>
+                            </span>
+
+                            <span className='w-[50%]'>
+                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-slate-500 hover:border-slate-500 hover:bg-slate-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Vertical</button>
+                            </span>
+                        </form>
+                    </span>
+
+
+                </span>
+
+                <span className='w-full'>
                     <span id='taskUsers'>
                         <form onSubmit={(e) => e.preventDefault()}>
                             <span>
@@ -406,34 +514,6 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                 <button type="submit" className='bg-rose-950 text-white px-5 py-2 text-sm'>Archive Task</button>
                             </form>
                         </span>
-                    </span>
-                </span>
-
-                <span className='w-full'>
-                    <span id='customers'>
-                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateCustomers}>
-                            <span className='w-[50%]'>
-                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Customer</label>
-                                <select
-                                    name="customerId"
-                                    placeholder="Select Customer"
-                                    required
-                                    className={`${inputClasses} min-w-[200px]`}
-                                    onChange={(e) => handleInputChangeCustomer(e)}
-                                >
-                                    <option>Select Customer</option>
-                                    {customers
-                                        .map((customer) => (
-                                            <option value={customer._id} key={customer._id}>{customer.customerName}</option>
-                                        ))
-                                    }
-                                </select>
-                            </span>
-
-                            <span>
-                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Customer</button>
-                            </span>
-                        </form>
                     </span>
                 </span>
             </section>
