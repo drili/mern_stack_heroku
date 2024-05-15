@@ -277,7 +277,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
         <div className="flex flex-col h-full bg-white border pt-5 border-t-slate-100 border-x-0 border-b-0">
             <div className="flex flex-col overflow-y-auto max-h-[55vh]" id='TaskChatMentions' ref={chatContainerRef}>
                 {comments.map((message, index) => (
-                    <div key={index} className="mb-4 flex align-top group relative hover:bg-slate-50 py-2">
+                    <div key={index} className="mb-0 flex align-top group relative hover:bg-slate-50 py-2">
                         <div>
                             <img
                                 className='h-[40px] w-[40px] mt-1 rounded-md mr-4 object-cover'
