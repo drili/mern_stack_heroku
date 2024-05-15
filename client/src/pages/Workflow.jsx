@@ -43,6 +43,9 @@ const Workflow = () => {
     const [newSprintArray, setNewSprintArray] = useState(null)
     const [deadlineTasks, setDeadlineTasks] = useState([]);
     const [activeFilterUser, setActiveFilterUser] = useState("");
+    const [toggleSmallCards, setToggleSmallCards] = useState(
+        JSON.parse(localStorage.getItem("toggleSmallCards")) || false
+    )
 
     const { baseURL } = useContext(ConfigContext);
 
@@ -204,9 +207,10 @@ const Workflow = () => {
                 fetchDeadlineTasks={fetchDeadlineTasks}
                 activeFilterUser={activeFilterUser}
                 setActiveFilterUser={setActiveFilterUser}
+                toggleSmallCards={toggleSmallCards}
+                setToggleSmallCards={setToggleSmallCards}
             ></WorkflowFilters>
 
-            {/* FIXME: When dropping task into the same column, it duplicates the task in the frontend */}
             <DragDropContext onDragEnd={onDragEnd}>
                 <section className='flex gap-3 flex-col md:flex-row'>
                     {Object.entries(workflowColumnsData).map(([key, value]) => (
@@ -245,6 +249,7 @@ const Workflow = () => {
                                                             taskType={task.taskType}
                                                             estimatedTime={task?.estimatedTime}
                                                             taskDeadline={task?.taskDeadline}
+                                                            toggleSmallCards={toggleSmallCards}
                                                         // customer={task.taskCustomer}
                                                         ></TaskCard>
                                                     </span>
@@ -275,6 +280,7 @@ const Workflow = () => {
                                                 taskId={task._id}
                                                 taskName={task.taskName}
                                                 taskDeadline={task.taskDeadline}
+                                                toggleSmallCards={toggleSmallCards}
                                             />
                                         </span>
                                     ))}

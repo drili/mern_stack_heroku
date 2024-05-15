@@ -7,6 +7,7 @@ const Customer = require("../models/Customer")
 const Task = require("../models/Task")
 
 const notificationType = "user_tagging_task"
+const sendSlackMessage = require("../functions/slackMessageUser")
 
 router.route("/fetch-unread-notifications").post(async (req, res) => {
     const { userId } = req.body
@@ -88,7 +89,7 @@ router.route("/create-notification").post(async (req, res) => {
         htmlContent } = req.body
 
     const notificationLinkModified = `/task?taskId=${taskId}`
-        
+
     try {
         mentionedUsers.forEach(async (user) => {
             const newNotification = new NotificationChatTask({
@@ -107,6 +108,12 @@ router.route("/create-notification").post(async (req, res) => {
             req.app.get("io").to(user.id).emit("new-notification", {
                 message: "You have a new notification"
             })
+
+            const notifiedUser = await User.findById(user.id)
+            const notifiedBy = await User.findById(mentionedBy)
+            if(notifiedUser.slackId) {
+                sendSlackMessage(`${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`, notifiedUser.slackId)
+            }
         })
 
         res.status(200).send("Notifications created successfully")

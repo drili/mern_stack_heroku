@@ -5,6 +5,15 @@ import toast, { Toaster } from 'react-hot-toast'
 import { UserContext } from '../../context/UserContext'
 import { ConfigContext } from '../../context/ConfigContext'
 
+const getFormattedDate = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + currentDate.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
+}
+
 const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, customerId, verticalId }) => {
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
@@ -76,7 +85,10 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
             sprintId: sprintId,
             customerId: customerId,
             verticalId: verticalId,
+            currentTime: getFormattedDate()
         }))
+
+        console.log(getFormattedDate())
     }, [taskId, sprintId, verticalId])
 
     return (

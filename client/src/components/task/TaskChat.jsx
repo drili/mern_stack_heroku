@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useContext, useLayoutEffect } from 'react';
-import { EditorState } from 'draft-js';
+import { EditorState, Editor, ContentState, convertFromHTML } from 'draft-js';
 import { stateToHTML } from "draft-js-export-html"
 import axios from 'axios';
 
 import { BsFillSendFill } from "react-icons/bs";
-import { BsFillTrashFill } from "react-icons/bs"
+import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs"
 
 import DraftEditor from '../drafteditor/DraftEditor';
 import { UserContext } from '../../context/UserContext'
@@ -43,13 +43,74 @@ const TaskChat = ({ taskID, taskCustomer }) => {
     const [isInputEmpty, setIsInputEmpty] = useState(true)
     const [comments, setComments] = useState([])
 
+    const [editingId, setEditingId] = useState(null)
+    const [draftContent, setDraftContent] = useState("")
+    const [editorStateComment, setEditorStateComment] = useState(null);
+
     const messagesEndRef = useRef(null)
     const chatContainerRef = useRef(null)
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
 
+    const startEdit = (message) => {
+        if (typeof message.htmlContent !== 'string') {
+            console.error("Expected a string for HTML content, received:", typeof message.htmlContent);
+            return
+        }
+    
+        setEditingId(message._id);
+    
+        try {
+            const blocksFromHtml = convertFromHTML(message.htmlContent);
+            const state = ContentState.createFromBlockArray(
+                blocksFromHtml.contentBlocks,
+                blocksFromHtml.entityMap
+            );
+            setEditorStateComment(EditorState.createWithContent(state));
+        } catch (error) {
+            console.error("Error converting HTML to content blocks:", error);
+        }
+    }
+
+    const renderEditor = () => {
+        if (editingId) {
+            return (
+                <Editor
+                    editorState={editorStateComment}
+                    onChange={setEditorStateComment}
+                />
+            )
+        }
+
+        return null
+    }
+
+    const cancelEdit = async () => {
+        setEditingId(null)
+    }
+
     // *** Server requests
+    const saveEdit = async () => {
+        if (!editorStateComment) return;
+
+        const htmlContent = stateToHTML(editorStateComment.getCurrentContent(), options);
+
+        try {
+            const htmlContentSave = stateToHTML(editorStateComment.getCurrentContent())
+            const response = await axios.put(`${baseURL}/comments/edit-comment/${editingId}`, {
+                htmlContent: htmlContentSave
+            })
+
+            setEditingId(null)
+            if (response.status === 200) {
+                fetchComments(taskID)
+            }
+        } catch (error) {
+            console.error("Error saving edited comment", error.response)
+        }
+    }
+
     const handleDeleteComment = async (commentId) => {
         try {
             const response = await fetch(`${baseURL}/comments/delete-comment-by-id/${commentId}`, {
@@ -198,6 +259,11 @@ const TaskChat = ({ taskID, taskCustomer }) => {
         console.log("Mentioned users:", mentionedUsers);
     };
 
+    const handleEditComment = (message) => {
+        setEditingId(message._id)
+        setDraftContent(message.htmlContent)
+    }
+
     useLayoutEffect(() => {
         scrollToBottom()
     }, [comments])
@@ -211,7 +277,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
         <div className="flex flex-col h-full bg-white border pt-5 border-t-slate-100 border-x-0 border-b-0">
             <div className="flex flex-col overflow-y-auto max-h-[55vh]" id='TaskChatMentions' ref={chatContainerRef}>
                 {comments.map((message, index) => (
-                    <div key={index} className="mb-4 flex align-top group relative hover:bg-slate-50">
+                    <div key={index} className="mb-4 flex align-top group relative hover:bg-slate-50 py-2">
                         <div>
                             <img
                                 className='h-[40px] w-[40px] mt-1 rounded-md mr-4 object-cover'
@@ -223,21 +289,52 @@ const TaskChat = ({ taskID, taskCustomer }) => {
                             <div className="text-md text-slate-950 font-bold mb-1">{message.createdBy.username}
                                 <span className='ml-2 font-light text-xs'>{formatDate(message.createdAt)}</span>
                             </div>
-                            <div 
-                                className="rounded-md" 
-                                dangerouslySetInnerHTML={{
-                                __html: processHtmlContent(message.htmlContent, user.id)
-                            }}></div>
+
+                            {editingId === message._id ? (
+                                renderEditor()
+
+                            ) : (
+                                <div
+                                    className="rounded-md" 
+                                    dangerouslySetInnerHTML={{
+                                    __html: processHtmlContent(message.htmlContent, user.id)
+                                }}></div>
+                            )}
                         </div>
 
                         {message.createdBy._id === user.id && (
-                            <button
-                                className='delete-button hidden group-hover:block absolute right-0 top-0 py-2 px-3'
-                                onClick={() => handleDeleteComment(message._id)}
-                                id={message._id}
-                            >
-                                <BsFillTrashFill className='text-xs text-rose-950' />
-                            </button>
+                            <span className='absolute right-0 top-0 py-1 px-0 flex'>
+                                {editingId === message._id && (
+                                    <span className='flex'>
+                                        <button onClick={cancelEdit} className='save-button text-xs'>
+                                            Cancel
+                                        </button>
+                                        <button onClick={saveEdit} className='save-button text-xs'>
+                                            Save
+                                        </button>
+                                    </span>
+                                )}
+
+                                {!editingId && (
+                                    <span className='flex'>
+                                        <button
+                                            className='delete-button hidden group-hover:block'
+                                            onClick={() => startEdit(message)}
+                                        >
+                                            <BsPencilSquare className='text-xs text-blue-500' />
+                                        </button>
+                                        
+                                        <button
+                                            className='delete-button hidden group-hover:block'
+                                            onClick={() => handleDeleteComment(message._id)}
+                                            id={message._id}
+                                        >
+                                            <BsFillTrashFill className='text-xs text-rose-950' />
+                                        </button>
+                                    </span>
+                                )}
+                                
+                            </span>
                         )}
                     </div>
                 ))}

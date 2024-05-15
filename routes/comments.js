@@ -6,6 +6,30 @@ const User = require("../models/User")
 
 const router = express.Router()
 
+router.route("/edit-comment/:commentId").put(async (req, res) => {
+    const { commentId } = req.params
+    const { htmlContent } = req.body
+
+    if (commentId && htmlContent) {
+        try {
+            const comment = await Comment.findByIdAndUpdate(commentId, {
+                $set: { htmlContent: htmlContent }
+            }, {
+                new: true,
+                runValidators: true
+            })
+
+            if (!comment) {
+                return res.status(404).send({ error: "Comment not found" })
+            }
+
+            res.status(200).send(comment)
+        } catch (error) {
+            res.status(500).send({ error: "Internal sever error `/edit-comment/:commentId`" })
+        }
+    }
+})
+
 router.route("/delete-comment-by-id/:commentId").delete(async (req, res) => {
     const { commentId } = req.params
     

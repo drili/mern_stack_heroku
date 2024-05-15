@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema(
             type: Number,
             default: 2024
         },
+        slackId: {
+            type: String,
+            default: "0",
+        }
     },
     {
         timestamps: true,

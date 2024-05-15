@@ -6,7 +6,7 @@ import { FaCalendar, FaClock } from "react-icons/fa";
 import TaskModal from './TaskModal'
 import { ConfigContext } from '../../context/ConfigContext';
 
-const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName, customerColor, taskLow, taskHigh, taskSprintId, taskSprintName, taskType, estimatedTime, taskDeadline }) => {
+const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName, customerColor, taskLow, taskHigh, taskSprintId, taskSprintName, taskType, estimatedTime, taskDeadline, toggleSmallCards }) => {
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [showModal, setShowModal] = useState(false)
 
@@ -53,12 +53,14 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                 </section>
                 <h3 className='font-bold mt-5 leading-5'>{truncatedTaskName}</h3>
             </span>
+                
+            {!toggleSmallCards && (
+                <span>
+                    <p className='text-sm mt-3 leading-4'>{truncatedTaskDescription}</p>
+                </span>
+            )}
 
-            <span>
-                <p className='text-sm mt-3 leading-4'>{truncatedTaskDescription}</p>
-            </span>
-
-                {taskType !== "quickTask" && (
+            {taskType !== "quickTask" && (
                 <span className='flex gap-1 mt-3 items-center'>
                     <p className='text-xs font-bold text-slate-500'><FaClock className='font-bold' /></p>
                     {/* <p className='text-xs'>Low {taskLow}</p>
@@ -76,49 +78,51 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                 </span>
             )}
 
-            <span className=''>
-                <section className='relative h-[45px] mt-2.5 overflow-hidden'>
-                    <hr className='mb-3' />
-                    {taskPersons.map((person, index) => {
-                        let personsLeft = Math.max(taskPersons.length - 2);
+            {!toggleSmallCards && (
+                <span className=''>
+                    <section className='relative h-[45px] mt-2.5 overflow-hidden'>
+                        <hr className='mb-3' />
+                        {taskPersons.map((person, index) => {
+                            let personsLeft = Math.max(taskPersons.length - 2);
 
-                        if (index < 2) {
-                            return (
-                                <span key={index}>
-                                    <img
-                                        id={index}
-                                        className='absolute w-[25px] h-[25px] object-cover object-center rounded-full'
-                                        src={`${baseURL}/uploads/${person.user.profileImage}`}
-                                        style={{
-                                            left: `${index * 15}px`
-                                        }}
-                                    />
-                                    {taskPersons.length > 2 && index < 1 && (
-                                        <span
-                                            className='absolute w-[25px] h-[25px] object-cover object-center rounded-full bg-rose-400 flex items-center justify-center text-white font-medium text-xs'
+                            if (index < 2) {
+                                return (
+                                    <span key={index}>
+                                        <img
+                                            id={index}
+                                            className='absolute w-[25px] h-[25px] object-cover object-center rounded-full'
+                                            src={`${baseURL}/uploads/${person.user.profileImage}`}
                                             style={{
-                                                left: `30px`,
-                                                zIndex: "1"
+                                                left: `${index * 15}px`
                                             }}
-                                        >
-                                            +{personsLeft}
-                                        </span>
-                                    )}
-                                </span>
-                            )
-                        }
-                    })}
+                                        />
+                                        {taskPersons.length > 2 && index < 1 && (
+                                            <span
+                                                className='absolute w-[25px] h-[25px] object-cover object-center rounded-full bg-rose-400 flex items-center justify-center text-white font-medium text-xs'
+                                                style={{
+                                                    left: `30px`,
+                                                    zIndex: "1"
+                                                }}
+                                            >
+                                                +{personsLeft}
+                                            </span>
+                                        )}
+                                    </span>
+                                )
+                            }
+                        })}
 
-                    {taskType === "quickTask" && (
-                        <span className='absolute right-0 bottom-[10px]'>
-                            <span className='flex items-center gap-2'>
-                                <p className='font-bold text-xs'>{taskDeadline}</p>
-                                <BsFillLightningChargeFill className='text-amber-500' />
+                        {taskType === "quickTask" && (
+                            <span className='absolute right-0 bottom-[10px]'>
+                                <span className='flex items-center gap-2'>
+                                    <p className='font-bold text-xs'>{taskDeadline}</p>
+                                    <BsFillLightningChargeFill className='text-amber-500' />
+                                </span>
                             </span>
-                        </span>
-                    )}
-                </section>
-            </span>
+                        )}
+                    </section>
+                </span>
+            )}
 
             {selectedTaskId && (
                 <TaskModal

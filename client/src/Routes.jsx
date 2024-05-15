@@ -26,6 +26,7 @@ import UserNotActivated from './pages/functionalities/UserNotActivated';
 import GeneralFeatures from './pages/admin/GeneralFeatures';
 import TaskVerticalsOverview from './pages/admin/TaskVerticalsOverview';
 import ReleaseNotes from './pages/ReleaseNotes';
+import TaskView from './pages/tasks/TaskView';
 
 function AppRoutes() {
     return (
@@ -46,6 +47,7 @@ function AppRoutes() {
                                 <Route path="sprint-overview" element={<ProtectedRoute><SprintOverview/></ProtectedRoute>} />
                                 <Route path="time-registrations" element={<ProtectedRoute><TimeRegistrations/></ProtectedRoute>} />
                                 <Route path="release-notes" element={<ProtectedRoute><ReleaseNotes /></ProtectedRoute>} />
+                                <Route path='task-view' element={<ProtectedRoute><TaskView /></ProtectedRoute>} />
                                 <Route 
                                     path="customers"
                                 >

@@ -217,7 +217,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                             <Table.Row className="bg-white  " key={data._id}>
                                                 <Table.Cell className="flex items-center gap-2 whitespace-nowrap font-medium text-gray-900 ">
                                                     <p className='w-[250px] text-xs whitespace-nowrap overflow-hidden text-ellipsis'>{data.taskName}</p>
-                                                    {data.taskType === "timedTask" ? (
+                                                    {data.taskType === "quickTask" ? (
                                                         <BsFillLightningChargeFill className='text-amber-500' />
                                                     ) : null}
                                                 </Table.Cell>

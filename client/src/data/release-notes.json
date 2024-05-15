@@ -1,5 +1,104 @@
 [
     {
+        "releaseVersion": "2.0.2",
+        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/05/pexels-pixabay-40896.jpg",
+        "releaseDate": "15-05-2024",
+        "releaseObject": [
+            {
+                "name": "Possibility to change task vertical",
+                "description": [
+                    "Implemented the functionality to modify a task's vertical assignment, enabling enhanced flexibility and adaptability during project organization and planning."
+                ]
+            },
+            {
+                "name": "On task modal, time date should be set by default to today",
+                "description": [
+                    "Updated the task modal to auto-populate the time registration date field with the current date, streamlining the time entry process for users and reducing manual input."
+                ]
+            },
+            {
+                "name": "Possibility to change customer on task",
+                "description": [
+                    "Enhanced task management by incorporating the ability to modify customer associations, allowing users to efficiently reorganize and reassign tasks based on evolving client needs."
+                ]
+            },
+            {
+                "name": "Update task cards inside workflow to have a 'small cards' toggle",
+                "description": [
+                    "Optimized the task card layout within workflows by introducing a 'small cards' toggle, providing a condensed, more manageable overview for enhanced administrative efficiency and reduced scrolling"
+                ]
+            },
+            {
+                "name": "Possibility to edit/add user slackID",
+                "description": [
+                    "Incorporated a new option for editing and adding user Slack IDs, empowering team members to customize their notification preferences and improve cross-platform communication."
+                ]
+            },
+            {
+                "name": "Add 'Edit' option on task chat message:",
+                "description": [
+                    "Added a new 'Edit' feature for task chat messages, allowing users to quickly update or clarify comments, streamlining communication and reducing the potential for misunderstandings"
+                ]
+            },
+            {
+                "name": "Task View",
+                "description": [
+                    "A page where a task is shown without the modal. Task ID is required as a parameter inside the URL to display the task data.",
+                    "Introduced a dedicated Task View page, offering users an alternative method to access and display task information without utilizing the modal interface"
+                ]
+            },
+            {
+                "name": "Slack Integration",
+                "description": [
+                    "Integrated Slack notifications, allowing users to receive real-time updates and mentions from task chats within the Slack platform, enhancing cross-platform collaboration and communication.",
+                    "Users will also receive a notification on Slack when they are mentioned on a task chat. Users must enable this setting and add their Slack user ID."
+                ]
+            },
+            {
+                "name": "Changed 'sprint' to 'month' wording",
+                "description": [
+                    "Updated the application's terminology from 'sprint' to 'month' for improved clarity and consistency throughout the user interface."
+                ]
+            },
+            {
+                "name": "Update task modal components & UI",
+                "description": [
+                    "Redesigned the task modal user interface, repositioning the task chat beneath the task information for easier access, and consolidating task settings within a dedicated tab to streamline workflow and improve usability."
+                ]
+            },
+            {
+                "name": "Workflow drag&drop extend drop-box",
+                "description": [
+                    "Enhanced the workflow drag-and-drop functionality by extending the drop-box height, enabling users to effortlessly relocate task cards without the need for scrolling, further optimizing the administrative experience."
+                ]
+            },
+            {
+                "name": "BUG: Time registration times cannot be deleted inside the input to write a new value",
+                "description": [
+                    "Addressed a bug preventing users from deleting time registration values within the input field, restoring the ability to easily update and manage time entries."
+                ]
+            },
+            {
+                "name": "BUG: When opening 'release notes' page, page is already scrolled down by default",
+                "description": [
+                    "Fixed an issue causing the release notes page to automatically scroll down upon opening, ensuring immediate visibility of the latest updates and improvements"
+                ]
+            },
+            {
+                "name": "BUG: When dropping task into the same column, it duplicates the task in the frontend",
+                "description": [
+                    "Resolved a frontend bug that led to the duplication of tasks within the same column when utilizing drag-and-drop functionality, ensuring accurate task representation and organization."
+                ]
+            },
+            {
+                "name": "BUG: Sprintover quick-tasks icon is wrongly shown",
+                "description": [
+                    "Corrected the display issue of the Sprintover quick-tasks icon, restoring visual consistency and user experience within the application."
+                ]
+            }
+        ]
+    },
+    {
         "releaseVersion": "2.0.1",
         "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-jan-van-der-wolf-20207148.jpg",
         "releaseDate": "18-03-2024",
