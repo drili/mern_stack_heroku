@@ -5,6 +5,12 @@
         "releaseDate": "15-05-2024",
         "releaseObject": [
             {
+                "name": "Workflow task card percentage time registration",
+                "description": [
+                    "Added UX improvement to task cards by adding a time percentage line that indicates the time registrations in percentage based on the task time high value. Calculacation: (timeRegisteredTotal * 100) / taskHigh."
+                ]
+            },
+            {
                 "name": "Possibility to change task vertical",
                 "description": [
                     "Implemented the functionality to modify a task's vertical assignment, enabling enhanced flexibility and adaptability during project organization and planning."

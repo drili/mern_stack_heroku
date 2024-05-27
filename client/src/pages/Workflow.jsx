@@ -71,7 +71,7 @@ const Workflow = () => {
             const activeUserId = userId ? userId : user.id
 
             if (activeSprintCheck && activeSprintCheck.sprintMonth && activeSprintCheck.sprintYear) {
-                const response = await axios.get(`${baseURL}/tasks/fetch-by-user-sprint/${activeUserId}?month=${activeSprintCheck.sprintMonth}&year=${activeSprintCheck.sprintYear}`)
+                const response = await axios.get(`${baseURL}/tasks/fetch-by-user-sprint/${activeUserId}?month=${activeSprintCheck.sprintMonth}&year=${activeSprintCheck.sprintYear}&time_reg=true`)
 
                 if (response.data.length == 0) {
                     setTasks([])
@@ -80,8 +80,8 @@ const Workflow = () => {
                 }
                 setTasks(response.data)
                 setFilteredTasks(response.data)
-            }
 
+            }
         } catch (error) {
             console.error('Failed to fetch tasks', error)
         }
@@ -250,7 +250,9 @@ const Workflow = () => {
                                                             estimatedTime={task?.estimatedTime}
                                                             taskDeadline={task?.taskDeadline}
                                                             toggleSmallCards={toggleSmallCards}
+                                                            timeRegisteredTotal={task?.timeRegistrations.reduce((total, { timeRegistered }) => total + timeRegistered, 0)}
                                                         // customer={task.taskCustomer}
+
                                                         ></TaskCard>
                                                     </span>
                                                 )}
