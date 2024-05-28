@@ -6,9 +6,10 @@ import { FaCalendar, FaClock } from "react-icons/fa";
 import TaskModal from './TaskModal'
 import { ConfigContext } from '../../context/ConfigContext';
 
-const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName, customerColor, taskLow, taskHigh, taskSprintId, taskSprintName, taskType, estimatedTime, taskDeadline, toggleSmallCards }) => {
+const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName, customerColor, taskLow, taskHigh, taskSprintId, taskSprintName, taskType, estimatedTime, taskDeadline, toggleSmallCards, timeRegisteredTotal }) => {
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [totalTimePercentage, setTotalTimePercentage] = useState(0)
 
     const { baseURL } = useContext(ConfigContext);
 
@@ -17,11 +18,16 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
         taskDescription.length > MAX_DESC_LENGTH
             ? taskDescription.slice(0, MAX_DESC_LENGTH) + "..."
             : taskDescription
-    
+
     const truncatedTaskName =
         taskName.length > MAX_DESC_LENGTH
             ? taskName.slice(0, MAX_DESC_LENGTH) + "..."
             : taskName
+
+    useEffect(() => {
+        const percentageTimeCalc_1 = parseFloat(timeRegisteredTotal * 100) / taskHigh
+        setTotalTimePercentage(percentageTimeCalc_1)
+    }, [taskHigh, timeRegisteredTotal])
 
     return (
         <div
@@ -53,7 +59,7 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                 </section>
                 <h3 className='font-bold mt-5 leading-5'>{truncatedTaskName}</h3>
             </span>
-                
+
             {!toggleSmallCards && (
                 <span>
                     <p className='text-sm mt-3 leading-4'>{truncatedTaskDescription}</p>
@@ -81,7 +87,26 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
             {!toggleSmallCards && (
                 <span className=''>
                     <section className='relative h-[45px] mt-2.5 overflow-hidden'>
-                        <hr className='mb-3' />
+
+                        {taskType !== "quickTask" && (
+                            <div className="parentPercentageLine">
+                                <span
+                                    className={totalTimePercentage < 100 ? `bg-emerald-600 h-[2px] block mb-3` : `bg-rose-800 h-[2px] block mb-3`}
+                                    style={{ width: `${totalTimePercentage}%` }}
+                                ></span>
+
+                            </div>
+                        )}
+
+                        {taskType === "quickTask" && (
+                            <div className="parentPercentageLine-quickTask">
+                                <span
+                                    className="bg-slate-100 h-[2px] block mb-3"
+                                ></span>
+
+                            </div>
+                        )}
+
                         {taskPersons.map((person, index) => {
                             let personsLeft = Math.max(taskPersons.length - 2);
 
