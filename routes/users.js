@@ -224,7 +224,8 @@ router.put("/profile/upload-image", upload.single("profileImage"), async (req, r
                 is_activated: updatedUser.isActivated,
                 profile_image: updatedUser.profileImage,
                 user_role: updatedUser.userRole,
-                user_title: updatedUser.userTitle
+                user_title: updatedUser.userTitle,
+                active_year: updatedUser.activeYear,
             }
          })
     } catch (error) {
