@@ -5,3 +5,4 @@ https://dribbble.com/shots/20002181-Changelog-Template
     - https://mailchimp.com/?currency=DKK
     - https://github.com/features/copilot
     - https://ovo-smarter.webflow.io/ ***
+    - https://develix.webflow.io/ ***
