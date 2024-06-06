@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 
 require('dotenv').config()
 
-// Routes
+// *** Routes
 const userRouter = require("./routes/users")
 const customerRouter = require("./routes/customers")
 const updateRouter = require("./routes/updates")
@@ -15,6 +15,8 @@ const labelRouter = require("./routes/labels")
 const verticalRouter = require("./routes/verticals")
 const commentsRouter = require("./routes/comments")
 const notificationsRouter = require("./routes/notifications")
+
+const accountRouter = require("./routes/account")
 
 const app = express()
 
@@ -50,6 +52,8 @@ app.use("/verticals", verticalRouter)
 app.use("/comments", commentsRouter)
 app.use("/notifications", notificationsRouter)
 
+app.use("/api/account", accountRouter)
+
 io.on("connection", (socket) => {
     // console.log("A user connected");
     socket.on("register", userId => {
@@ -58,16 +62,22 @@ io.on("connection", (socket) => {
 
 });
 
-const uri = process.env.MONGO_DB_URI
-mongoose.connect(uri, { 
-    useNewUrlParser: true,
-    useUnifiedTopology: true 
-})
+const staticDbUrl = process.env.MONGO_DB_URI
+mongoose.connect(staticDbUrl, {}).then(() => {
+    console.log("::: Connected to static MongoDB for accounts successfully");
+}).catch((err) => {
+    console.error('::: Failed to connect to static MongoDB', err);
+});
 
-const connection = mongoose.connection
-connection.once('open', () => {
-    console.log("::: MongoDB database connection established successfully")
-})
+// mongoose.connect(uri, { 
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true 
+// })
+
+// const connection = mongoose.connection
+// connection.once('open', () => {
+//     console.log("::: MongoDB database connection established successfully")
+// })
 
 server.listen(process.env.PORT, () => {
     console.log("::: Server is running on port 5000");

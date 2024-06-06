@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/admin/Register';
-import Home from './components/Home';
+import Home from './pages-pre/Home';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 import AdminRoute from './AdminRoute';
@@ -28,27 +28,55 @@ import TaskVerticalsOverview from './pages/admin/TaskVerticalsOverview';
 import ReleaseNotes from './pages/ReleaseNotes';
 import TaskView from './pages/tasks/TaskView';
 
+import LayoutPre from './pages-pre/LayoutPre';
+import Registration from './pages-pre/Registration';
+import TestComponent from './test/TestComponent';
+
 function AppRoutes() {
     return (
+
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/user-not-activated" element={<UserNotActivated/>}/>
+                {/* SaaS pages */}
+                <Route path="/" element={
+                    <LayoutPre>
+                        <Home />
+                    </LayoutPre>
+                } />
 
+                <Route path="/registration" element={
+                    <LayoutPre>
+                        <Registration />
+                    </LayoutPre>
+                } />
+
+                {/* TEST */}
                 <Route 
-                    path="/*" 
+                    path='/:accountUsername/*'
+                    element={
+                        <Routes>
+                            <Route path='testing' element={<TestComponent />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/user-not-activated" element={<UserNotActivated />} />
+                        </Routes>
+                    }
+                    >
+                </Route>
+
+                {/* TODO: Update routes to include :accountUsername */}
+                <Route
+                    path="/:accountUsername/*"
                     element={
                         <Layout>
                             <Routes>
                                 <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                                 <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                                 <Route path="create-task" element={<ProtectedRoute><CreateTask /></ProtectedRoute>} />
-                                <Route path="sprint-overview" element={<ProtectedRoute><SprintOverview/></ProtectedRoute>} />
-                                <Route path="time-registrations" element={<ProtectedRoute><TimeRegistrations/></ProtectedRoute>} />
+                                <Route path="sprint-overview" element={<ProtectedRoute><SprintOverview /></ProtectedRoute>} />
+                                <Route path="time-registrations" element={<ProtectedRoute><TimeRegistrations /></ProtectedRoute>} />
                                 <Route path="release-notes" element={<ProtectedRoute><ReleaseNotes /></ProtectedRoute>} />
                                 <Route path='task-view' element={<ProtectedRoute><TaskView /></ProtectedRoute>} />
-                                <Route 
+                                <Route
                                     path="customers"
                                 >
                                     <Route index={true} element={<Customers />}></Route>
@@ -58,46 +86,46 @@ function AppRoutes() {
                                 <Route path="workflow" element={<ProtectedRoute><Workflow /></ProtectedRoute>} />
                                 <Route path="register-offtime" element={<ProtectedRoute><RegisterOffTimes /></ProtectedRoute>} />
                                 <Route path="notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-                                
+
                                 <Route path="admin" element={<ProtectedRoute>
                                     <AdminRoute>
-                                        <Admin/>
+                                        <Admin />
                                     </AdminRoute>
                                 </ProtectedRoute>} />
                                 <Route path="admin/time-registrations-overview" element={<ProtectedRoute>
                                     <AdminRoute>
-                                        <TimeRegistrationsOverview/>
+                                        <TimeRegistrationsOverview />
                                     </AdminRoute>
                                 </ProtectedRoute>} />
                                 <Route path="admin/persons-overview" element={<ProtectedRoute>
                                     <AdminRoute>
-                                        <PersonsOverview/>
+                                        <PersonsOverview />
                                     </AdminRoute>
                                 </ProtectedRoute>} />
                                 <Route path="admin/register" element={<ProtectedRoute>
                                     <AdminRoute>
-                                        <Register/>
+                                        <Register />
                                     </AdminRoute>
                                 </ProtectedRoute>} />
                                 <Route path="admin/general-features" element={<ProtectedRoute>
                                     <AdminRoute>
-                                        <GeneralFeatures/>
+                                        <GeneralFeatures />
                                     </AdminRoute>
                                 </ProtectedRoute>} />
                                 <Route path="admin/task-verticals-overview" element={<ProtectedRoute>
                                     <AdminRoute>
-                                        <TaskVerticalsOverview/>
+                                        <TaskVerticalsOverview />
                                     </AdminRoute>
                                 </ProtectedRoute>} />
-                                
-                                <Route path="cannot-access" element={
-                                    <ProtectedRoute><CannotAccess/></ProtectedRoute>
-                                }/>
 
-                                <Route path="*" element={<NotFound/>} />
+                                <Route path="cannot-access" element={
+                                    <ProtectedRoute><CannotAccess /></ProtectedRoute>
+                                } />
+
+                                <Route path="*" element={<NotFound />} />
                             </Routes>
                         </Layout>
-                    } 
+                    }
                 />
             </Routes>
         </BrowserRouter>
