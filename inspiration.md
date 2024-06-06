@@ -12,5 +12,6 @@ https://dribbble.com/shots/20002181-Changelog-Template
     - https://mi-soluna.webflow.io/ (8)
     - https://az-basel.webflow.io/features (8)
     - https://maximize-saas-webflow-template.webflow.io/about (9)
+    - https://glint-wbs.webflow.io/about (9.5)
 
     - https://webflow.com/templates/tag/saas-websites
