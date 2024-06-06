@@ -13,4 +13,7 @@ const labelSchema = new mongoose.Schema({
 
 const Label = mongoose.model("Label", labelSchema)
 
-module.exports = Label
+module.exports = {
+    Label: Label,
+    LabelSchema: labelSchema
+};

@@ -41,4 +41,7 @@ const timeRegistrationSchema = new mongoose.Schema({
 
 const TimeRegistration = mongoose.model("TimeRegistration", timeRegistrationSchema)
 
-module.exports = TimeRegistration
+module.exports = {
+    TimeRegistration: TimeRegistration,
+    TimeRegistrationSchema: timeRegistrationSchema
+};

@@ -18,4 +18,7 @@ const groupsSchema = mongoose.Schema({
 
 const Groups = mongoose.model("Groups", groupsSchema)
 
-module.exports = Groups
+module.exports = {
+    Groups: Groups,
+    GroupsSchema: groupsSchema
+};

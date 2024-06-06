@@ -18,4 +18,7 @@ const sprintSchema = mongoose.Schema({
 
 const Sprints = mongoose.model("Sprints", sprintSchema)
 
-module.exports = Sprints
+module.exports = {
+    Sprints: Sprints,
+    SprintsSchema: sprintSchema
+};

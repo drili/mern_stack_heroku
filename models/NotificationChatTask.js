@@ -45,4 +45,7 @@ const notificationChatTask = mongoose.Schema({
 
 const NotificationChatTask = mongoose.model("NotificationChatTask", notificationChatTask)
 
-module.exports = NotificationChatTask
+module.exports = {
+    NotificationChatTask: NotificationChatTask,
+    NotificationChatTaskSchema: notificationChatTask
+};

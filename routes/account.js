@@ -2,8 +2,19 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
+
 const Account = require("../models/Account");
-const { UserSchema } = require("../models/User")
+const { UserSchema } = require("../models/User");
+const { CommentSchema } = require("../models/Comments");
+const { CustomerSchema } = require("../models/Customer");
+const { GroupsSchema } = require("../models/Groups");
+const { LabelSchema } = require("../models/Label");
+const { NotificationChatTaskSchema } = require("../models/NotificationChatTask");
+const { SprintsSchema } = require("../models/Sprints");
+const { SprintYearSchema } = require("../models/SprintYear");
+const { TaskSchema } = require("../models/Task");
+const { TimeRegistrationSchema } = require("../models/TimeRegistration");
+const { VerticalSchema } = require("../models/Vertical");
 
 const router = express.Router();
 
@@ -53,6 +64,18 @@ router.post("/verify-account", async (req, res) => {
             });
 
             await newUser.save();
+
+            // *** Create collections
+            newDbConnection.model("Comment", CommentSchema)
+            newDbConnection.model("Customer", CustomerSchema)
+            newDbConnection.model("Groups", GroupsSchema)
+            newDbConnection.model("Label", LabelSchema)
+            newDbConnection.model("NotificationChatTask", NotificationChatTaskSchema)
+            newDbConnection.model("Sprints", SprintsSchema)
+            newDbConnection.model("SprintYear", SprintYearSchema)
+            newDbConnection.model("Task", TaskSchema)
+            newDbConnection.model("TimeRegistration", TimeRegistrationSchema)
+            newDbConnection.model("Vertical", VerticalSchema)
 
             res.status(200).json({ message: "Your account has been verified successfully" });
         });
