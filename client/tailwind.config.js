@@ -9,6 +9,9 @@ module.exports = {
             lineHeight: {
                 "custom-12": "1.2em",
                 "custom-14": "1.4em", 
+            },
+            borderRadius: {
+                "extra-large": "20px",
             }
         },
 	},
