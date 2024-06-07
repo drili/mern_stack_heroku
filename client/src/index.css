@@ -83,6 +83,13 @@ a:hover {
 }
 
 /***
+* Custom Classes
+***/
+.text-wrapped-balance {
+    text-wrap: balance !important;
+}
+
+/***
 * Custom CSS
 ***/
 .navbar {

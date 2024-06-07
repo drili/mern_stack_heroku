@@ -8,7 +8,7 @@ const LayoutPre = ({ children }) => {
             <NavbarUI />
         </section>
 
-        <section className='max-w-screen-xl m-auto'>
+        <section className=''>
             {children}
         </section>
     </div>

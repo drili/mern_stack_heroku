@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import HeroOne from '../components/ui/HeroOne';
 
 function Home() {
 
@@ -9,12 +10,13 @@ function Home() {
     // }, [navigate])
 
     return (
-        <>
-            <h1>Home Page 1</h1>
+        <section id='pages-pre-Home'>
+            <HeroOne />
+            
             <span className='block mb-[2000px]'>
                 <p>test</p>
             </span>
-        </>
+        </section>
     )
 }
 
