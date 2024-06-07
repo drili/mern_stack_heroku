@@ -120,3 +120,19 @@ input[type=color] {
 #NotificationsSections .notificationWrapper:not(:last-child) {
 	border-bottom: 1px solid #f8fafc;
 }
+
+#HowItWorksSlider .slick-slider button {
+    top: -40px;
+    display: block;
+    background: #6b7280;
+    border: none;
+}
+
+#HowItWorksSlider .slick-prev {
+    left: auto;
+    right: 50px;
+}
+
+#HowItWorksSlider .slick-next {
+    right: 0;
+}
