@@ -1,4 +1,3 @@
-// HowItWorksSlider.js
 import React from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
@@ -35,7 +34,7 @@ const HowItWorksSlider = () => {
     };
 
     return (
-        <section className='mx-auto py-10 overflow-hidden'>
+        <section id='HowItWorksSlider' className='mx-auto py-10 overflow-hidden relative'>
             <div className='container'>
                 <div className='max-w-[400px] mb-20'>
                     <HeadingTitle>How it works, a deep dive</HeadingTitle>
