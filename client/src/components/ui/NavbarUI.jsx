@@ -24,7 +24,7 @@ const NavbarUI = () => {
                     <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Contact</a>
                 </div>
                 <div className="hidden md:block">
-                    <button className="bg-white text-zinc-900 px-6 py-3 rounded hover:bg-pink-600 hover:text-white">Sign Up</button>
+                    <button className="bg-white text-zinc-900 px-6 py-3 rounded hover:bg-pink-700 hover:text-white">Sign Up</button>
                 </div>
                 <div className="md:hidden">
                     <button onClick={toggleMenu} className="text-zinc-900 focus:outline-none rounded">
