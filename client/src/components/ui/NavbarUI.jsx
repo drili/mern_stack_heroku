@@ -16,10 +16,11 @@ const NavbarUI = () => {
                         <Logo lightLogo={true} />
                     </a>
                 </div>
-                <div className="hidden md:flex space-x-8">
+                <div className="hidden md:flex space-x-4">
                     <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Home</a>
+                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Features</a>
+                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Pricing</a>
                     <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">About</a>
-                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Services</a>
                     <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Contact</a>
                 </div>
                 <div className="hidden md:block">
