@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import HeroOne from '../components/ui/HeroOne';
 import FeatureSection from '../components/ui/FeatureSection';
+import HowItWorksSlider from '../components/ui/HowItWorksSlider';
 
 function Home() {
 
@@ -14,9 +15,9 @@ function Home() {
     return (
         <section id='pages-pre-Home'>
             <HeroOne />
-
             <FeatureSection />
-            
+            <HowItWorksSlider />
+
             <span className='block mb-[2000px]'>
                 <p>test</p>
             </span>
