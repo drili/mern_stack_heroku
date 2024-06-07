@@ -11,7 +11,7 @@ import ButtonBig from './elements/ButtonBig';
 
 const HeroOne = () => {
     return (
-        <div className='relative mb-40'>
+        <div className='relative mb-20 md:mb-40'>
             <div className='relative'>
                 <div
                     className='absolute inset-0 bg-zinc-900'
@@ -43,9 +43,9 @@ const HeroOne = () => {
                         </div>
                     </div>
 
-                    <section className='container'>
-                        <div className="relative bg-stone-100 p-5 mt-10 rounded-extra-large">
-                            <img src={OverlappingImage} alt="Overlapping" className="shadow-lg mr-auto ml-auto w-[90%] md:w-full rounded-extra-large" />
+                    <section className='container px-4'>
+                        <div className="relative bg-stone-100 p-2 mt-10 rounded-extra-large md:p-5">
+                            <img src={OverlappingImage} alt="Overlapping" className="shadow-lg w-full rounded-extra-large" />
                         </div>
                     </section>
                 </section>
