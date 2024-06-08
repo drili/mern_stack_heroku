@@ -7,21 +7,45 @@ import RegisterImage from "../../assets/Screenshot_1.png"
 import ManageTasksImage from "../../assets/Screenshot_1.png"
 import ViewReportsImage from "../../assets/Screenshot_1.png"
 import HeadingTitle from './elements/HeadingTitle';
+import SubTitle from './elements/SubTitle';
+import SubTitleSmall from './elements/SubTitleSmall';
+import { NextArrow, PrevArrow } from './elements/Arrows';
+
+const SliderItem = ({ imageSrc, title, description}) => {
+    return (
+        <div className='pr-5 pl-5 lg:pr-20'>
+            <div className='grid grid-cols-[2fr_3fr] bg-stone-100 rounded-extra-large'>
+                <span className='bg-white rounded-extra-large'>
+                    <img src={imageSrc} alt="Register Time" className='w-full h-full min-h-[350px] object-cover rounded-extra-large scale-95' />
+                </span>
+                <span className='px-10 pt-10 text-left'>
+                    <SubTitleSmall>{title}</SubTitleSmall>
+                    <p className='mt-5 text-lg'>{description}</p>
+                </span>
+            </div>
+        </div>
+    )
+}
 
 const HowItWorksSlider = () => {
     const settings = {
         dots: false,
         infinite: false,
-        speed: 500,
+        speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: true,
         centerMode: true,
-        centerPadding: '300px',
+        centerPadding: '400px',
+        easing: "ease-in-out",
+        prevArrow: <PrevArrow />,
+        nextArrow: <NextArrow />,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
+                    infinite: false,
+                    dots: true,
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
@@ -42,39 +66,26 @@ const HowItWorksSlider = () => {
             </div>
 
             <Slider {...settings} className='w-full mx-auto'>
-                <div className='pr-20'>
-                    <div className='grid grid-cols-2 bg-stone-100 rounded-extra-large'>
-                        <span className='bg-white rounded-extra-large'>
-                            <img src={RegisterImage} alt="Register Time" className='w-full h-[350px] object-cover rounded-extra-large scale-95' />
-                        </span>
-                        <span className='px-10'>
-                            <h3 className='text-xl font-semibold text-center mt-4'>Register Time</h3>
-                            <p className='text-center mt-2'>Effortlessly register your time with our intuitive interface.</p>
-                        </span>
-                    </div>
-                </div>
-                <div className='pr-20'>
-                    <div className='grid grid-cols-2 bg-stone-100 rounded-extra-large'>
-                        <span className='bg-white rounded-extra-large'>
-                            <img src={ManageTasksImage} alt="Manage Tasks" className='w-full h-[350px] object-cover rounded-extra-large scale-95' />
-                        </span>
-                        <span>
-                            <h3 className='text-xl font-semibold text-center mt-4'>Manage Tasks</h3>
-                            <p className='text-center mt-2'>Easily manage and prioritize your tasks.</p>
-                        </span>
-                    </div>
-                </div>
-                <div className='pr-20'>
-                    <div className='grid grid-cols-2 bg-stone-100 rounded-extra-large'>
-                        <span className='bg-white rounded-extra-large'>
-                            <img src={ViewReportsImage} alt="View Reports" className='w-full h-[350px] object-cover rounded-extra-large scale-95' />
-                        </span>
-                        <span>
-                            <h3 className='text-xl font-semibold text-center mt-4'>View Reports</h3>
-                            <p className='text-center mt-2'>Generate and view detailed reports of your time and tasks.</p>
-                        </span>
-                    </div>
-                </div>
+                <SliderItem
+                    imageSrc={RegisterImage}
+                    title="Register Time"
+                    description="Effortlessly register your time with our intuitive interface. Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt harum eaque praesentium sunt blanditiis nam ad ipsa, inventore, provident asperiores voluptas saepe ipsam autem consequuntur beatae dolorum porro animi ea."
+                />
+                <SliderItem
+                    imageSrc={RegisterImage}
+                    title="Register Time"
+                    description="Effortlessly register your time with our intuitive interface. Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt harum eaque praesentium sunt blanditiis nam ad ipsa, inventore, provident asperiores voluptas saepe ipsam autem consequuntur beatae dolorum porro animi ea."
+                />
+                <SliderItem
+                    imageSrc={RegisterImage}
+                    title="Register Time"
+                    description="Effortlessly register your time with our intuitive interface. Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt harum eaque praesentium sunt blanditiis nam ad ipsa, inventore, provident asperiores voluptas saepe ipsam autem consequuntur beatae dolorum porro animi ea."
+                />
+                <SliderItem
+                    imageSrc={RegisterImage}
+                    title="Register Time"
+                    description="Effortlessly register your time with our intuitive interface. Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt harum eaque praesentium sunt blanditiis nam ad ipsa, inventore, provident asperiores voluptas saepe ipsam autem consequuntur beatae dolorum porro animi ea."
+                />
             </Slider>
         </section>
     );

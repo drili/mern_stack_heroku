@@ -121,29 +121,41 @@ input[type=color] {
 	border-bottom: 1px solid #f8fafc;
 }
 
-#HowItWorksSlider .slick-slider button {
+#HowItWorksSlider .slick-slider button,
+#HowItWorksSlider .slick-arrow.slick-next,
+#HowItWorksSlider .slick-arrow.slick-prev {
     top: -100px;
-    display: block;
+    display: flex !important;
     background: #f5f5f4;
     border: none !important;
     color: black;
     border-radius: 100%;
     width: 60px;
     height: 60px;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
 }
 #HowItWorksSlider .slick-slider button * {
     border: none !important;
 }
 
 #HowItWorksSlider .slick-prev {
-    left: auto;
-    right: 200px;
+    left: auto !important;
+    right: 215px !important;
 }
 
 #HowItWorksSlider .slick-next {
-    right: 125px;
+    right: 125px !important;
 }
+
 #HowItWorksSlider .slick-slider button::after,
 #HowItWorksSlider .slick-slider button::before {
     color: black !important;
+}
+
+#HowItWorksSlider .slick-arrow.slick-prev::before,
+#HowItWorksSlider .slick-arrow.slick-next::before {
+    display: none !important;
 }
