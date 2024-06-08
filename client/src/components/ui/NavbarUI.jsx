@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Logo from '../Logo'
+import { Link } from 'react-router-dom'
 
 const NavbarUI = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -17,11 +18,11 @@ const NavbarUI = () => {
                     </a>
                 </div>
                 <div className="hidden md:flex space-x-4">
-                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Home</a>
-                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Features</a>
-                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Pricing</a>
-                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">About</a>
-                    <a href="#" className="text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white">Contact</a>
+                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Home</Link>
+                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Features</Link>
+                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Pricing</Link>
+                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Contact</Link>
+                    {/* <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>About</Link> */}
                 </div>
                 <div className="hidden md:block">
                     <button className="bg-white text-zinc-900 px-6 py-3 rounded hover:bg-pink-700 hover:text-white">Sign Up</button>

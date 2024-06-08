@@ -18,6 +18,10 @@ function Home() {
             <FeatureSection />
             <HowItWorksSlider />
 
+            <h1>::: NEWSLETTER FORM + PRICING</h1>
+            <h1>FAQ</h1>
+            <h1>CONTACT FORM</h1>
+            <h1>FOOTER</h1>
             <span className='block mb-[2000px]'>
                 <p>test</p>
             </span>
