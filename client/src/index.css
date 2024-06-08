@@ -122,17 +122,28 @@ input[type=color] {
 }
 
 #HowItWorksSlider .slick-slider button {
-    top: -40px;
+    top: -100px;
     display: block;
-    background: #6b7280;
-    border: none;
+    background: #f5f5f4;
+    border: none !important;
+    color: black;
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+}
+#HowItWorksSlider .slick-slider button * {
+    border: none !important;
 }
 
 #HowItWorksSlider .slick-prev {
     left: auto;
-    right: 50px;
+    right: 200px;
 }
 
 #HowItWorksSlider .slick-next {
-    right: 0;
+    right: 125px;
+}
+#HowItWorksSlider .slick-slider button::after,
+#HowItWorksSlider .slick-slider button::before {
+    color: black !important;
 }

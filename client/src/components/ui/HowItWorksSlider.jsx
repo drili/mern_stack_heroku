@@ -17,7 +17,7 @@ const HowItWorksSlider = () => {
         slidesToScroll: 1,
         arrows: true,
         centerMode: true,
-        centerPadding: '400px',
+        centerPadding: '300px',
         responsive: [
             {
                 breakpoint: 1024,
@@ -26,7 +26,7 @@ const HowItWorksSlider = () => {
                     slidesToScroll: 1,
                     infinite: true,
                     dots: false,
-                    centerMode: false,  // Disable center mode on smaller screens
+                    centerMode: false,
                     centerPadding: '0%'
                 }
             }
@@ -42,21 +42,21 @@ const HowItWorksSlider = () => {
             </div>
 
             <Slider {...settings} className='w-full mx-auto'>
-                <div className='px-10'>
-                    <div className='grid grid-cols-2 bg-rose-500'>
-                        <span>
-                            <img src={RegisterImage} alt="Register Time" className='w-full h-[300px] object-cover rounded-md' />
+                <div className='pr-20'>
+                    <div className='grid grid-cols-2 bg-stone-100 rounded-extra-large'>
+                        <span className='bg-white rounded-extra-large'>
+                            <img src={RegisterImage} alt="Register Time" className='w-full h-[350px] object-cover rounded-extra-large scale-95' />
                         </span>
-                        <span>
+                        <span className='px-10'>
                             <h3 className='text-xl font-semibold text-center mt-4'>Register Time</h3>
                             <p className='text-center mt-2'>Effortlessly register your time with our intuitive interface.</p>
                         </span>
                     </div>
                 </div>
-                <div className='px-10'>
-                    <div className='grid grid-cols-2 bg-rose-500'>
-                        <span>
-                            <img src={ManageTasksImage} alt="Manage Tasks" className='w-full h-[300px] object-cover rounded-md' />
+                <div className='pr-20'>
+                    <div className='grid grid-cols-2 bg-stone-100 rounded-extra-large'>
+                        <span className='bg-white rounded-extra-large'>
+                            <img src={ManageTasksImage} alt="Manage Tasks" className='w-full h-[350px] object-cover rounded-extra-large scale-95' />
                         </span>
                         <span>
                             <h3 className='text-xl font-semibold text-center mt-4'>Manage Tasks</h3>
@@ -64,10 +64,10 @@ const HowItWorksSlider = () => {
                         </span>
                     </div>
                 </div>
-                <div className='px-10'>
-                    <div className='grid grid-cols-2 bg-rose-500'>
-                        <span>
-                            <img src={ViewReportsImage} alt="View Reports" className='w-full h-[300px] object-cover rounded-md' />
+                <div className='pr-20'>
+                    <div className='grid grid-cols-2 bg-stone-100 rounded-extra-large'>
+                        <span className='bg-white rounded-extra-large'>
+                            <img src={ViewReportsImage} alt="View Reports" className='w-full h-[350px] object-cover rounded-extra-large scale-95' />
                         </span>
                         <span>
                             <h3 className='text-xl font-semibold text-center mt-4'>View Reports</h3>

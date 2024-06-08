@@ -38,7 +38,7 @@ const FeatureSection = () => {
             </div>
 
             <span className='absolute top-0 bottom-0 left-0 right-0 flex mb-0 mr-auto ml-auto flex-col justify-center -z-10 opacity-5'>
-                <h1 className='rotate-90 md:rotate-0 text-[40vw] md:text-[10vw] text-center text-pink-700 font-bold'>Features</h1>
+                <h1 className='rotate-90 md:rotate-0 text-[40vw] md:text-[15vw] text-center text-pink-700 font-bold'>Features</h1>
             </span>
         </section>
     )
