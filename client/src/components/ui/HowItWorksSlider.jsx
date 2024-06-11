@@ -18,9 +18,9 @@ const SliderItem = ({ imageSrc, title, description}) => {
                 <span className='bg-white rounded-extra-large'>
                     <img src={imageSrc} alt="Register Time" className='w-full h-full min-h-[350px] object-cover rounded-extra-large scale-95' />
                 </span>
-                <span className='px-10 pt-10 text-left'>
+                <span className='px-10 pt-10 pb-10 text-left'>
                     <SubTitleSmall>{title}</SubTitleSmall>
-                    <p className='mt-5 text-lg'>{description}</p>
+                    <p className='mt-5 text-lg text-slate-800 font-medium'>{description}</p>
                 </span>
             </div>
         </div>
@@ -45,11 +45,10 @@ const HowItWorksSlider = () => {
                 breakpoint: 1024,
                 settings: {
                     infinite: false,
-                    dots: true,
+                    dots: false,
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     infinite: true,
-                    dots: false,
                     centerMode: false,
                     centerPadding: '0%'
                 }
@@ -58,7 +57,7 @@ const HowItWorksSlider = () => {
     };
 
     return (
-        <section id='HowItWorksSlider' className='mx-auto py-10 overflow-hidden relative'>
+        <section id='HowItWorksSlider' className='mx-auto py-10 overflow-hidden relative mb-40'>
             <div className='container'>
                 <div className='max-w-[400px] mb-20'>
                     <HeadingTitle>How it works, a deep dive</HeadingTitle>
