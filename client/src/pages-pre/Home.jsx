@@ -20,7 +20,6 @@ function Home() {
             <HowItWorksSlider />
             <NewsletterPricing />
 
-            <h1>::: NEWSLETTER FORM + PRICING</h1>
             <h1>FAQ</h1>
             <h1>CONTACT FORM</h1>
             <h1>FOOTER</h1>
