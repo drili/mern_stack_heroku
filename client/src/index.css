@@ -174,3 +174,8 @@ input[type=color] {
 #HowItWorksSlider .slick-arrow.slick-next::before {
     display: none !important;
 }
+
+#FAQSection button {
+    /* border-bottom: 1px solid;
+    border-radius: 0; */
+}

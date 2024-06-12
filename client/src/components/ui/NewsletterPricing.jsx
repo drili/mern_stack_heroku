@@ -10,7 +10,7 @@ const NewsletterPricing = () => {
     return (
         <section
             id='NewsletterPricing'
-            className='bg-zinc-900 py-10 px-4 md:py-[12rem] h-full'
+            className='bg-zinc-900 py-10 px-4 md:py-[12rem] h-full mb-10 md:mb-40'
             style={{
                 backgroundImage: `url(${BackgroundImage})`,
                 backgroundSize: 'cover',

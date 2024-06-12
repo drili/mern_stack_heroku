@@ -5,6 +5,8 @@ import HeroOne from '../components/ui/HeroOne';
 import FeatureSection from '../components/ui/FeatureSection';
 import HowItWorksSlider from '../components/ui/HowItWorksSlider';
 import NewsletterPricing from '../components/ui/NewsletterPricing';
+import FAQSection from '../components/ui/FAQSection';
+import ContactForm from '../components/ui/ContactForm';
 
 function Home() {
 
@@ -20,8 +22,9 @@ function Home() {
             <HowItWorksSlider />
             <NewsletterPricing />
 
-            <h1>FAQ</h1>
-            <h1>CONTACT FORM</h1>
+            <FAQSection />
+            <ContactForm />
+
             <h1>FOOTER</h1>
             <span className='block mb-[2000px]'>
                 <p>test</p>
