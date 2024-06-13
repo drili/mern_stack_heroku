@@ -7,6 +7,7 @@ import HowItWorksSlider from '../components/ui/HowItWorksSlider';
 import NewsletterPricing from '../components/ui/NewsletterPricing';
 import FAQSection from '../components/ui/FAQSection';
 import ContactForm from '../components/ui/ContactForm';
+import FooterUI from '../components/ui/FooterUI';
 
 function Home() {
 
@@ -21,14 +22,9 @@ function Home() {
             <FeatureSection />
             <HowItWorksSlider />
             <NewsletterPricing />
-
             <FAQSection />
             <ContactForm />
-
-            <h1>FOOTER</h1>
-            <span className='block mb-[2000px]'>
-                <p>test</p>
-            </span>
+            <FooterUI />
         </section>
     )
 }
