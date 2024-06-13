@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Logo from '../Logo'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const NavbarUI = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentURL, setCurrentURL] = useState("")
+
+    const location = useLocation()
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -12,32 +14,34 @@ const NavbarUI = () => {
 
     const getLinkClass = (path) => {
         return currentURL === path
-            ? "text-white py-3 px-4 rounded bg-custom-rgba text-white"
+            ? "text-white py-3 px-4 rounded bg-custom-rgba text-white hover:text-white"
             : "text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white"
     }
 
     useEffect(() => {
         setCurrentURL(window.location.pathname);
-    }, [])
+    }, [location])
 
     return (
         <nav className="bg-zinc-900 p-4">
             <div className="container mx-auto flex items-center justify-between">
                 <div className="text-white font-bold text-xl">
-                    <a href="#">
+                    <Link to="/">
                         <Logo lightLogo={true} />
-                    </a>
+                    </Link>
                 </div>
                 <div className="hidden md:flex space-x-4">
                     <Link to="/" className={getLinkClass("/")}>Home</Link>
-                    <Link to="/" className={getLinkClass("/features")}>Features</Link>
-                    <Link to="/" className={getLinkClass("/pricing")}>Pricing</Link>
-                    <Link to="/" className={getLinkClass("/contact")}>Contact</Link>
+                    <Link to="/features" className={getLinkClass("/features")}>Features</Link>
+                    <Link to="/pricing" className={getLinkClass("/pricing")}>Pricing</Link>
+                    <Link to="/contact" className={getLinkClass("/contact")}>Contact</Link>
                     <p>{currentURL}</p>
                     {/* <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>About</Link> */}
                 </div>
                 <div className="hidden md:block">
-                    <button className="bg-white text-zinc-900 px-6 py-3 rounded hover:bg-pink-700 hover:text-white">Sign Up</button>
+                    <Link to="/registration">
+                        <button className="bg-white text-zinc-900 px-6 py-3 rounded hover:bg-pink-700 hover:text-white">Sign Up</button>
+                    </Link>
                 </div>
                 <div className="md:hidden">
                     <button onClick={toggleMenu} className="text-zinc-900 focus:outline-none rounded">

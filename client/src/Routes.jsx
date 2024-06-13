@@ -31,6 +31,9 @@ import TaskView from './pages/tasks/TaskView';
 import LayoutPre from './pages-pre/LayoutPre';
 import Registration from './pages-pre/Registration';
 import TestComponent from './test/TestComponent';
+import Features from './pages-pre/Features';
+import Pricing from './pages-pre/Pricing';
+import Contact from './pages-pre/Contact';
 
 function AppRoutes() {
     return (
@@ -38,17 +41,11 @@ function AppRoutes() {
         <BrowserRouter>
             <Routes>
                 {/* SaaS pages */}
-                <Route path="/" element={
-                    <LayoutPre>
-                        <Home />
-                    </LayoutPre>
-                } />
-
-                <Route path="/registration" element={
-                    <LayoutPre>
-                        <Registration />
-                    </LayoutPre>
-                } />
+                <Route path="/" element={<LayoutPre><Home /></LayoutPre>} />
+                <Route path="/features" element={<LayoutPre><Features /></LayoutPre>} />
+                <Route path="/pricing" element={<LayoutPre><Pricing /></LayoutPre>} />
+                <Route path="/contact" element={<LayoutPre><Contact /></LayoutPre>} />
+                <Route path="/registration" element={<LayoutPre><Registration /></LayoutPre>} />
 
                 {/* TEST */}
                 <Route 
