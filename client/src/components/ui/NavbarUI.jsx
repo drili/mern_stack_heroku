@@ -1,13 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../Logo'
 import { Link } from 'react-router-dom'
 
 const NavbarUI = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const [currentURL, setCurrentURL] = useState("")
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
     }
+
+    const getLinkClass = (path) => {
+        return currentURL === path
+            ? "text-white py-3 px-4 rounded bg-custom-rgba text-white"
+            : "text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white"
+    }
+
+    useEffect(() => {
+        setCurrentURL(window.location.pathname);
+    }, [])
 
     return (
         <nav className="bg-zinc-900 p-4">
@@ -18,10 +29,11 @@ const NavbarUI = () => {
                     </a>
                 </div>
                 <div className="hidden md:flex space-x-4">
-                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Home</Link>
-                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Features</Link>
-                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Pricing</Link>
-                    <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>Contact</Link>
+                    <Link to="/" className={getLinkClass("/")}>Home</Link>
+                    <Link to="/" className={getLinkClass("/features")}>Features</Link>
+                    <Link to="/" className={getLinkClass("/pricing")}>Pricing</Link>
+                    <Link to="/" className={getLinkClass("/contact")}>Contact</Link>
+                    <p>{currentURL}</p>
                     {/* <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>About</Link> */}
                 </div>
                 <div className="hidden md:block">
