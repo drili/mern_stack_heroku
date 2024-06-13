@@ -15,6 +15,8 @@ const { SprintYearSchema } = require("../models/SprintYear");
 const { TaskSchema } = require("../models/Task");
 const { TimeRegistrationSchema } = require("../models/TimeRegistration");
 const { VerticalSchema } = require("../models/Vertical");
+const Tenants = require("../models/Tenants");
+const { User } = require("../models/User");
 
 const router = express.Router();
 
@@ -24,66 +26,40 @@ router.post("/verify-account", async (req, res) => {
     console.log({ email, confirmationCode });
 
     try {
-        const account = await Account.findOne({ email })
+        // *** NEW SETUP
+        const tenant = await Tenants.findOne({ email })
 
-        if (!account) {
-            return res.status(404).json({ message: "Account not found" })
+        if (!tenant) {
+            return res.status(404).json({ message: "Tenant not found" })
         }
 
-        if (account.accountConfirmationCode !== confirmationCode) {
+        if (tenant.tenantConfirmationCode !== confirmationCode) {
             return res.status(400).json({ message: "Invalid confirmation code" })
         }
 
-        account.accountConfirmed = true
-        await account.save()
+        tenant.tenantConfirmed = true
+        await tenant.save()
+        
+        const tenantUsername = tenant.tenantUsername
 
-        const accountUsername = account.accountUsername
+        // *** Create user
+        const newUser = new User({
+            tenantId: tenant._id,
+            username: tenantUsername, 
+            email: tenant.email,
+            password: tenant.password,
+            isActivated: true,
+            userRole: 1,
+            userTitle: "admin",
+            isPasswordHashed: true,
+        })
+        await newUser.save()
 
-        const dbName = `Account-${accountUsername}`;
-        const newDbUri = `mongodb+srv://db:nPa7vcJRCeCXaHRd@cluster0.2dtcjow.mongodb.net/${dbName}`;
-        const newDbConnection = mongoose.createConnection(newDbUri, {})
-
-        newDbConnection.on('connected', async () => {
-            console.log(`Connected to database: ${dbName}`);
-
-            const SampleSchema = new mongoose.Schema({ name: String });
-            const SampleModel = newDbConnection.model("initialCollection", SampleSchema);
-
-            await SampleModel.create({ name: "Initial Document" });
-
-            const UserModel = newDbConnection.model("User", UserSchema);
-
-            const newUser = new UserModel({
-                username: accountUsername,
-                email: account.email,
-                password: account.password,
-                isActivated: true,
-                userRole: 1,
-                userTitle: "admin",
-                isPasswordHashed: true
-            });
-
-            await newUser.save();
-
-            // *** Create collections
-            newDbConnection.model("Comment", CommentSchema)
-            newDbConnection.model("Customer", CustomerSchema)
-            newDbConnection.model("Groups", GroupsSchema)
-            newDbConnection.model("Label", LabelSchema)
-            newDbConnection.model("NotificationChatTask", NotificationChatTaskSchema)
-            newDbConnection.model("Sprints", SprintsSchema)
-            newDbConnection.model("SprintYear", SprintYearSchema)
-            newDbConnection.model("Task", TaskSchema)
-            newDbConnection.model("TimeRegistration", TimeRegistrationSchema)
-            newDbConnection.model("Vertical", VerticalSchema)
-
+        if (newUser) {
             res.status(200).json({ message: "Your account has been verified successfully" });
-        });
-
-        newDbConnection.on('error', (err) => {
-            console.error(`Error connecting to database: ${dbName}`, err);
-            res.status(500).json({ message: "Error verifying account", error: err });
-        });
+        } else {
+            res.status(500).json({ message: "Error creating user" });
+        }
     } catch (error) {
         res.status(500).json({ message: "Error verifying account", error })
     }
@@ -95,23 +71,23 @@ router.post("/register", async (req, res) => {
     console.log({ accountUsername, email, password, confirmationCode });
 
     try {
-        const account = new Account({
-            accountUsername,
+        const tenant = new Tenants({
+            tenantUsername: accountUsername,
             email,
             password,
-            accountConfirmationCode: confirmationCode,
+            tenantConfirmationCode: confirmationCode,
         });
-        await account.save();
+        await tenant.save();
 
-        console.log({ account });
-        if (!account) {
+        console.log({ tenant });
+        if (!tenant) {
             res.status(400).json({ message: "Error creating account" });
             return;
         }
 
-        res.status(201).json({ message: "Account created successfully", account });
+        res.status(201).json({ message: "Tentant created successfully", tenant });
     } catch (error) {
-        res.status(400).json({ message: "Error creating account", error });
+        res.status(400).json({ message: "Error creating tenant", error });
     }
 });
 
