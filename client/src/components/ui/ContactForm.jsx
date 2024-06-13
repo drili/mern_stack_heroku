@@ -22,7 +22,7 @@ const ContactForm = () => {
 
             <div className='flex flex-col lg:flex-row gap-20 container mx-auto'>
                 <section id='ContactInfo' className='bg-stone-100 w-full p-[2rem] md:p-[4rem] rounded-extra-large'>
-                    <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Contact Information</h3>
+                    <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Contact information</h3>
                     <span className='flex flex-col gap-2'>
                         <p className='text-slate-800 font-bold text-xl'>You can reach us at:</p>
                         <p className='text-slate-800 font-medium'>1234 Street Name</p>
