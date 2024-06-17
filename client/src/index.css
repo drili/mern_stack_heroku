@@ -56,6 +56,11 @@ button {
     cursor: pointer;
     transition: border-color 0.25s;
 }
+button,
+button:hover,
+input[type=submit] {
+    cursor: pointer;
+}
 
 button:focus,
 button:focus-visible {

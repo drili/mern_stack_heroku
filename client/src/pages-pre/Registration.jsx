@@ -101,6 +101,7 @@ const Registration = () => {
                     <section id='ContactForm-section' className='w-full rounded-extra-large'>
                         {loginForm && (
                             <section id="loginForm" className='mb-5'>
+                                {/* TODO: When user logins with credentials through this form, account email will be used to find tenant and redirect to .../tenant-id/dashboard  */}
                                 <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Account login</h3>
 
                                 <form className='grid grid-col-1 gap-2' onSubmit={handleLogin}>

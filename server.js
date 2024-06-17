@@ -39,6 +39,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.set('io', io);
 
+// TODO: Update routes to use tenantId
 app.use('/uploads', express.static('uploads'));
 app.use(express.json())
 app.use("/users", userRouter)
