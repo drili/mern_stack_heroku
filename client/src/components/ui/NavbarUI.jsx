@@ -35,7 +35,6 @@ const NavbarUI = () => {
                     <Link to="/features" className={getLinkClass("/features")}>Features</Link>
                     <Link to="/pricing" className={getLinkClass("/pricing")}>Pricing</Link>
                     <Link to="/contact" className={getLinkClass("/contact")}>Contact</Link>
-                    <p>{currentURL}</p>
                     {/* <Link to="/" className='text-white py-3 px-4 rounded hover:bg-custom-rgba hover:text-white'>About</Link> */}
                 </div>
                 <div className="hidden md:block">
