@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 
+// TODO: Update to include "tenantId" with ref.
 const customerSchema = new mongoose.Schema({
     customerName: {
         type: String,
