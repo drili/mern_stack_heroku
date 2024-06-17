@@ -42,17 +42,17 @@ app.set('io', io);
 // TODO: Update routes to use tenantId
 app.use('/uploads', express.static('uploads'));
 app.use(express.json())
-app.use("/users", userRouter)
-app.use("/customers", customerRouter)
-app.use("/updates", updateRouter)
-app.use("/tasks", taskRouter)
-app.use("/sprints", sprintRouter)
-app.use("/time-registrations", TimeRegistrationRouter)
-app.use("/labels", labelRouter)
-app.use("/verticals", verticalRouter)
-app.use("/comments", commentsRouter)
-app.use("/notifications", notificationsRouter)
+app.use("/:tenantId/users", userRouter)
+app.use("/:tenantId/customers", customerRouter)
+app.use("/:tenantId/updates", updateRouter)
+app.use("/:tenantId/tasks", taskRouter)
+app.use("/:tenantId/time-registrations", TimeRegistrationRouter)
+app.use("/:tenantId/labels", labelRouter)
+app.use("/:tenantId/verticals", verticalRouter)
+app.use("/:tenantId/comments", commentsRouter)
+app.use("/:tenantId/notifications", notificationsRouter)
 
+app.use("/sprints", sprintRouter)
 app.use("/api/account", accountRouter)
 
 io.on("connection", (socket) => {
