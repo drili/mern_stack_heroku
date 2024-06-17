@@ -44,19 +44,20 @@ const ConfirmAccount = ({ inputClass, labelClass, email, handleShowLoginForm, se
                     {!accountVerified ? (
                         <div>
                             <span className='mb-5'>
-                                <h2 className='mb-10 text-2xl text-slate-500 font-bold text-center'>Account Confirmation</h2>
+                                <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Confirm account</h3>
+
                                 <p className='mb-5'>Enter your confirmation code that was sent to your email ({email}) here</p>
                             </span>
 
                             <span className='mb-5'>
                                 <form className='grid grid-col-1 gap-2' onSubmit={handleConfirmationForm}>
-                                    <span className='flex flex-col gap-2'>
-                                        <label htmlFor="" className={labelClass}>Confirmation code</label>
-                                        <input name='text' value={confirmationCode} onChange={handleConfirmationCode} className={inputClass} required />
-                                    </span>
 
+                                    <span className='flex flex-col'>
+                                        <label htmlFor="" className='text-lg font-medium mb-2'>Confirmation code</label>
+                                        <input name='text' placeholder='Enter your confirmation code' value={confirmationCode} onChange={handleConfirmationCode} className='h-[50px] border rounded focus:border-pink-700 p-3' required />
+                                    </span>
                                     <span className='flex flex-col gap-2'>
-                                        <input type="submit" value="Confirm" name='' className="bg-slate-900 text-white mt-5 py-2 rounded-sm" />
+                                        <input type="submit" value="Confirm" name='' className="bg-black text-white py-3 rounded mt-5" />
                                     </span>
 
                                     {errorMsg && (
