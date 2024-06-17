@@ -20,6 +20,7 @@ const { User } = require("../models/User");
 
 const router = express.Router();
 
+// TODO: Add account login, which returns if credentials are correct, handle redirect on frontend with same credentials (only works with admin login)
 router.post("/verify-account", async (req, res) => {
     const { email, confirmationCode } = req.body
 

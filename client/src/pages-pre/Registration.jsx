@@ -102,7 +102,7 @@ const Registration = () => {
                         {loginForm && (
                             <section id="loginForm" className='mb-5'>
                                 {/* TODO: When user logins with credentials through this form, account email will be used to find tenant and redirect to .../tenant-id/dashboard  */}
-                                <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Account login</h3>
+                                <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Account login (admin)</h3>
 
                                 <form className='grid grid-col-1 gap-2' onSubmit={handleLogin}>
                                     <span className='flex flex-col'>
@@ -120,7 +120,7 @@ const Registration = () => {
                                     </span>
 
                                     <span className='flex flex-col gap-2 mt-2'>
-                                        <p className='text-xs text-center'>Notice: If your account exists, then you will be redirected to your domain.</p>
+                                        <p className='text-xs text-center text-wrapped-balance'>Notice: If your account exists, then you will be redirected to your domain. Admin accounts only, users can login on your respective subdomain which admins are given.</p>
                                     </span>
                                 </form>
 
