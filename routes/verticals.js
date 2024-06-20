@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const Vertical = require("../models/Vertical")
+const {Vertical} = require("../models/Vertical")
 
 router.route("/fetch-Verticals").get(async (req, res) => {
     try {

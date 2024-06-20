@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const Label = require("../models/Label")
+const {Label} = require("../models/Label")
 
 router.route("/fetch-labels").get(async (req, res) => {
     try {

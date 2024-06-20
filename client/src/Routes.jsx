@@ -46,26 +46,27 @@ function AppRoutes() {
                 <Route path="/pricing" element={<LayoutPre><Pricing /></LayoutPre>} />
                 <Route path="/contact" element={<LayoutPre><Contact /></LayoutPre>} />
                 <Route path="/registration" element={<LayoutPre><Registration /></LayoutPre>} />
-
+                <Route path="/login" element={<Login />} />
+                
                 {/* TEST */}
-                <Route 
+                {/* <Route 
                     path='/:accountUsername/*'
                     element={
                         <Routes>
                             <Route path='testing' element={<TestComponent />} />
-                            <Route path="/login" element={<Login />} />
                             <Route path="/user-not-activated" element={<UserNotActivated />} />
                         </Routes>
                     }
                     >
-                </Route>
+                </Route> */}
 
                 {/* TODO: Update routes to include :accountUsername */}
                 <Route
-                    path="/:accountUsername/*"
+                    path="/:tenantId/*"
                     element={
                         <Layout>
                             <Routes>
+                                <Route path='testing' element={<ProtectedRoute><TestComponent /></ProtectedRoute>} />
                                 <Route path="dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                                 <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                                 <Route path="create-task" element={<ProtectedRoute><CreateTask /></ProtectedRoute>} />
@@ -120,6 +121,7 @@ function AppRoutes() {
                                 } />
 
                                 <Route path="*" element={<NotFound />} />
+                                <Route path="user-not-activated" element={<UserNotActivated />} />
                             </Routes>
                         </Layout>
                     }

@@ -47,6 +47,7 @@ const CreateTask = () => {
     const activeSprint = getCurrentSprint()
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
@@ -91,7 +92,7 @@ const CreateTask = () => {
 
     const fetchTasks = async () => {
         try {
-            const response = await axios.get(`${baseURL}/tasks/fetch-by-user/${user.id}`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user/${user.id}`)
             setTasks(response.data)
 
         } catch (error) {
@@ -101,7 +102,7 @@ const CreateTask = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(baseURL + "/customers/fetch")
+            const response = await axios.get(tenantBaseURL + "/customers/fetch")
             setCustomers(response.data)
         } catch (error) {
             console.error('Failed to fetch customers', error);
@@ -110,7 +111,7 @@ const CreateTask = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(baseURL + "/users/fetch-active-users")
+            const response = await axios.get(tenantBaseURL + "/users/fetch-active-users")
             setActiveUsers(response.data)
         } catch (error) {
             console.error('Failed to fetch active users', error);
@@ -128,7 +129,7 @@ const CreateTask = () => {
 
     const fetchLabels = async () => {
         try {
-            const response = await axios.get(baseURL + "/labels/fetch-labels")
+            const response = await axios.get(tenantBaseURL + "/labels/fetch-labels")
             const labelsData = response.data;
             const defaultLabelId = labelsData.find(label => label.labelName === "Ingen label")?._id;
 
@@ -144,7 +145,7 @@ const CreateTask = () => {
 
     const fetchVerticals = async () => {
         try {
-            const response = await axios.get(baseURL + "/verticals/fetch-verticals")
+            const response = await axios.get(tenantBaseURL + "/verticals/fetch-verticals")
             setVerticals(response.data)
 
             if (response.data.length > 0) {

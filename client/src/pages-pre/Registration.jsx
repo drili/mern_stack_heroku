@@ -101,8 +101,7 @@ const Registration = () => {
                     <section id='ContactForm-section' className='w-full rounded-extra-large'>
                         {loginForm && (
                             <section id="loginForm" className='mb-5'>
-                                {/* TODO: When user logins with credentials through this form, account email will be used to find tenant and redirect to .../tenant-id/dashboard  */}
-                                <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Account login (admin)</h3>
+                                <h3 className='mb-10 text-4xl text-black text-wrapped-balance font-bold'>Account login</h3>
 
                                 <form className='grid grid-col-1 gap-2' onSubmit={handleLogin}>
                                     <span className='flex flex-col'>
@@ -119,8 +118,8 @@ const Registration = () => {
                                         <input type="submit" value="Login" name='' className="bg-black text-white py-3 rounded mt-5" />
                                     </span>
 
-                                    <span className='flex flex-col gap-2 mt-2'>
-                                        <p className='text-xs text-center text-wrapped-balance'>Notice: If your account exists, then you will be redirected to your domain. Admin accounts only, users can login on your respective subdomain which admins are given.</p>
+                                    <span className='flex flex-col gap-2 mt-2 hidden'>
+                                        <p className='text-xs text-center text-wrapped-balance hidden'>Notice: If your account exists, then you will be redirected to your domain. Admin accounts only, users can login on your respective subdomain which admins are given.</p>
                                     </span>
                                 </form>
 
@@ -165,7 +164,7 @@ const Registration = () => {
                                 </form>
 
                                 <span className='flex justify-center'>
-                                    <p className='mt-5'>Account already created? <a href="#" className='underline' onClick={handleShowLoginForm}>Login</a></p>
+                                    <p className='mt-5'>Account already created? <a href="/login" className='underline'>Login</a></p>
                                 </span>
                             </section>
                         ) : (

@@ -30,11 +30,12 @@ const Dashboard = () => {
     const [timeRegisteredAll, setTimeRegisteredAll] = useState([])
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const fetchTimeRegistrationsBySprint = async (sprintId) => {
         try {
             if(sprintId) {
-                const response = await axios.get(`${baseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}/`)
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}/`)
 
                 if (response.status === 200) {
                     setTimeRegisteredAll(response.data)
@@ -48,7 +49,7 @@ const Dashboard = () => {
     const fetchTimeRegistrations = async (sprintId) => {
         try {
             if (sprintId) {
-                const response = await axios.get(`${baseURL}/time-registrations/time-registered-user/${sprintId}/${user.id}`)
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registered-user/${sprintId}/${user.id}`)
                 
                 if (response.status == 200) {
                     setTimeRegistered(response.data)
@@ -73,7 +74,7 @@ const Dashboard = () => {
     const fetchTasksByUserAndSprint = async (activeSprintArray) => {
         try {
             if (activeSprintArray && activeSprintArray.sprintMonth) {
-                const response = await axios.get(`${baseURL}/tasks/fetch-by-user-sprint/${user.id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}`)
+                const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user-sprint/${user.id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}`)
 
                 const totalAllocatedTimeLow = response.data.reduce((accumulator, time) => {
                     const userTaskPerson = time.taskPersons.find(

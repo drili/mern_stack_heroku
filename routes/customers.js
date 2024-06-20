@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Customer = require('../models/Customer')
+const {Customer} = require('../models/Customer')
 
 router.route("/create").post(async (req, res) => {
     const { customerName, customerColor } = req.body

@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const Task = require("../models/Task")
-const Sprint = require("../models/Sprints")
-const TimeRegistration = require("../models/TimeRegistration")
+const {Task} = require("../models/Task")
+const {Sprints} = require("../models/Sprints")
+const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
 
 router.route("/fetch-deadlines").get(async (req, res) => {
@@ -148,7 +148,7 @@ router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
             return res.status(400).json({ error: "Month and year are required." });
         }
 
-        const targetTaskSprint = await Sprint.findOne({
+        const targetTaskSprint = await Sprints.findOne({
             sprintMonth: month,
             sprintYear: year
         })
@@ -200,7 +200,7 @@ router.route("/fetch-by-user-sprint/:userId").get(async (req, res) => {
             return res.status(400).json({ error: "Month and year are required." });
         }
 
-        const targetTaskSprint = await Sprint.findOne({
+        const targetTaskSprint = await Sprints.findOne({
             sprintMonth: month,
             sprintYear: year
         })

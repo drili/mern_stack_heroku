@@ -28,6 +28,8 @@ const Navbar = () => {
 
     const { user, setUser, hasUnreadNotifications, setHasUnreadNotifications } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
+    const tenantId = user.tenant_id
 
     const socket = socketIoClient(baseURL)
 
@@ -39,7 +41,7 @@ const Navbar = () => {
         const newActiveYear = e
 
         try {
-            const response = await axios.put(`${baseURL}/users/update-sprint-year`, { activeYear: newActiveYear, userId: user.id })
+            const response = await axios.put(`${tenantBaseURL}/users/update-sprint-year`, { activeYear: newActiveYear, userId: user.id })
             setActiveYear(response.data.activeYear)
 
             if (user) {
@@ -134,11 +136,11 @@ const Navbar = () => {
                     </select>
                 </div>
 
-                <Link to="/register-offtime">
+                <Link to={`/${tenantId}/register-offtime`}>
                     <button type="submit" className='h-fit whitespace-nowrap button text-black bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Register Off- & Sicktime</button>
                 </Link>
 
-                <Link to="/create-task">
+                <Link to={`/${tenantId}/create-task`}>
                     <button type="submit" className='bg-rose-500 h-fit whitespace-nowrap button text-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Create Task</button>
                 </Link>
             </span>

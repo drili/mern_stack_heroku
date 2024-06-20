@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const TimeRegistration = require("../models/TimeRegistration")
-const User = require("../models/User")
-const Sprints = require("../models/Sprints")
+const {TimeRegistration} = require("../models/TimeRegistration")
+const {User} = require("../models/User")
+const {Sprints} = require("../models/Sprints")
 const mongoose = require("mongoose")
 
 const formatDateToMonthYear = require("../functions/formatDateToMonthYear")

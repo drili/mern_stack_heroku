@@ -1,8 +1,8 @@
 const express = require("express")
 const sanitizeHtml = require("sanitize-html")
 
-const Comment = require("../models/Comments")
-const User = require("../models/User")
+const {Comment} = require("../models/Comments")
+const {User} = require("../models/User")
 
 const router = express.Router()
 

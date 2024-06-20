@@ -2,6 +2,8 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
 
 const Account = require("../models/Account");
 const { UserSchema } = require("../models/User");
@@ -20,7 +22,48 @@ const { User } = require("../models/User");
 
 const router = express.Router();
 
-// TODO: Add account login, which returns if credentials are correct, handle redirect on frontend with same credentials (only works with admin login)
+router.route("/login").post((req, res) => {
+    const { email, password } = req.body
+    
+    if(!email || !password) {
+        return res.status(400).json({ msg: '::: Please enter all fields' });
+    }
+
+    User.findOne({ email })
+        .then(user => {
+            if (!user) return res.status(400).json({ msg: '::: User does not exist' });
+
+            bcrypt.compare(password, user.password)
+                .then(isMatch => {
+                    if (!isMatch) return res.status(400).json({ msg: '::: Invalid credentials' });
+
+                    jwt.sign(
+                        { id: user.id },
+                        'my_jwt_secret',
+                        { expiresIn: 3600 },
+                        (err, token) => {
+                            if (err) throw err;
+
+                            res.json({
+                                token,
+                                user: {
+                                    id: user.id,
+                                    username: user.username,
+                                    email: user.email,
+                                    is_activated: user.isActivated,
+                                    profile_image: user.profileImage,
+                                    user_role: user.userRole,
+                                    user_title: user.userTitle,
+                                    active_year: user.activeYear,
+                                    tenant_id: user.tenantId,
+                                }
+                            });
+                        }
+                    )
+                });
+        })
+})
+
 router.post("/verify-account", async (req, res) => {
     const { email, confirmationCode } = req.body
 

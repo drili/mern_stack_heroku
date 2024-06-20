@@ -13,6 +13,8 @@ const Layout = ({ children }) => {
     const [isMobile, setIsMobile] = useState(false)
     const { user } = useContext(UserContext)
 
+    const tenantId = user.tenant_id
+
     const [imageSrc, setImageSrc] = useState(null)
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -24,7 +26,7 @@ const Layout = ({ children }) => {
     const toggleSidebar = () => {
         setShowSidebar(!showSidebar)
     }
-    
+
     const { baseURL } = useContext(ConfigContext);
 
     useEffect(() => {
@@ -42,7 +44,7 @@ const Layout = ({ children }) => {
             } else {
                 setShowSidebar(true)
             }
-            
+
             setIsMobile(screenWidth <= 990)
         }
 
@@ -65,42 +67,42 @@ const Layout = ({ children }) => {
 
                         <span className='sidebarLinks flex flex-col gap-2'>
                             <SidebarLink
-                                menuLink="/dashboard"
+                                menuLink={`/${tenantId}/dashboard`}
                                 linkText="Dashboard"
                                 currentPath={currentPath}
                                 iconComponent={BsHouseDoor}
                             />
 
                             <SidebarLink
-                                menuLink="/workflow"
+                                menuLink={`/${tenantId}/workflow`}
                                 linkText="Workflow"
                                 currentPath={currentPath}
                                 iconComponent={BsList}
                             />
 
                             <SidebarLink
-                                menuLink="/sprint-overview"
+                                menuLink={`/${tenantId}/sprint-overview`}
                                 linkText="Month Overview"
                                 currentPath={currentPath}
                                 iconComponent={BsCalendar}
                             />
 
                             <SidebarLink
-                                menuLink="/time-registrations"
+                                menuLink={`/${tenantId}/time-registrations`}
                                 linkText="Time Registrations"
                                 currentPath={currentPath}
                                 iconComponent={BsClock}
                             />
 
                             <SidebarLink
-                                menuLink="/customers"
+                                menuLink={`/${tenantId}/customers`}
                                 linkText="Customers"
                                 currentPath={currentPath}
                                 iconComponent={BsPeople}
                             />
 
                             <SidebarLink
-                                menuLink="/profile"
+                                menuLink={`/${tenantId}/profile`}
                                 linkText="User Profile"
                                 currentPath={currentPath}
                                 iconComponent={BsPerson}
@@ -110,7 +112,7 @@ const Layout = ({ children }) => {
                                 <h3 className='mb-3 font-thin text-zinc-300'>Misc</h3>
 
                                 <SidebarLink
-                                    menuLink="/admin"
+                                    menuLink={`/${tenantId}/admin`}
                                     linkText="Admin"
                                     currentPath={currentPath}
                                     iconComponent={BsGear}
