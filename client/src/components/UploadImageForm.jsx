@@ -66,11 +66,12 @@ const UploadImageForm = () => {
                 <hr className='mt-10'/>
             </span>
 
-            <form onSubmit={handleFormSubmit} className='mt-10'>
+            <form onSubmit={handleFormSubmit} className='mt-10 opacity-5'>
                 <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 ">Update Image</label>
-                <input type="file" accept="image/*" onChange={handleImageUpload} />
+                <input disabled type="file" accept="image/*" onChange={handleImageUpload} />
                 <input
                     required 
+                    disabled
                     className='my-button button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '
                     type="submit"
                     value="Upload New Image"
