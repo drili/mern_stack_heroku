@@ -5,6 +5,7 @@ module.exports = {
 		extend: {
             backgroundColor: {
                 'custom-rgba': 'rgba(255, 255, 255, 0.05)',
+                'custom-bg-gray': '#f2f3f4',
             },
             lineHeight: {
                 "custom-12": "1.2em",

@@ -140,7 +140,7 @@ const Dashboard = () => {
             <PageHeading 
                 heading="Dashboard"
                 subHeading={`Welcome to your user dashboard`}
-                suffix="A quick overview of your data"
+                suffix="A quick overview of your data."
             />
 
             <DashboardFilters
@@ -161,10 +161,10 @@ const Dashboard = () => {
 
             <section id="timeRegsWeekly" className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-2">
                 <span>
-                    <Card className="h-full bg-rose-50">
+                    <Card className="h-full border-gray-200 shadow-none bg-stone-100 border-none">
                         <div>
                             <span className="flex flex-col gap-2 mb-5">
-                                <h3 className="font-bold">Your time registrations this week</h3>
+                                <h3 className="text-black text-lg font-medium">Your time registrations this week</h3>
                             </span>
 
                             <span className="flex flex-col gap-2">
@@ -177,7 +177,7 @@ const Dashboard = () => {
                 </span>
 
                 <span>
-                    <Card className="h-full">
+                    <Card className="h-full shadow-none border-gray-200">
                         <DashboardActivityCard data={timeRegistered} />
                     </Card>
                 </span>

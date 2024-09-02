@@ -57,7 +57,7 @@ const Layout = ({ children }) => {
     return (
         <div className='layout flex'>
             {showSidebar && (
-                <aside className={`bg-stone-100 p-6 transition-transform duration-300 ease-in-out ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0' : 'fixed inset-0 z-10 -translate-x-full') : 'relative w-1/6 min-h-screen'}`}>
+                <aside className={`bg-custom-bg-gray p-6 transition-transform duration-300 ease-in-out ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0' : 'fixed inset-0 z-10 -translate-x-full') : 'relative w-1/6 min-h-screen'}`}>
                     <div className='sidebar-content top-40 left-0 sticky'>
                         <span>
                             <h3 className='mb-3 font-thin text-zinc-400'>Main Menu</h3>
@@ -136,16 +136,16 @@ const Layout = ({ children }) => {
 
                         <hr className='mt-[20px]' />
 
-                        <div id="sidebarUser" className='flex items-center justify-center p-4 space-x-2 mt-[40px]'>
+                        <Link to={`/${tenantId}/profile`} id='sidebarUser' className='flex items-center justify-center p-4 space-x-2 mt-[40px]'>
                             <img
                                 src={`${imageSrc}${userImg}`}
-                                className='h-12 w-12 rounded-full object-cover'
+                                className='h-12 w-12 rounded object-cover'
                             />
                             <div>
                                 <p className='font-bold text-gray-900'>@{username}</p>
                                 <p className='font-light text-gray-600 text-sm'>{email}</p>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </aside>
             )}

@@ -147,13 +147,13 @@ const Navbar = () => {
                 </Link>
             </span>
 
-            <span className='flex flex-row align-center items-center justify-center py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 mt-5 md:mt-0'>
+            <Link to={`/${tenantId}/profile`} className='flex flex-row align-center items-center justify-center py-1 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 mt-5 md:mt-0'>
                 <p className='font-bold'>@{username}</p>
                 <img
-                    className='w-[40px] h-[40px] rounded-full object-cover ml-2'
+                    className='w-[45px] h-[45px] rounded object-cover ml-2'
                     src={`${imageSrc}${userImg}`} /
                 >
-            </span>
+            </Link>
 
             <span className='flex items-center'>
                 <Link to="/notifications">
