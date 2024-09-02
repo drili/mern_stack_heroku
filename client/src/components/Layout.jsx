@@ -57,12 +57,10 @@ const Layout = ({ children }) => {
     return (
         <div className='layout flex'>
             {showSidebar && (
-                // <aside className='relative bg-slate-50 w-1/6 min-h-screen p-6'>
-                // <aside className={`bg-slate-50 p-6 ${isMobile ? 'fixed inset-0 z-40' : 'relative w-1/6 min-h-screen'}`}>
-                <aside className={`bg-slate-50 p-6 transition-transform duration-300 ease-in-out ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0' : 'fixed inset-0 z-10 -translate-x-full') : 'relative w-1/6 min-h-screen'}`}>
+                <aside className={`bg-stone-100 p-6 transition-transform duration-300 ease-in-out ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0' : 'fixed inset-0 z-10 -translate-x-full') : 'relative w-1/6 min-h-screen'}`}>
                     <div className='sidebar-content top-40 left-0 sticky'>
                         <span>
-                            <h3 className='mb-3 font-thin text-zinc-300'>Main Menu</h3>
+                            <h3 className='mb-3 font-thin text-zinc-400'>Main Menu</h3>
                         </span>
 
                         <span className='sidebarLinks flex flex-col gap-2'>
@@ -109,7 +107,7 @@ const Layout = ({ children }) => {
                             />
 
                             <span className='mt-[20px]'>
-                                <h3 className='mb-3 font-thin text-zinc-300'>Misc</h3>
+                                <h3 className='mb-3 font-thin text-zinc-400'>Misc</h3>
 
                                 <SidebarLink
                                     menuLink={`/${tenantId}/admin`}
