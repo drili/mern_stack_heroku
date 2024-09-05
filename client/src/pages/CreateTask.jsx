@@ -16,6 +16,19 @@ import getCurrentSprint from '../functions/getCurrentSprint'
 import { ConfigContext } from '../context/ConfigContext'
 
 const CreateTask = () => {
+    const [customers, setCustomers] = useState([])
+    const [sprints, setSprints] = useState([])
+    const [labels, setLabels] = useState([])
+    const [verticals, setVerticals] = useState([])
+    const [activeUsers, setActiveUsers] = useState([])
+    const { user } = useContext(UserContext)
+    const [tasks, setTasks] = useState([])
+    const [selectedSprints, setSelectedSprints] = useState([]);
+    const [displayCount, setDisplayCount] = useState(5)
+    const [toggleViewState, setToggleViewState] = useState("timedTask")
+    const [toggleShowAdjustPercentages, setToggleShowAdjustPercentages] = useState(false)
+    const [percentageAllocations, setPercentageAllocations] = useState([]);
+
     const [taskData, setTaskData] = useState({
         taskName: '',
         taskTimeLow: '',
@@ -30,27 +43,19 @@ const CreateTask = () => {
         taskDeadline: '',
         estimatedTime: 0,
         taskType: "timedTask",
+        tenantId: user.tenant_id,
     });
-    const [customers, setCustomers] = useState([])
-    const [sprints, setSprints] = useState([])
-    const [labels, setLabels] = useState([])
-    const [verticals, setVerticals] = useState([])
-    const [activeUsers, setActiveUsers] = useState([])
-    const { user } = useContext(UserContext)
-    const [tasks, setTasks] = useState([])
-    const [selectedSprints, setSelectedSprints] = useState([]);
-    const [displayCount, setDisplayCount] = useState(5)
-    const [toggleViewState, setToggleViewState] = useState("timedTask")
-    const [toggleShowAdjustPercentages, setToggleShowAdjustPercentages] = useState(false)
-    const [percentageAllocations, setPercentageAllocations] = useState([]);
 
     const activeSprint = getCurrentSprint()
 
     const { baseURL } = useContext(ConfigContext);
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
-    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    // const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    // const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+
+    const inputClasses = "h-[50px] border rounded focus:border-pink-700 p-3 w-full block mb-4"
+    const labelClasses = "text-sm font-medium mb-2 block "
     const imageSrc = baseURL + "/uploads/"
 
     const handleInputChange = (e) => {
@@ -129,7 +134,8 @@ const CreateTask = () => {
 
     const fetchLabels = async () => {
         try {
-            const response = await axios.get(tenantBaseURL + "/labels/fetch-labels")
+            const response = await axios.get(`${tenantBaseURL}/labels/fetch-labels?tenantId=${user.tenant_id}`);
+            
             const labelsData = response.data;
             const defaultLabelId = labelsData.find(label => label.labelName === "Ingen label")?._id;
 
@@ -145,7 +151,8 @@ const CreateTask = () => {
 
     const fetchVerticals = async () => {
         try {
-            const response = await axios.get(tenantBaseURL + "/verticals/fetch-verticals")
+            const response = await axios.get(`${tenantBaseURL}/verticals/fetch-verticals?tenantId=${user.tenant_id}`);
+
             setVerticals(response.data)
 
             if (response.data.length > 0) {
@@ -216,10 +223,9 @@ const CreateTask = () => {
             }
         }
 
-        console.log({finalTaskData})
-
         try {
-            const response = await axios.post(baseURL + "/tasks/create", finalTaskData)
+            const response = await axios.post(`${baseURL}/${user.tenant_id}/tasks/create`, finalTaskData)
+
             setTasks([])
 
             if (response.status === 200) {
@@ -300,30 +306,34 @@ const CreateTask = () => {
             <PageHeading
                 heading="Create Task"
                 subHeading={`Create a new task.`}
-                suffix="Complete the form and submit the data"
+                suffix="Complete the form and submit the data."
             />
 
             <section className='grid grid-cols-5 gap-10 mb-10'>
-                <span className='shadow-md p-10 rounded-lg mb-10 col-span-3'>
+                <span className='py-10 px-10 flex rounded-lg border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none col-span-3'>
                     <form onSubmit={handleSubmit}>
                         <span>
                             <section className='flex w-full justify-between'>
                                 <div>
-                                    <h2 className='font-bold mb-0'>Create new <span className={`${toggleViewState === "timedTask" ? "text-slate-500" : "text-amber-500"}`}>
+                                    <h2 className='text-lg md:text-2xl text-black font-bold'>Create new <span className={`${toggleViewState === "timedTask" ? "text-pink-700" : "text-teal-200"}`}>
                                         {toggleViewState === "timedTask" ? "timed" : "quick"}</span> task
                                     </h2>
                                 </div>
 
                                 <div className='flex items-start pb-0 rounded-t'>
                                     <button
-                                        className={`${toggleViewState === "timedTask" ? "bg-slate-500 text-white font-bold border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100 flex gap-2 items-center`}
+                                        className={`${toggleViewState === "timedTask" ? 
+                                            "bg-pink-700 text-white" : ""} 
+                                            rounded-none flex gap-2 items-center focus:outline-none border-none`}
                                         onClick={() => handleViewState("timedTask")}
                                         type='button'
                                     >
                                         Timed Task <AiOutlineClockCircle />
                                     </button>
                                     <button
-                                        className={`${toggleViewState === "quickTask" ? "bg-amber-500 text-white font-bold border-amber-200" : ""} rounded-none border-amber-100 focus:outline-none hover:border-amber-100 flex gap-2 items-center`}
+                                        className={`${toggleViewState === "quickTask" ? 
+                                            "bg-teal-200 text-white border-none" : ""} 
+                                            rounded-none flex gap-2 items-center focus:outline-none border-none`}
                                         onClick={() => handleViewState("quickTask")}
                                         type='button'
                                     >
@@ -508,14 +518,14 @@ const CreateTask = () => {
 
                         {/* <p>Current sprint: {activeSprint.sprintId}</p> */}
 
-                        <button type="submit" className='button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Create Task</button>
+                        <button type="submit" className='bg-black text-white py-3 rounded mt-10 w-full'>Create Task</button>
                     </form>
                 </span>
 
                 <span className='col-span-2'>
-                    <div className='shadow-md p-10 rounded-lg mb-10 bg-slate-50'>
+                    <div className='bg-stone-100 w-full p-[2rem] md:p-10 rounded-extra-large'>
                         <span>
-                            <h2 className='font-bold mb-5'>Your Recent Created Tasks</h2>
+                            <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Your Recent Created Tasks</h2>
                             <hr className='mb-5' />
                         </span>
 

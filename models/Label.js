@@ -1,7 +1,10 @@
 const mongoose = require("mongoose")
 
-// TODO: Update to include "tenantId" with ref.
 const labelSchema = new mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     labelName: {
         type: String,
         required: true
