@@ -54,7 +54,7 @@ const CreateTask = () => {
     // const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
     // const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
 
-    const inputClasses = "h-[50px] border rounded focus:border-pink-700 p-3 w-full block mb-4"
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
     const labelClasses = "text-sm font-medium mb-2 block "
     const imageSrc = baseURL + "/uploads/"
 
@@ -97,7 +97,7 @@ const CreateTask = () => {
 
     const fetchTasks = async () => {
         try {
-            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user/${user.id}`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user/${user.id}?tenantId=${user.tenant_id}`)
             setTasks(response.data)
 
         } catch (error) {
@@ -107,7 +107,7 @@ const CreateTask = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(tenantBaseURL + "/customers/fetch")
+            const response = await axios.get(`${tenantBaseURL}/customers/fetch?tenantId=${user.tenant_id}`)
             setCustomers(response.data)
         } catch (error) {
             console.error('Failed to fetch customers', error);
@@ -116,7 +116,8 @@ const CreateTask = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(tenantBaseURL + "/users/fetch-active-users")
+            const response = await axios.get(`${tenantBaseURL}/users/fetch-active-users?tenantId=${user.tenant_id}`)
+
             setActiveUsers(response.data)
         } catch (error) {
             console.error('Failed to fetch active users', error);
@@ -224,7 +225,7 @@ const CreateTask = () => {
         }
 
         try {
-            const response = await axios.post(`${baseURL}/${user.tenant_id}/tasks/create`, finalTaskData)
+            const response = await axios.post(`${baseURL}/${user.tenant_id}/tasks/create?tenantId=${user.tenant_id}`, finalTaskData)
 
             setTasks([])
 
@@ -310,7 +311,7 @@ const CreateTask = () => {
             />
 
             <section className='grid grid-cols-5 gap-10 mb-10'>
-                <span className='py-10 px-10 flex rounded-lg border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none col-span-3'>
+                <span className='py-10 px-10 flex rounded-extra-large border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none col-span-3'>
                     <form onSubmit={handleSubmit}>
                         <span>
                             <section className='flex w-full justify-between'>
@@ -393,9 +394,9 @@ const CreateTask = () => {
                         )}
 
                         <div>
-                            <label className={labelClasses} htmlFor="taskDescription">Task Description</label>
+                            <label className={labelClasses} htmlFor="taskDescription">Task Description (optional)</label>
                             <textarea required={false} name="taskDescription" value={taskData.taskDescription} onChange={handleFormChange} placeholder="Task Description"
-                                className={inputClasses} />
+                                className={`${inputClasses} py-3 min-h-[100px]`} />
                         </div>
                         <div>
                             <label className={labelClasses} htmlFor="taskCustomer">Task Customer</label>
@@ -529,7 +530,7 @@ const CreateTask = () => {
                             <hr className='mb-5' />
                         </span>
 
-                        <span id='tasksList'>
+                        <span id='tasksList' className='flex flex-col gap-2'>
                             {tasks.slice(0, displayCount).map((task) => (
                                 <span
                                     key={task._id}

@@ -20,7 +20,7 @@ const RegisterOffTimes = () => {
     const [sprintId, setSprintId] = useState("")
     const { baseURL } = useContext(ConfigContext);
 
-    const inputClasses = "h-[50px] border rounded focus:border-pink-700 p-3 "
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 px-3 py-0 "
     const labelClasses = "text-sm font-medium mb-2 "
 
     const handleInputChange = (e) => {

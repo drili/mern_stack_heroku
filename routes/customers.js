@@ -23,8 +23,14 @@ router.route("/create").post(async (req, res) => {
 })
 
 router.route("/fetch").get(async (req, res) => {
+    const tenantId = req.query.tenantId
+
+    if (!tenantId) {
+        return res.status(400).json({ error: "tenantId is required" })
+    }
+
     try {
-        const customers = await Customer.find().sort({ _id: -1 })
+        const customers = await Customer.find({ tenantId }).sort({ _id: -1 })
         res.json(customers)
     } catch (error) {
         console.error('Failed to fetch customers', error)

@@ -235,9 +235,15 @@ router.put("/profile/upload-image", upload.single("profileImage"), async (req, r
 })
 
 router.route("/fetch-active-users").get(async (req, res) => {
+    const tenantId = req.query.tenantId
+
+    if (!tenantId) {
+        return res.status(400).json({ error: "tenantId is required" })
+    }
+
     try {
         const users = await User.find(
-            { isActivated: true },
+            { isActivated: true, tenantId },
             '_id username email profileImage userRole userTitle createdAt'
             ).sort({ _id: -1 })
         res.json(users)

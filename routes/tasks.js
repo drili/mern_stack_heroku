@@ -84,7 +84,12 @@ router.route("/create").post(async (req, res) => {
         taskDeadline,
         estimatedTime,
         taskType,
+        tenantId
     } = req.body
+
+    if (!tenantId) {
+        return res.status(400).json({ error: "tenantId is required" })
+    }
 
     try {
         taskSprints.forEach(async (sprintId) => {
@@ -102,6 +107,7 @@ router.route("/create").post(async (req, res) => {
                 taskDeadline,
                 estimatedTime,
                 taskType,
+                tenantId,
             })
 
             const taskSaved = await task.save()
@@ -116,11 +122,17 @@ router.route("/create").post(async (req, res) => {
 
 router.route("/fetch-by-user/:userId").get(async (req, res) => {
     const { userId } = req.params
+    const tenantId = req.query.tenantId
+
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId and userId is required" })
+    }
 
     try {
         const tasks = await Task.find({
             createdBy: userId,
-            isArchived: { $ne: true }
+            isArchived: { $ne: true },
+            tenantId,
         })
             .populate("createdBy", ["username", "email", "profileImage", "userRole", "userTitle"])
             // .populate("taskPersons", ["username", "email", "profileImage", "userRole", "userTitle"])
