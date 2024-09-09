@@ -56,17 +56,20 @@ router.route("/time-registrations-verticals-aggregated/:sprintId").get(async (re
     }
 })
 
-router.route("/fetch-users-time-regs-by-sprint/:sprintId").get(async (req, res) => {
+router.route("/fetch-users-time-regs-by-sprint/:sprintId/:tenantId").get(async (req, res) => {
     try {
         const { sprintId } = req.params
-        const activeUsers = await User.find({ isActivated: true })
+        const { tenantId } = req.params
+
+        const activeUsers = await User.find({ isActivated: true, tenantId })
         const activeUsersData = []
 
-        if (sprintId && activeUsers) {
+        if (sprintId && tenantId && activeUsers) {
             for (const user of activeUsers) {
                 const timeRegistrations = await TimeRegistration.find({
                     userId: user._id,
-                    sprintId: sprintId
+                    sprintId: sprintId,
+                    tenantId,
                 })
 
                 let totalTime = 0
@@ -263,15 +266,17 @@ router.route("/time-registered/:taskId").get(async (req, res) => {
     }
 })
 
-router.route("/time-registered-user/:sprintId/:userId").get(async (req, res) => {
+router.route("/time-registered-user/:sprintId/:userId/:tenantId").get(async (req, res) => {
     const { sprintId } = req.params
     const { userId } = req.params
+    const { tenantId } = req.params
 
-    if (sprintId && userId) {
+    if (sprintId && userId && tenantId) {
         try {
             const timeRegistered = await TimeRegistration.find({
                 sprintId,
-                userId
+                userId,
+                tenantId,
             })
 
             return res.status(200).json(timeRegistered)

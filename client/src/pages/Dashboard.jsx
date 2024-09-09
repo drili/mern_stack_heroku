@@ -35,7 +35,7 @@ const Dashboard = () => {
     const fetchTimeRegistrationsBySprint = async (sprintId) => {
         try {
             if(sprintId) {
-                const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}/`)
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}/${user.tenant_id}`)
 
                 if (response.status === 200) {
                     setTimeRegisteredAll(response.data)
@@ -49,7 +49,7 @@ const Dashboard = () => {
     const fetchTimeRegistrations = async (sprintId) => {
         try {
             if (sprintId) {
-                const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registered-user/${sprintId}/${user.id}`)
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registered-user/${sprintId}/${user.id}/${user.tenant_id}`)
                 
                 if (response.status == 200) {
                     setTimeRegistered(response.data)
