@@ -13,6 +13,8 @@ router.route("/fetch-deadlines").get(async (req, res) => {
 
     const todayDate = new Date();
     const sevenDaysFromNow = new Date();
+
+    todayDate.setHours(0, 0, 0, 0);
     sevenDaysFromNow.setDate(todayDate.getDate() + 7);
 
     try {
