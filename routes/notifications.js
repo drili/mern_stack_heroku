@@ -10,10 +10,16 @@ const notificationType = "user_tagging_task"
 const sendSlackMessage = require("../functions/slackMessageUser")
 
 router.route("/fetch-unread-notifications").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
-        const notifications = await NotificationChatTask.find({ userId: userId, notificationIsRead: false })
+        const notifications = await NotificationChatTask.find({ userId: userId, notificationIsRead: false, tenantId: tenantId })
             .populate({
                 path: "mentionedBy",
                 model: User,
@@ -39,10 +45,19 @@ router.route("/fetch-unread-notifications").post(async (req, res) => {
 })
 
 router.route("/update-user-notification-read").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { notificationId } = req.body
 
+    if (!tenantId || !notificationId) {
+        return res.status(400).json({ error: "tenantId & notificationId is required" })
+    }
+    
     try {
-        const notification = await NotificationChatTask.findByIdAndUpdate(notificationId, { $set: { notificationIsRead: true } })
+        const notification = await NotificationChatTask.findByIdAndUpdate(
+            { _id: notificationId, tenantId: tenantId }, 
+            { $set: { notificationIsRead: true } }
+        )
         
         res.json({ message: "Customer archived & updated successfully" })
     } catch (error) {
@@ -52,10 +67,16 @@ router.route("/update-user-notification-read").put(async (req, res) => {
 })
 
 router.route("/fetch-user-notifications").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
-        const notifications = await NotificationChatTask.find({ userId: userId })
+        const notifications = await NotificationChatTask.find({ userId: userId, tenantId: tenantId })
             .populate({
                 path: "mentionedBy",
                 model: User,
@@ -81,6 +102,8 @@ router.route("/fetch-user-notifications").post(async (req, res) => {
 })
 
 router.route("/create-notification").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const {
         mentionedUsers,
         taskId,
@@ -89,6 +112,10 @@ router.route("/create-notification").post(async (req, res) => {
         htmlContent } = req.body
 
     const notificationLinkModified = `/task?taskId=${taskId}`
+
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
 
     try {
         mentionedUsers.forEach(async (user) => {
@@ -99,7 +126,8 @@ router.route("/create-notification").post(async (req, res) => {
                 notificationMessage: htmlContent,
                 taskId: taskId,
                 taskCustomer: taskCustomer,
-                mentionedBy: mentionedBy
+                mentionedBy: mentionedBy,
+                tenantId: tenantId,
             })
 
             await newNotification.save()
@@ -109,8 +137,8 @@ router.route("/create-notification").post(async (req, res) => {
                 message: "You have a new notification"
             })
 
-            const notifiedUser = await User.findById(user.id)
-            const notifiedBy = await User.findById(mentionedBy)
+            const notifiedUser = await User.findById({ _id: user.id, tenantId: tenantId })
+            const notifiedBy = await User.findById({ _id: mentionedBy, tenantId: tenantId})
             if(notifiedUser.slackId) {
                 sendSlackMessage(`${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`, notifiedUser.slackId)
             }

@@ -1,7 +1,10 @@
 const mongoose = require("mongoose")
 
-// TODO: Update to include "tenantId" with ref.
 const notificationChatTask = mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
