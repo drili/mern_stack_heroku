@@ -7,17 +7,22 @@ const {User} = require("../models/User")
 const router = express.Router()
 
 router.route("/edit-comment/:commentId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
     const { commentId } = req.params
     const { htmlContent } = req.body
 
-    if (commentId && htmlContent) {
+    if (commentId && htmlContent && tenantId) {
         try {
-            const comment = await Comment.findByIdAndUpdate(commentId, {
-                $set: { htmlContent: htmlContent }
-            }, {
-                new: true,
-                runValidators: true
-            })
+            const comment = await Comment.findByIdAndUpdate(
+                { _id: commentId, tenantId: tenantId }, 
+                { $set: { htmlContent: htmlContent } }, 
+                {
+                    new: true,
+                    runValidators: true 
+                }
+            )
 
             if (!comment) {
                 return res.status(404).send({ error: "Comment not found" })
@@ -31,10 +36,17 @@ router.route("/edit-comment/:commentId").put(async (req, res) => {
 })
 
 router.route("/delete-comment-by-id/:commentId").delete(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
     const { commentId } = req.params
     
+    if (!tenantId || !commentId) {
+        return res.status(400).json({ error: "tenantId & commentId is required" })
+    }
+
     try {
-        const comment = await Comment.findByIdAndDelete(commentId)
+        const comment = await Comment.findByIdAndDelete({ _id: commentId, tenantId: tenantId })
         
         if (!comment) {
             return res.status(404).send({ error: "Comment not found" })
@@ -47,14 +59,16 @@ router.route("/delete-comment-by-id/:commentId").delete(async (req, res) => {
 })
 
 router.route("/fetch-comments-by-task").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.body
 
-    if (!taskId) {
-        return res.status(400).send({ error: "Task ID is required" })
+    if (!taskId || !tenantId) {
+        return res.status(400).send({ error: "Task ID & tenantId is required" })
     }
 
     try {
-        const comments = await Comment.find({ taskId: taskId })
+        const comments = await Comment.find({ taskId: taskId, tenantId: tenantId })
             .sort({ createdAt: 0 })
             .populate({
                 path: "createdBy",
@@ -68,7 +82,13 @@ router.route("/fetch-comments-by-task").post(async (req, res) => {
 })
 
 router.route("/create-comment").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId, htmlContent, createdBy } = req.body
+
+    if (!taskId || !tenantId) {
+        return res.status(400).send({ error: "Task ID & tenantId is required" })
+    }
 
     try {
         const sanitizedHtml = sanitizeHtml(htmlContent, {
@@ -84,6 +104,7 @@ router.route("/create-comment").post(async (req, res) => {
             taskId: taskId,
             htmlContent: sanitizedHtml,
             createdBy: createdBy,
+            tenantId: tenantId,
         })
 
         const savedComment = await comment.save()

@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
-// TODO: Update to include "tenantId" with ref.
 const commentSchema = new mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     taskId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

@@ -23,7 +23,9 @@ router.route("/create").post(async (req, res) => {
 })
 
 router.route("/fetch").get(async (req, res) => {
-    const tenantId = req.query.tenantId
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    // const tenantId = req.query.tenantId
 
     if (!tenantId) {
         return res.status(400).json({ error: "tenantId is required" })
