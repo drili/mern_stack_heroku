@@ -6,11 +6,17 @@ const jwtMiddleware = require("../jwtMiddleware")
 const multer = require("multer")
 
 router.route("/update-sprint-year").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { activeYear, userId } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & commentId is required" })
+    }
+
     try {
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userId, tenantId: tenantId },
             { activeYear },
             { new: true }
         )
@@ -23,6 +29,8 @@ router.route("/update-sprint-year").put(async (req, res) => {
 })
 
 router.route("/register").post((req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { 
         username, 
         password,
@@ -33,14 +41,14 @@ router.route("/register").post((req, res) => {
         user_title
     } = req.body
 
-    if (!username || !password) {
-        return res.status(400).json({ msg: "::: Please enter all fields" })
+    if (!username || !password || !tenantId) {
+        return res.status(400).json({ msg: "username, password & tenantId is required" })
     }
 
     User.findOne({ username })
         .then(user => {
             if (user) {
-                return res.status(400).json({ msg: "::: User already exists" })
+                return res.status(400).json({ msg: "User already exists" })
             }
 
             const newUser = new User({
@@ -49,7 +57,8 @@ router.route("/register").post((req, res) => {
                 email,
                 isActivated: is_activated,
                 profileImage: profile_image,
-                userRole:user_role
+                userRole: user_role,
+                tenantId: tenantId
             })
 
             newUser.save()
@@ -74,7 +83,8 @@ router.route("/register").post((req, res) => {
                                     is_activated: user.isActivated,
                                     profile_image: user.profileImage,
                                     user_role: user.userRole,
-                                    user_title: user.userTitle
+                                    user_title: user.userTitle,
+                                    tenant_id: user.tenantId,
                                 }
                             })
                         }
@@ -84,19 +94,21 @@ router.route("/register").post((req, res) => {
 })
 
 router.route("/login").post((req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { email, password } = req.body
 
-    if(!email || !password) {
-        return res.status(400).json({ msg: '::: Please enter all fields' });
+    if (!tenantId || !email || !password) {
+        return res.status(400).json({ error: "tenantId, email & password is required" })
     }
 
     User.findOne({ email })
         .then(user => {
-            if (!user) return res.status(400).json({ msg: '::: User does not exist' });
+            if (!user) return res.status(400).json({ msg: 'User does not exist' });
 
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
-                    if (!isMatch) return res.status(400).json({ msg: '::: Invalid credentials' });
+                    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
                     jwt.sign(
                         { id: user.id },
@@ -116,6 +128,7 @@ router.route("/login").post((req, res) => {
                                     user_role: user.userRole,
                                     user_title: user.userTitle,
                                     active_year: user.activeYear,
+                                    tenant_id: user.tenantId,
                                 }
                             });
                         }
@@ -125,11 +138,16 @@ router.route("/login").post((req, res) => {
 })
 
 router.route("/profile/update").put((req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { username, email, userTitle, userId } = req.body;
 
-    console.log(req.body)
-    User.findByIdAndUpdate(
-        userId,
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
+    User.findOneAndUpdate(
+        { _id: userId, tenantId: tenantId },
         {
             $set: {
                 username,
@@ -148,7 +166,8 @@ router.route("/profile/update").put((req, res) => {
                 is_activated: updatedUser.isActivated,
                 profile_image: updatedUser.profileImage,
                 user_role: updatedUser.userRole,
-                user_title: updatedUser.userTitle
+                user_title: updatedUser.userTitle,
+                tenant_id: user.tenantId,
             }
         })
 })
@@ -159,10 +178,16 @@ router.route("/profile/update").put((req, res) => {
 })
 
 router.put("/profile/update-password", async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { newPassword, userId } = req.body;
 
+    if (!tenantId || !userId || !newPassword) {
+        return res.status(400).json({ error: "tenantId, newPassword & userId is required" })
+    }
+
     try {
-        const user = await User.findById(userId)
+        const user = await User.findOne({ _id: userId, tenantId: tenantId })
         if(!user) {
             return res.status(400).json({ msg: "::: User not found" })
         }
@@ -200,7 +225,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.put("/profile/upload-image", upload.single("profileImage"), async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
     const userId = req.body.userId
+
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
 
     if (!req.file) {
         return res.status(400).json({ msg: 'No file uploaded' })
@@ -210,8 +242,8 @@ router.put("/profile/upload-image", upload.single("profileImage"), async (req, r
     const filePath = req.file.path
 
     try {
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userId, tenantId: tenantId },
             { profileImage: req.file.filename },
             { new: true }
         )
@@ -254,7 +286,13 @@ router.route("/fetch-active-users").get(async (req, res) => {
 })
 
 router.route("/users-not-in-task").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskPersons } = req.body
+
+    if (!tenantId || !taskPersons) {
+        return res.status(400).json({ error: "tenantId & taskPersons is required" })
+    }
 
     try {
         const userIds = taskPersons.map(person => person.user)
@@ -274,8 +312,15 @@ router.route("/users-not-in-task").post(async (req, res) => {
 })
 
 router.route("/fetch-all-users").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
+    if (!tenantId) {
+        return res.status(400).json({ error: "tenantId is required" })
+    }
+
     try {
-        const users = await User.find().sort({ username: 1 })
+        const users = await User.find({ tenantId: tenantId }).sort({ username: 1 })
 
         return res.status(200).json(users)
     } catch (error) {
@@ -285,12 +330,19 @@ router.route("/fetch-all-users").get(async (req, res) => {
 })
 
 router.route("/update-users/:userId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
     const { userId } = req.params
     const updatedUserData = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
         const user = await User.findOneAndUpdate(
-            { _id: userId },
+            { _id: userId, tenantId: tenantId },
             updatedUserData,
             { new: true }
         )
@@ -307,11 +359,18 @@ router.route("/update-users/:userId").put(async (req, res) => {
 })
 
 router.route("/update-user-activation/:userId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.params
     const { isActivated } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
-        const updatedUser = await User.findByIdAndUpdate(userId,
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userId, tenantId: tenantId },
             { isActivated },
             { new: true }
         )
