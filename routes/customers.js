@@ -55,7 +55,7 @@ router.route("/delete/:customerId").delete(async (req, res) => {
     }
 
     try {
-        await Customer.findByIdAndDelete({ _id: customerId, tenantId: tenantId })
+        await Customer.findOneAndDelete({ _id: customerId, tenantId: tenantId })
         res.json({ message: "Customer deleted successfully" })
     } catch (error) {
         console.error("Failed to delete customer", error)
@@ -73,7 +73,7 @@ router.route("/archive/:customerId").put(async (req,res) => {
     }
 
     try {
-        await Customer.findByIdAndUpdate(
+        await Customer.findOneAndUpdate(
             { _id: customerId, tenantId: tenantId }, 
             { $set : { isArchived: true } }
         )
@@ -95,7 +95,7 @@ router.route("/unarchive/:customerId").put(async (req,res) => {
     }
 
     try {
-        await Customer.findByIdAndUpdate({
+        await Customer.findOneAndUpdate({
             _id: customerId, tenantId: tenantId},
             { $set : { isArchived: false } }
         )

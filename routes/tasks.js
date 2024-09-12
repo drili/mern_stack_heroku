@@ -6,7 +6,13 @@ const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
 
 router.route("/fetch-deadlines").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.query
+
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
 
     // const objectIdSprintId = new mongoose.Types.ObjectId(sprintId)
     const objectIdUserId = new mongoose.Types.ObjectId(userId)
@@ -19,7 +25,8 @@ router.route("/fetch-deadlines").get(async (req, res) => {
         const deadlineTasks = await Task.find({
             // taskSprints: objectIdSprintId,
             'taskPersons.user': objectIdUserId,
-            isArchived: false
+            isArchived: false,
+            tenantId: tenantId,
         })
 
         const arrayTasks = [];
@@ -40,14 +47,16 @@ router.route("/fetch-deadlines").get(async (req, res) => {
 })
 
 router.route("/update-percentage").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId, percentageValues } = req.body
 
-    // for (const [key, value] of Object.entries(percentageValues)) {
-    //     console.log(`${key}: ${value}`)
-    // }
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
 
     try {
-        const task = await Task.findById(taskId)
+        const task = await Task.findOne({ _id: taskId, tenantId: tenantId })
 
         if (!task) {
             return res.status(404).json({ error: "Task not found" })
@@ -152,14 +161,16 @@ router.route("/fetch-by-user/:userId").get(async (req, res) => {
 })
 
 router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { customerId } = req.params
+    const { month, year, time_reg } = req.query
+
+    if (!tenantId || !customerId || month || year) {
+        return res.status(400).json({ error: "tenantId, month, year & customerId is required" })
+    }
+
     try {
-        const { customerId } = req.params
-        const { month, year, time_reg } = req.query
-
-        if (!month || !year) {
-            return res.status(400).json({ error: "Month and year are required." });
-        }
-
         const targetTaskSprint = await Sprints.findOne({
             sprintMonth: month,
             sprintYear: year
@@ -168,7 +179,8 @@ router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
         const tasks = await Task.find({
             taskCustomer: customerId,
             isArchived: { $ne: true },
-            taskSprints: targetTaskSprint._id
+            taskSprints: targetTaskSprint._id,
+            tenantId: tenantId,
         })
             .populate("createdBy", ["username", "email", "profileImage", "userRole", "userTitle"])
             .populate({
@@ -204,13 +216,14 @@ router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
 })
 
 router.route("/fetch-by-user-sprint/:userId").get(async (req, res) => {
-    try {
-        const { userId } = req.params
-        const { month, year, time_reg, tenantId } = req.query
+    const { userId } = req.params
+    const { month, year, time_reg, tenantId } = req.query
 
-        if (!month || !year || !tenantId) {
-            return res.status(400).json({ error: "Month, year and tenantId are required." });
-        }
+    if (!month || !year || !tenantId) {
+        return res.status(400).json({ error: "Month, year and tenantId are required." });
+    }
+
+    try {
 
         const targetTaskSprint = await Sprints.findOne({
             sprintMonth: month,
@@ -257,10 +270,16 @@ router.route("/fetch-by-user-sprint/:userId").get(async (req, res) => {
 })
 
 router.route("/fetch-by-id/:taskId").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const task = await Task.find({ _id: taskId })
+        const task = await Task.find({ _id: taskId, tenantId: tenantId })
             // .populate("taskPersons", ["_id", "username", "email", "profileImage", "userRole", "userTitle"])
             .populate({
                 path: 'taskPersons.user',
@@ -277,12 +296,18 @@ router.route("/fetch-by-id/:taskId").get(async (req, res) => {
 })
 
 router.route("/update/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
     const { taskName, taskTimeLow, taskTimeHigh, taskDescription, taskDeadline, estimatedTime } = req.body;
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(
-            taskId,
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, tenantId: tenantId },
             {
                 taskName,
                 taskTimeLow,
@@ -302,12 +327,18 @@ router.route("/update/:taskId").put(async (req, res) => {
 })
 
 router.route("/update-vertical/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
     const { taskVertical } = req.body
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(
-            taskId,
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, tenantId: tenantId },
             { taskVertical: taskVertical },
             { new: true }
         )
@@ -320,12 +351,18 @@ router.route("/update-vertical/:taskId").put(async (req, res) => {
 })
 
 router.route("/update-customers/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
     const { customerId } = req.body
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(
-            taskId,
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, tenantId: tenantId },
             { taskCustomer: customerId },
             { new: true }
         )
@@ -338,12 +375,18 @@ router.route("/update-customers/:taskId").put(async (req, res) => {
 })
 
 router.route("/update-sprint/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
     const { taskSprintId } = req.body
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(
-            taskId,
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, tenantId: tenantId },
             { taskSprints: taskSprintId },
             { new: true }
         )
@@ -356,11 +399,17 @@ router.route("/update-sprint/:taskId").put(async (req, res) => {
 })
 
 router.route("/assign-user/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
     const { assignedUserId } = req.body
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const task = await Task.findById(taskId)
+        const task = await Task.findOne({ _id: taskId, tenantId: tenantId })
 
         if (!task) {
             return res.status(404).json({ error: 'Task not found' })
@@ -388,10 +437,16 @@ router.route("/assign-user/:taskId").put(async (req, res) => {
 })
 
 router.route("/remove-user/:taskId/:taskPersonId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId, taskPersonId } = req.params
 
+    if (!tenantId || !taskId || !taskPersonId) {
+        return res.status(400).json({ error: "tenantId, taskPersonId & taskId is required" })
+    }
+
     try {
-        const task = await Task.findById(taskId);
+        const task = await Task.findOne({ _id: taskId, tenantId: tenantId });
 
         if (!task) {
             return res.status(404).json({ error: 'Task not found' });
@@ -425,11 +480,17 @@ router.route("/remove-user/:taskId/:taskPersonId").put(async (req, res) => {
 })
 
 router.route("/archive-task/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const task = await Task.findByIdAndUpdate(
-            taskId,
+        const task = await Task.findOneAndUpdate(
+            { _id: taskId, tenantId: tenantId }, 
             { isArchived: true },
             { new: true }
         )
@@ -442,12 +503,18 @@ router.route("/archive-task/:taskId").put(async (req, res) => {
 })
 
 router.route("/update-taskworkflow/:taskId").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
     const { workflowStatus } = req.body
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(
-            taskId,
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, tenantId: tenantId },
             { workflowStatus: workflowStatus },
             { new: true }
         )

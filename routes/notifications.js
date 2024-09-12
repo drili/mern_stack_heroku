@@ -54,7 +54,7 @@ router.route("/update-user-notification-read").put(async (req, res) => {
     }
     
     try {
-        const notification = await NotificationChatTask.findByIdAndUpdate(
+        const notification = await NotificationChatTask.findOneAndUpdate(
             { _id: notificationId, tenantId: tenantId }, 
             { $set: { notificationIsRead: true } }
         )
@@ -137,8 +137,8 @@ router.route("/create-notification").post(async (req, res) => {
                 message: "You have a new notification"
             })
 
-            const notifiedUser = await User.findById({ _id: user.id, tenantId: tenantId })
-            const notifiedBy = await User.findById({ _id: mentionedBy, tenantId: tenantId})
+            const notifiedUser = await User.findOne({ _id: user.id, tenantId: tenantId })
+            const notifiedBy = await User.findOne({ _id: mentionedBy, tenantId: tenantId})
             if(notifiedUser.slackId) {
                 sendSlackMessage(`${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`, notifiedUser.slackId)
             }
