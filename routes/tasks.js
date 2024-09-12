@@ -206,10 +206,10 @@ router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
 router.route("/fetch-by-user-sprint/:userId").get(async (req, res) => {
     try {
         const { userId } = req.params
-        const { month, year, time_reg } = req.query
+        const { month, year, time_reg, tenantId } = req.query
 
-        if (!month || !year) {
-            return res.status(400).json({ error: "Month and year are required." });
+        if (!month || !year || !tenantId) {
+            return res.status(400).json({ error: "Month, year and tenantId are required." });
         }
 
         const targetTaskSprint = await Sprints.findOne({
@@ -220,7 +220,8 @@ router.route("/fetch-by-user-sprint/:userId").get(async (req, res) => {
         const tasks = await Task.find({
             "taskPersons.user": userId,
             isArchived: { $ne: true },
-            taskSprints: targetTaskSprint._id
+            taskSprints: targetTaskSprint._id,
+            tenantId
         })
             .populate("createdBy", ["username", "email", "profileImage", "userRole", "userTitle"])
             .populate({

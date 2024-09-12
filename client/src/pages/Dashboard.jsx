@@ -74,7 +74,7 @@ const Dashboard = () => {
     const fetchTasksByUserAndSprint = async (activeSprintArray) => {
         try {
             if (activeSprintArray && activeSprintArray.sprintMonth) {
-                const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user-sprint/${user.id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}`)
+                const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user-sprint/${user.id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}&tenantId=${user.tenant_id}`)
 
                 const totalAllocatedTimeLow = response.data.reduce((accumulator, time) => {
                     const userTaskPerson = time.taskPersons.find(
