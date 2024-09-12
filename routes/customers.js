@@ -3,14 +3,19 @@ const router = express.Router()
 const {Customer} = require('../models/Customer')
 
 router.route("/create").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { customerName, customerColor } = req.body
 
-    console.log(req.body)
+    if (!tenantId || !customerName) {
+        return res.status(400).json({ error: "tenantId & customerName is required" })
+    }
 
     try {
         const customer = new Customer({
             customerName,
-            customerColor
+            customerColor,
+            tenantId,
         })
 
         const savedCustomer = await customer.save()
@@ -41,10 +46,16 @@ router.route("/fetch").get(async (req, res) => {
 })
 
 router.route("/delete/:customerId").delete(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { customerId } = req.params
 
+    if (!tenantId || !customerId) {
+        return res.status(400).json({ error: "tenantId & customerId is required" })
+    }
+
     try {
-        await Customer.findByIdAndDelete(customerId)
+        await Customer.findByIdAndDelete({ _id: customerId, tenantId: tenantId })
         res.json({ message: "Customer deleted successfully" })
     } catch (error) {
         console.error("Failed to delete customer", error)
@@ -53,10 +64,20 @@ router.route("/delete/:customerId").delete(async (req, res) => {
 })
 
 router.route("/archive/:customerId").put(async (req,res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { customerId } = req.params
 
+    if (!tenantId || !customerId) {
+        return res.status(400).json({ error: "tenantId & customerId is required" })
+    }
+
     try {
-        await Customer.findByIdAndUpdate(customerId, { $set : { isArchived: true } })
+        await Customer.findByIdAndUpdate(
+            { _id: customerId, tenantId: tenantId }, 
+            { $set : { isArchived: true } }
+        )
+        
         res.json({ message: "Customer archived & updated successfully" })
     } catch (error) {
         console.error("Failed to archive customer", error);
@@ -65,10 +86,20 @@ router.route("/archive/:customerId").put(async (req,res) => {
 })
 
 router.route("/unarchive/:customerId").put(async (req,res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { customerId } = req.params
 
+    if (!tenantId || !customerId) {
+        return res.status(400).json({ error: "tenantId & customerId is required" })
+    }
+
     try {
-        await Customer.findByIdAndUpdate(customerId, { $set : { isArchived: false } })
+        await Customer.findByIdAndUpdate({
+            _id: customerId, tenantId: tenantId},
+            { $set : { isArchived: false } }
+        )
+
         res.json({ message: "Customer archived & updated successfully" })
     } catch (error) {
         console.error("Failed to archive customer", error);
