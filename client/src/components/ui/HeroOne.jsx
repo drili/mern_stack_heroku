@@ -2,7 +2,7 @@ import React from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
 
 import BackgroundImage from "../../assets/images/65c5ecddff8cba0a5346c654_hero-bg-image.png"
-import OverlappingImage from "../../assets/Screenshot_1.png"
+import OverlappingImage from "../../assets/images/screenshot_dashboard1.png"
 
 import HeadingBig from './elements/headingBig'
 import ButtonSmall from './elements/ButtonSmall'
