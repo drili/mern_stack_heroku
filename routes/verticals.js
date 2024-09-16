@@ -3,7 +3,9 @@ const router = express.Router()
 const {Vertical} = require("../models/Vertical")
 
 router.route("/fetch-Verticals").get(async (req, res) => {
-    const tenantId = req.query.tenantId
+    // const tenantId = req.query.tenantId
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
     if (!tenantId) {
         return res.status(400).json({ error: "tenantId is required" })

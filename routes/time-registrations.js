@@ -64,10 +64,12 @@ router.route("/time-registrations-verticals-aggregated/:sprintId").get(async (re
 })
 
 router.route("/fetch-users-time-regs-by-sprint/:sprintId/:tenantId").get(async (req, res) => {
-    try {
-        const { sprintId } = req.params
-        const { tenantId } = req.params
+    const { sprintId } = req.params
+    // const { tenantId } = req.params
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
+    try {
         const activeUsers = await User.find({ isActivated: true, tenantId })
         const activeUsersData = []
 
@@ -222,7 +224,9 @@ router.route("/time-registered-by-user").post(async (req, res) => {
 })
 
 router.route("/register-time").post(async (req, res) => {
-    const { userId, taskId, timeRegistered, description, sprintId, currentTime, registrationType, customerId, verticalId, tenantId } = req.body
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { userId, taskId, timeRegistered, description, sprintId, currentTime, registrationType, customerId, verticalId } = req.body
 
     if (!tenantId || !userId) {
         return res.status(400).json({ error: "tenantId & userId is required" })
@@ -314,7 +318,9 @@ router.route("/time-registered/:taskId").get(async (req, res) => {
 router.route("/time-registered-user/:sprintId/:userId/:tenantId").get(async (req, res) => {
     const { sprintId } = req.params
     const { userId } = req.params
-    const { tenantId } = req.params
+    // const { tenantId } = req.params
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
     if (sprintId && userId && tenantId) {
         try {

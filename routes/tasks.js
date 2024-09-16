@@ -79,6 +79,9 @@ router.route("/update-percentage").post(async (req, res) => {
 })
 
 router.route("/create").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
     const {
         taskName,
         taskTimeLow,
@@ -93,7 +96,6 @@ router.route("/create").post(async (req, res) => {
         taskDeadline,
         estimatedTime,
         taskType,
-        tenantId
     } = req.body
 
     if (!tenantId) {
@@ -131,7 +133,9 @@ router.route("/create").post(async (req, res) => {
 
 router.route("/fetch-by-user/:userId").get(async (req, res) => {
     const { userId } = req.params
-    const tenantId = req.query.tenantId
+    // const tenantId = req.query.tenantId
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
     if (!tenantId || !userId) {
         return res.status(400).json({ error: "tenantId and userId is required" })
@@ -217,7 +221,9 @@ router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
 
 router.route("/fetch-by-user-sprint/:userId").get(async (req, res) => {
     const { userId } = req.params
-    const { month, year, time_reg, tenantId } = req.query
+    const { month, year, time_reg } = req.query
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
     if (!month || !year || !tenantId) {
         return res.status(400).json({ error: "Month, year and tenantId are required." });

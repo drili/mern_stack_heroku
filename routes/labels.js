@@ -3,7 +3,9 @@ const router = express.Router()
 const { Label } = require("../models/Label")
 
 router.route("/fetch-labels").get(async (req, res) => {
-    const tenantId = req.query.tenantId
+    // const tenantId = req.query.tenantId
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     
     if (!tenantId) {
         return res.status(400).json({ error: "tenantId is required" })
