@@ -17,6 +17,7 @@ const getFormattedDate = () => {
 const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, customerId, verticalId }) => {
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const [timeRegistrations, setTimeRegistrations] = useState([])
     const [formRegisterTime, setFormRegisterTime] = useState({
@@ -32,7 +33,8 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
 
     const fetchTimeRegistrations = async (taskId) => {
         try {
-            const response = await axios.get(`${baseURL}/time-registrations/time-registered/${taskId}`)
+            const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registered/${taskId}`)
+            
             setTimeRegistrations(response.data)
         } catch (error) {
             console.error('Failed to fetch registered time(s)', error)
@@ -51,7 +53,7 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
         
         if (formRegisterTime.timeRegistered > 0) {
             try {
-                const response = await axios.post(`${baseURL}/time-registrations/register-time`, formRegisterTime)
+                const response = await axios.post(`${tenantBaseURL}/time-registrations/register-time`, formRegisterTime)
                 if (response.status === 201) {
                     toast('Time registered successfully', {
                         duration: 4000,

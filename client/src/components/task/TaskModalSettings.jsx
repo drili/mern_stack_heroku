@@ -3,6 +3,7 @@ import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 
 import { ConfigContext } from '../../context/ConfigContext'
+import { UserContext } from '../../context/UserContext'
 
 const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, fetchTasks, task, closeModal, updateFunc, sprintOverviewFetch, fetchWorkflow, taskType, activeSprint, activeFilterUser, newSprintArray }) => {
     const [sprints, setSprints] = useState([])
@@ -26,6 +27,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const [sprintToUse, setSprintToUse] = useState([])
 
     const { baseURL } = useContext(ConfigContext);
+    const { user } = useContext(UserContext)
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
+
     const imageSrc = `${baseURL}/uploads/`
 
     const fetchSprints = async () => {
@@ -39,7 +43,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     const fetchVerticals = async () => {
         try {
-            const response = await axios.get(baseURL + "/verticals/fetch-verticals")
+            const response = await axios.get(tenantBaseURL + "/verticals/fetch-verticals")
             setVerticals(response.data)
         } catch (error) {
             console.error('Failed to fetch verticals', error);
@@ -48,7 +52,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(`${baseURL}/customers/fetch`)
+            const response = await axios.get(`${tenantBaseURL}/customers/fetch`)
             setTimeout(() => {
                 setCustomers(response.data)
             }, 250)
@@ -59,7 +63,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     const fetchUsersNotInTask = async (taskPersons) => {
         try {
-            const response = await axios.post(baseURL + "/users/users-not-in-task", { taskPersons })
+            const response = await axios.post(tenantBaseURL + "/users/users-not-in-task", { taskPersons })
             setUsersNot(response.data)
         } catch (error) {
             console.error('Failed to fetch users not in task', error);
@@ -78,7 +82,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         if (formDataVerticalId.taskVertical == "") return
 
         try {
-            const response = await axios.put(`${baseURL}/tasks/update-vertical/${taskID}`, formDataVerticalId)
+            const response = await axios.put(`${tenantBaseURL}/tasks/update-vertical/${taskID}`, formDataVerticalId)
             if (response.status === 200) {
                 toast('Task vertical updated successfully', {
                     duration: 4000,
@@ -112,7 +116,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         if (formDataSprintCustomer.customerId == "") return
 
         try {
-            const response = await axios.put(`${baseURL}/tasks/update-customers/${taskID}`, formDataSprintCustomer)
+            const response = await axios.put(`${tenantBaseURL}/tasks/update-customers/${taskID}`, formDataSprintCustomer)
             if (response.status === 200) {
                 toast('Task customer updated successfully', {
                     duration: 4000,
@@ -146,7 +150,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         if (formDataSprint.taskSprintId == "") return
         
         try {
-            const response = await axios.put(`${baseURL}/tasks/update-sprint/${taskID}`, formDataSprint)
+            const response = await axios.put(`${tenantBaseURL}/tasks/update-sprint/${taskID}`, formDataSprint)
             if (response.status === 200) {
                 toast('Task sprint updated successfully', {
                     duration: 4000,
@@ -193,7 +197,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const handleAddTaskUser = async (assignedUserId) => {
         if (assignedUserId) {
             try {
-                const response = await axios.put(`${baseURL}/tasks/assign-user/${taskID}`, { assignedUserId })
+                const response = await axios.put(`${tenantBaseURL}/tasks/assign-user/${taskID}`, { assignedUserId })
                 if (response.status === 200) {
                     fetchTaskData(taskID)
                     if (fetchTasks) {
@@ -217,7 +221,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         }
 
         try {
-            const response = await axios.put(`${baseURL}/tasks/remove-user/${taskID}/${taskPersonId}`)
+            const response = await axios.put(`${tenantBaseURL}/tasks/remove-user/${taskID}/${taskPersonId}`)
             if (response.status === 200) {
                 fetchTaskData(taskID)
                 if (fetchTasks) {
@@ -249,7 +253,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
             }
 
             try {
-                const response = await axios.post(`${baseURL}/tasks/update-percentage`, updatedPercentageData)
+                const response = await axios.post(`${tenantBaseURL}/tasks/update-percentage`, updatedPercentageData)
 
                 if (response.status === 200) {
                     toast('Percentage updated successfully', {
@@ -288,7 +292,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         const archiveTaskId = e.target.elements.archiveTaskId.value
 
         try {
-            const response = await axios.put(`${baseURL}/tasks/archive-task/${archiveTaskId}`)
+            const response = await axios.put(`${tenantBaseURL}/tasks/archive-task/${archiveTaskId}`)
             if (response.status === 200) {
                 toast('Task archived successfully', {
                     duration: 4000,

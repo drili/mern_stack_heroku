@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 
 const { NotificationChatTask } = require("../models/NotificationChatTask")
-const User = require("../models/User")
+const { User } = require("../models/User")
 const Customer = require("../models/Customer")
 const Task = require("../models/Task")
 
@@ -118,7 +118,7 @@ router.route("/create-notification").post(async (req, res) => {
     }
 
     try {
-        mentionedUsers.forEach(async (user) => {
+        for (const user of mentionedUsers) {
             const newNotification = new NotificationChatTask({
                 userId: user.id,
                 notificationType: notificationType,
@@ -128,21 +128,24 @@ router.route("/create-notification").post(async (req, res) => {
                 taskCustomer: taskCustomer,
                 mentionedBy: mentionedBy,
                 tenantId: tenantId,
-            })
+            });
 
-            await newNotification.save()
+            await newNotification.save();
 
-            // *** Emit a WebSocket event to the user
             req.app.get("io").to(user.id).emit("new-notification", {
                 message: "You have a new notification"
-            })
+            });
 
-            const notifiedUser = await User.findOne({ _id: user.id, tenantId: tenantId })
-            const notifiedBy = await User.findOne({ _id: mentionedBy, tenantId: tenantId})
-            if(notifiedUser.slackId) {
-                sendSlackMessage(`${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`, notifiedUser.slackId)
+            const notifiedUser = await User.findOne({ _id: user.id, tenantId: tenantId });
+            const notifiedBy = await User.findOne({ _id: mentionedBy, tenantId: tenantId });
+
+            if (notifiedUser && notifiedUser.slackId) {
+                sendSlackMessage(
+                    `${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`,
+                    notifiedUser.slackId
+                );
             }
-        })
+        }
 
         res.status(200).send("Notifications created successfully")
     } catch (error) {

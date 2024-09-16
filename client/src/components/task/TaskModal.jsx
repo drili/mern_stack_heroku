@@ -10,8 +10,10 @@ import TaskModalSettings from './TaskModalSettings'
 import TaskTimeRegistration from './TaskTimeRegistration'
 import TaskChat from './TaskChat'
 import { ConfigContext } from '../../context/ConfigContext';
+import { UserContext } from '../../context/UserContext';
 
 const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
+    const { user } = useContext(UserContext)
     const [showModal, setShowModal] = useState(false)
     const [task, setTask] = useState([])
     const [taskSprint, setTaskSprint] = useState([])
@@ -29,6 +31,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
     const modalContentRef = useRef(null)
 
     const copyToClipboard = () => {
@@ -61,7 +64,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
     const fetchTaskData = async (taskID) => {
         if (taskID) {
-            const response = await axios.get(`${baseURL}/tasks/fetch-by-id/${taskID}`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-id/${taskID}`)
 
             setTask(response.data)
             setFormData((formData) => ({
@@ -113,7 +116,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
         event.preventDefault()
 
         try {
-            const response = await axios.put(`${baseURL}/tasks/update/${taskID}`, formData)
+            const response = await axios.put(`${tenantBaseURL}/tasks/update/${taskID}`, formData)
 
             if (response.status === 200) {
                 toast('Task updated successfully', {

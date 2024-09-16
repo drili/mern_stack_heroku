@@ -267,7 +267,8 @@ router.put("/profile/upload-image", upload.single("profileImage"), async (req, r
 })
 
 router.route("/fetch-active-users").get(async (req, res) => {
-    const tenantId = req.query.tenantId
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
     if (!tenantId) {
         return res.status(400).json({ error: "tenantId is required" })
@@ -300,7 +301,8 @@ router.route("/users-not-in-task").post(async (req, res) => {
         const users = await User.find({
             $and: [
                 { _id: { $nin: userIds } },
-                { isActivated: true }
+                { isActivated: true },
+                { tenantId: tenantId },
             ]
         })
 

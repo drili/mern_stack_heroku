@@ -304,7 +304,7 @@ router.route("/time-registered/:taskId").get(async (req, res) => {
 
     try {
         const timeRegistrations = await TimeRegistration.find({
-            _id: taskId,
+            taskId: taskId,
             tenantId: tenantId
         })
 

@@ -52,6 +52,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const startEdit = (message) => {
         if (typeof message.htmlContent !== 'string') {
@@ -98,7 +99,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
         try {
             const htmlContentSave = stateToHTML(editorStateComment.getCurrentContent())
-            const response = await axios.put(`${baseURL}/comments/edit-comment/${editingId}`, {
+            const response = await axios.put(`${tenantBaseURL}/comments/edit-comment/${editingId}`, {
                 htmlContent: htmlContentSave
             })
 
@@ -113,7 +114,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
     const handleDeleteComment = async (commentId) => {
         try {
-            const response = await fetch(`${baseURL}/comments/delete-comment-by-id/${commentId}`, {
+            const response = await fetch(`${tenantBaseURL}/comments/delete-comment-by-id/${commentId}`, {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json'
@@ -133,7 +134,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
     const fetchComments = async (taskId) => {
         try {
-            const response = await fetch(baseURL + "/comments/fetch-comments-by-task", {
+            const response = await fetch(tenantBaseURL + "/comments/fetch-comments-by-task", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -156,7 +157,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
     const sendCommentToServer = async (htmlContent) => {
         try {
-            const response = await fetch(baseURL + "/comments/create-comment", {
+            const response = await fetch(tenantBaseURL + "/comments/create-comment", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -180,7 +181,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
     const sendNotification = async (mentionedUsers, taskId, taskCustomer, mentionedBy, htmlContent) => {
         try {
-            const response = await axios.post(baseURL + "/notifications/create-notification", {
+            const response = await axios.post(tenantBaseURL + "/notifications/create-notification", {
                 mentionedUsers,
                 taskId,
                 taskCustomer,
