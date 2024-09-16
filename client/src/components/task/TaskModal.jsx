@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { FaWindowClose } from "react-icons/fa"
-import { BsFillLightningChargeFill } from "react-icons/bs";
+import { BsFillLightningChargeFill, BsXLg } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { FaCalendar, FaClock, FaPaperclip } from "react-icons/fa";
 import axios from 'axios'
@@ -11,6 +10,7 @@ import TaskTimeRegistration from './TaskTimeRegistration'
 import TaskChat from './TaskChat'
 import { ConfigContext } from '../../context/ConfigContext';
 import { UserContext } from '../../context/UserContext';
+import LabelSmall from '../LabelSmall';
 
 const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
     const { user } = useContext(UserContext)
@@ -158,59 +158,63 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
             <>
                 {showModal ? (
                     <>
-                        <div
-                            // className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                            className='absolute z-50 top-0 w-full translate-x-[-50%] left-[50%]'
-                        >
+                        <div className='absolute z-50 top-0 w-full translate-x-[-50%] left-[50%]'>
                             <div className="relative my-6 mx-auto max-w-screen-xl w-full taskModalComponent">
+                                <div className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
-                                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-
-                                    <div className='flex items-center gap-2 px-4 pt-5 pb-0 rounded-t md:px-10'>
-                                        <span 
-                                            className="taskLabel flex items-center gap-2 text-xs px-2 py-1 rounded font-bold"
-                                            style={{
-                                                color: `${task[0]?.taskCustomer?.customerColor}`,
-                                                border: `1px solid ${task[0]?.taskCustomer?.customerColor}`
-                                            }}>
+                                    <div className='flex items-center gap-2 px-4 pt-10 pb-0 rounded-t md:px-10'>
+                                        <LabelSmall 
+                                            classes={``}
+                                            backgroundColor=""
+                                            borderColor={task[0]?.taskCustomer?.customerColor}
+                                        >
                                             {task[0]?.taskCustomer?.customerName}
-                                        </span>
-                                        <span className="taskLabel flex items-center gap-2 bg-rose-100 text-xs px-2 py-1 rounded text-rose-800 font-bold">
+                                        </LabelSmall>
+
+                                        <LabelSmall>
                                             {task[0]?.taskSprints[0]?.sprintName} <FaCalendar />
-                                        </span>
+                                        </LabelSmall>
+                                        
+                                        <LabelSmall>
+                                            <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></span>
+                                        </LabelSmall>
 
                                         {task[0]?.taskType === "quickTask" && (
                                             <>
-                                                <span className="flex items-center gap-2 taskLabel bg-amber-100 text-xs px-2 py-1 rounded text-amber-500 font-bold">
-                                                    Quick Task <BsFillLightningChargeFill className='text-amber-500' />
-                                                </span>
+                                                <LabelSmall
+                                                    classes={`bg-teal-50 text-teal-500`}
+                                                >
+                                                    Quick Task <BsFillLightningChargeFill className='text-teal-500' />
+                                                </LabelSmall>
 
-                                                <span className="flex items-center gap-2 taskLabel bg-amber-100 text-xs px-2 py-1 rounded text-amber-500 font-bold">
-                                                    <p className='font-bold text-xs text-amber-500'>{task[0]?.taskDeadline}</p><FaClock />
-                                                </span>
+                                                <LabelSmall
+                                                    classes={`bg-teal-50 text-teal-500`}
+                                                >
+                                                    {task[0]?.taskDeadline}<FaClock />
+                                                </LabelSmall>
                                             </>
                                         )}
-
                                     </div>
-                                    <div className="flex items-start justify-between p-4 pb-5 rounded-t md:px-10">
+
+                                    <div className="flex items-start justify-between py-6 rounded-t md:px-10 gap-8">
                                         <span>
-                                            <h3 className="text-3xl font-semibold">
+                                            <h3 className="text-lg md:text-2xl text-black font-extrabold">
                                                 {formData["taskName"]}
                                             </h3>
-                                            <p className='flex gap-2 hover:cursor-pointer items-center text-slate-500 text-sm mt-2' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></p>
+                                            
                                         </span>
                                         <button
-                                            className="text-white bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150"
+                                            className="text-white rounded-full h-[50px] w-[50px] bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150 flex justify-center items-center"
                                             type="button"
                                             onClick={closeModal}
                                         >
-                                            <h4><FaWindowClose></FaWindowClose></h4>
+                                            <h4 className='text-2xl'><BsXLg></BsXLg></h4>
                                         </button>
                                     </div>
 
-                                    <div className='flex items-start px-4 pt-5 pb-0 rounded-t md:px-10'>
-                                        <button className={`${toggleViewState === "task" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100`} onClick={() => handleViewState("task")}>Task</button>
-                                        <button className={`${toggleViewState === "taskChat" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:border-slate-100`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
+                                    <div className='flex items-start px-4 pb-0 rounded-t md:px-10'>
+                                        <button className={`${toggleViewState === "task" ? "bg-pink-700 text-white " : "bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("task")}>Task</button>
+                                        <button className={`${toggleViewState === "taskChat" ? "bg-pink-700 text-white " : " bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
                                     </div>
 
                                     {toggleViewState === "task" ? (
