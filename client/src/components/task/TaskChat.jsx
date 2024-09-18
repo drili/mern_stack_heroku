@@ -278,17 +278,17 @@ const TaskChat = ({ taskID, taskCustomer }) => {
         <div className="flex flex-col h-full bg-white border pt-5 border-t-slate-100 border-x-0 border-b-0">
             <div className="flex flex-col overflow-y-auto max-h-[55vh]" id='TaskChatMentions' ref={chatContainerRef}>
                 {comments.map((message, index) => (
-                    <div key={index} className="mb-0 flex align-top group relative hover:bg-slate-50 py-2">
+                    <div key={index} className="mb-0 flex align-top group relative hover:bg-stone-100 py-2 px-4 rounded">
                         <div>
                             <img
-                                className='h-[40px] w-[40px] mt-1 rounded-md mr-4 object-cover'
+                                className='h-[40px] w-[40px] mt-1 rounded mr-4 object-cover'
                                 src={`${baseURL}/uploads/${message.createdBy.profileImage}`}
                             />
                         </div>
 
                         <div className='w-full'>
-                            <div className="text-md text-slate-950 font-bold mb-1">{message.createdBy.username}
-                                <span className='ml-2 font-light text-xs'>{formatDate(message.createdAt)}</span>
+                            <div className="text-base text-zinc-900 font-bold mb-0">{message.createdBy.username}
+                                <span className='ml-1 font-[400] text-[12px] text-zinc-400'>{formatDate(message.createdAt)}</span>
                             </div>
 
                             {editingId === message._id ? (
@@ -306,31 +306,31 @@ const TaskChat = ({ taskID, taskCustomer }) => {
                         {message.createdBy._id === user.id && (
                             <span className='absolute right-0 top-0 py-1 px-0 flex'>
                                 {editingId === message._id && (
-                                    <span className='flex'>
-                                        <button onClick={cancelEdit} className='save-button text-xs'>
+                                    <span className='flex gap-2 mt-2 mr-2'>
+                                        <button onClick={cancelEdit} className='save-button text-xs text-white'>
                                             Cancel
                                         </button>
-                                        <button onClick={saveEdit} className='save-button text-xs'>
+                                        <button onClick={saveEdit} className='save-button text-xs text-white'>
                                             Save
                                         </button>
                                     </span>
                                 )}
 
                                 {!editingId && (
-                                    <span className='flex'>
+                                    <span className='flex gap-2 mt-2 mr-2'>
                                         <button
-                                            className='delete-button hidden group-hover:block'
+                                            className='delete-button hidden group-hover:block bg-white rounded'
                                             onClick={() => startEdit(message)}
                                         >
-                                            <BsPencilSquare className='text-xs text-blue-500' />
+                                            <BsPencilSquare className='text-xs text-black' />
                                         </button>
                                         
                                         <button
-                                            className='delete-button hidden group-hover:block'
+                                            className='delete-button hidden group-hover:block bg-white rounded'
                                             onClick={() => handleDeleteComment(message._id)}
                                             id={message._id}
                                         >
-                                            <BsFillTrashFill className='text-xs text-rose-950' />
+                                            <BsFillTrashFill className='text-xs text-rose-500' />
                                         </button>
                                     </span>
                                 )}
@@ -343,17 +343,17 @@ const TaskChat = ({ taskID, taskCustomer }) => {
                 <div ref={messagesEndRef} />
             </div>
 
-            <div className="border-t border-gray-200 pt-5">
-                <section onKeyDown={handleKeyDown}>
+            <div className="border-t border-gray-200 pt-10 grid grid-cols-12 gap-4 items-end">
+                <section className='col-span-10' onKeyDown={handleKeyDown}>
                     <DraftEditor
                         editorState={editorState}
                         setEditorState={handleEditorStateChange}
                     />
                 </section>
 
-                <section className='flex justify-end mt-5'>
+                <section className='cols-span-2 justify-end mt-5'>
                     <button
-                        className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center gap-2 hover:border-green-800 disabled:bg-green-100"
+                        className="bg-pink-700 text-white px-4 text-sm py-2 rounded-md flex items-center gap-2 hover:border-green-800 disabled:bg-pink-100"
                         onClick={handleSendMessage}
                         disabled={isInputEmpty}
                     >

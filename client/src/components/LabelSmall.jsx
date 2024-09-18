@@ -4,7 +4,7 @@ const LabelSmall = ({ children, classes, backgroundColor, borderColor }) => {
     return (
         <section 
             id='component_LabelSmall'
-            className={`${classes} text-black px-2 py-1 rounded font-bold text-xs flex gap-2 items-center`}
+            className={`${classes} text-black px-2 py-1 rounded font-medium text-xs flex gap-2 items-center`}
             style={{ 
                 backgroundColor: backgroundColor,
                 border: `1px solid ${borderColor ? borderColor : ''}`,

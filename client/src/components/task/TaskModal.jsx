@@ -27,8 +27,10 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
     })
     const [toggleViewState, setToggleViewState] = useState("task")
 
-    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    // const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
+    // const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
+    const labelClasses = "text-sm font-medium mb-2 block "
 
     const { baseURL } = useContext(ConfigContext);
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
@@ -204,7 +206,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                             
                                         </span>
                                         <button
-                                            className="text-white rounded-full h-[50px] w-[50px] bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150 flex justify-center items-center"
+                                            className="absolute right-10 top-10 text-white rounded-full h-[50px] w-[50px] bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150 flex justify-center items-center"
                                             type="button"
                                             onClick={closeModal}
                                         >
@@ -214,7 +216,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
                                     <div className='flex items-start px-4 pb-0 rounded-t md:px-10'>
                                         <button className={`${toggleViewState === "task" ? "bg-pink-700 text-white " : "bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("task")}>Task</button>
-                                        <button className={`${toggleViewState === "taskChat" ? "bg-pink-700 text-white " : " bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
+                                        <button className={`${toggleViewState === "taskChat" ? "bg-pink-700 text-white " : " bg-pink-50"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
                                     </div>
 
                                     {toggleViewState === "task" ? (
@@ -224,7 +226,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                             <div className={`${task[0]?.taskType !== "quickTask" ? "md:grid-cols-2 gap-5 md:gap-10" : "md:grid-cols-0"} grid`}>
                                                 <section className='mt-5'>
                                                     {task[0]?.taskType !== "quickTask" && (
-                                                        <div className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full'>
+                                                        <div className='mt-5 pt-6 px-6 border-0 bg-stone-100  rounded-extra-large relative flex flex-col w-full outline-none focus:outline-none h-full'>
                                                             {task && (
                                                                 <TaskTimeRegistration
                                                                     labelClasses={labelClasses}
@@ -240,12 +242,12 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                 </section>
                                                 
                                                 <section id='taskModalUpdate' className="mt-5">
-                                                    <form className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full' onSubmit={handleUpdateTask}>
+                                                    <form className='mt-5 pt-6 pb-4 px-6 bg-white rounded-extra-large relative flex flex-col w-full focus:outline-none h-full border border-gray-200' onSubmit={handleUpdateTask}>
                                                         <div>
-                                                            <h2 className='font-semibold mb-5'>Update Task</h2>
+                                                            <h2 className='font-bold mb-5 text-lg'>Update task</h2>
                                                         </div>
                                                         <div>
-                                                            <label htmlFor="taskName" className={labelClasses}>Task Name</label>
+                                                            <label htmlFor="taskName" className={labelClasses}>Task name</label>
                                                             <input type="text" name="taskName" placeholder="Task Name" required value={formData["taskName"]}
                                                                 className={inputClasses}
                                                                 onChange={(e) => handleInputChange(e)} />
@@ -254,13 +256,13 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                             {task[0]?.taskType !== "quickTask" && (
                                                                 <>
                                                                     <div>
-                                                                        <label className={labelClasses} htmlFor="taskTimeLow">Task Time Low</label>
+                                                                        <label className={labelClasses} htmlFor="taskTimeLow">Task time low</label>
                                                                         <input type="number" name="taskTimeLow" placeholder="Task Time Low" required value={formData["taskTimeLow"]}
                                                                             className={inputClasses}
                                                                             onChange={(e) => handleInputChange(e)} />
                                                                     </div>
                                                                     <div>
-                                                                        <label className={labelClasses} htmlFor="taskTimeHigh">Task Time High</label>
+                                                                        <label className={labelClasses} htmlFor="taskTimeHigh">Task hime high</label>
                                                                         <input type="number" name="taskTimeHigh" placeholder="Task Time High" required value={formData["taskTimeHigh"]}
                                                                             className={inputClasses}
                                                                             onChange={(e) => handleInputChange(e)} />
@@ -282,7 +284,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                                         />
                                                                     </span>
                                                                     <div>
-                                                                        <label className={labelClasses} htmlFor="estimatedTime">Estimated Time <span className='text-slate-300'>optional</span></label>
+                                                                        <label className={labelClasses} htmlFor="estimatedTime">Estimated time <span className='text-slate-300'>optional</span></label>
                                                                         <input 
                                                                             type="number" name="estimatedTime" value={formData["estimatedTime"]} placeholder="Estimated Task Time"
                                                                             onChange={(e) => handleInputChange(e)}
@@ -293,21 +295,21 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                             )}
                                                         </span>
                                                         <div>
-                                                            <label className={labelClasses} htmlFor="taskDescription">Task Description</label>
+                                                            <label className={labelClasses} htmlFor="taskDescription">Task description</label>
 
                                                             <textarea name="taskDescription" placeholder="Task Description" value={formData["taskDescription"]}
-                                                                className={inputClasses}
+                                                                className="h-[auto] border rounded focus:border-pink-700 pt-2 pb-2 px-3 w-full block mb-4"
                                                                 onChange={(e) => handleInputChange(e)} />
                                                         </div>
 
-                                                        <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task</button>
+                                                        <button type="submit" className='mt-5 rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer '>Update Task</button>
                                                     </form>
                                                 </section>
                                             </div>
 
                                             <div className="grid grid-cols-1 gap-5 md:grid-cols-1 md:gap-5 mt-10 pt-10">
                                                 <>
-                                                    <h2 className='font-semibold'>Task Chat</h2>
+                                                    <h2 className='text-lg md:text-2xl text-black font-extrabold'>Task chat</h2>
                                                     {taskID && (
                                                         <TaskChat 
                                                             taskID={taskID} 
