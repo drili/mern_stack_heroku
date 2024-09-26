@@ -342,7 +342,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     return (
         <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-stone-100 relative flex flex-col w-full outline-none focus:outline-none'>
             <h2 className='font-bold mb-5 text-lg'>Task settings</h2>
-            <section className='flex gap-10'>
+            <section className='flex gap-20'>
                 <span className='w-full'>
                     <span id='sprints'>
                         <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateSprint}>
