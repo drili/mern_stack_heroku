@@ -342,7 +342,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     return (
         <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-stone-100 relative flex flex-col w-full outline-none focus:outline-none'>
             <h2 className='font-bold mb-5 text-lg'>Task settings</h2>
-            <section className='flex gap-20'>
+            <section className='flex gap-10'>
                 <span className='w-full'>
                     <span id='sprints'>
                         <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateSprint}>
@@ -422,6 +422,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
 
                 </span>
+
+                <div className="border-l-[1px] border-gray-200 h-auto"></div>
 
                 <span className='w-full'>
                     <span id='taskUsers'>
@@ -512,9 +514,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                         <span id='archiveTask'>
                             <hr className='mb-5' />
                             <form onSubmit={handleArchiveTask}>
-                                <label className={labelClasses} htmlFor="archiveTaskId">Archivet task</label>
+                                <label className={labelClasses} htmlFor="archiveTaskId">Archive task</label>
                                 <input type="hidden" name='archiveTaskId' value={taskID} />
-                                <button type="submit" className='flex items-center justify-center gap-2 mt-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer bg-pink-900'>Archive Task <BsFillTrashFill className='text-xs text-white' /></button>
+                                <button type="submit" className='flex items-center justify-center gap-2 mt-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer bg-pink-900'>Archive task <BsFillTrashFill className='text-xs text-white' /></button>
                             </form>
                         </span>
                     </span>

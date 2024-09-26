@@ -341,10 +341,6 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         newSprintArray={newSprintArray}
                                                     />
                                                 </section>
-
-                                                <section className='mt-5'>
-                                                    
-                                                </section>
                                             </div>
                                         </div>
                                     )}
