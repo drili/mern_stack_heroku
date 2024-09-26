@@ -558,7 +558,7 @@ const CreateTask = () => {
                         <span>
                             {displayCount < tasks.length && (
                                 <button onClick={handleLoadMore}
-                                    className='bg-white text-slate-900 mt-5 h-fit whitespace-nowrap button border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>
+                                    className='rounded w-full mt-5 text-sm min-h-[45px] border border-zinc-400 cursor-pointer  bg-pink-700 border-none text-white'>
                                     Load More Tasks
                                 </button>
                             )}
