@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
+import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs"
 
 import { ConfigContext } from '../../context/ConfigContext'
 import { UserContext } from '../../context/UserContext'
@@ -339,16 +340,14 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     }, [task, fetchTaskData, taskID])
 
     return (
-        <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none'>
-            <h2 className='font-semibold mb-5'>
-                Task Settings 1
-            </h2>
+        <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-stone-100 relative flex flex-col w-full outline-none focus:outline-none'>
+            <h2 className='font-bold mb-5 text-lg'>Task settings</h2>
             <section className='flex gap-10'>
                 <span className='w-full'>
                     <span id='sprints'>
-                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateSprint}>
-                            <span className='w-[50%]'>
-                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Month</label>
+                        <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateSprint}>
+                            <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task month</label>
+                            <span className='w-[100%] col-span-6 pr-5'>
                                 <select
                                     name="taskSprintId"
                                     placeholder="Select Month"
@@ -365,16 +364,16 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                 </select>
                             </span>
 
-                            <span className='w-[50%]'>
-                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-slate-500 hover:border-slate-500 hover:bg-slate-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Month</button>
+                            <span className='w-[100%] col-span-6'>
+                                <button type="submit" className='mb-4 h-[40px] w-full rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer bg-white '>Update task month</button>
                             </span>
                         </form>
                     </span>
 
                     <span id='customers'>
-                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateCustomers}>
-                            <span className='w-[50%]'>
-                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Customer</label>
+                        <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateCustomers}>
+                            <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task customer</label>
+                            <span className='w-[100%] col-span-6 pr-5'>
                                 <select
                                     name="customerId"
                                     placeholder="Select Customer"
@@ -391,14 +390,14 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                 </select>
                             </span>
 
-                            <span className='w-[50%]'>
-                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-slate-500 hover:border-slate-500 hover:bg-slate-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Customer</button>
+                            <span className='w-[100%] col-span-6'>
+                                <button type="submit" className='mb-4 h-[40px] w-full rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer bg-white '>Update task customer</button>
                             </span>
                         </form>
 
-                        <form className='flex flex-col gap-4 mb-5 md:flex-row md:items-end' onSubmit={handleUpdateVertical}>
-                            <span className='w-[50%]'>
-                                <label className={labelClasses} htmlFor="taskCustomer">Change Task Vertical</label>
+                        <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateVertical}>
+                            <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task vertical</label>
+                            <span className='w-[100%] col-span-6 pr-5'>
                                 <select
                                     name="taskVertical"
                                     placeholder="Select Customer"
@@ -415,8 +414,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                 </select>
                             </span>
 
-                            <span className='w-[50%]'>
-                                <button type="submit" className='mb-4 button text-black mt-1 bg-white border-slate-500 hover:border-slate-500 hover:bg-slate-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task Vertical</button>
+                            <span className='w-[100%] col-span-6'>
+                                <button type="submit" className='mb-4 h-[40px] w-full rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer bg-white '>Update task vertical</button>
                             </span>
                         </form>
                     </span>
@@ -427,14 +426,14 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                 <span className='w-full'>
                     <span id='taskUsers'>
                         <form onSubmit={(e) => e.preventDefault()}>
-                            <span>
+                            <span className='flex flex-col gap-1'>
                                 <label className={labelClasses} htmlFor="taskCustomer">Task user(s)</label>
                                 <span>
                                     <select
                                         name="taskUsersNot"
                                         placeholder="Add User"
                                         required
-                                        className={`${inputClasses} min-w-[200px]`}
+                                        className={`${inputClasses} min-w-[200px] h-[40px]`}
                                         onChange={(e) => handleAddTaskUser(e.target.value)}
                                     >
                                         <option>Add User</option>
@@ -454,7 +453,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                     <div key={user.user._id} id={user.user._id}>
                                         <span className='flex gap-2 items-center mb-1 border border-zinc-100 p-2 rounded-lg justify-between'>
                                             <section className='flex gap-2 items-center'>
-                                                <img className='w-[25px] h-[25px] object-cover object-center rounded-full' src={`${imageSrc}${user.user.profileImage}`} />
+                                                <img className='w-[25px] h-[25px] object-cover object-center rounded' src={`${imageSrc}${user.user.profileImage}`} />
                                                 <p className='font-bold text-sm whitespace-nowrap'>{user.user.username}</p>
 
                                                 {taskPersons.length > 1 && (
@@ -513,9 +512,9 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                         <span id='archiveTask'>
                             <hr className='mb-5' />
                             <form onSubmit={handleArchiveTask}>
-                                <label className={labelClasses} htmlFor="archiveTaskId">Archive Task</label>
+                                <label className={labelClasses} htmlFor="archiveTaskId">Archivet task</label>
                                 <input type="hidden" name='archiveTaskId' value={taskID} />
-                                <button type="submit" className='bg-rose-950 text-white px-5 py-2 text-sm'>Archive Task</button>
+                                <button type="submit" className='flex items-center justify-center gap-2 mt-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer bg-pink-900'>Archive Task <BsFillTrashFill className='text-xs text-white' /></button>
                             </form>
                         </span>
                     </span>
