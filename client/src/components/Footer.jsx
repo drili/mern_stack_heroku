@@ -19,6 +19,11 @@ const Footer = () => {
                         <Link to="/notifications" className='text-slate-800 text-base'>
                             Notifications
                         </Link>
+
+                        {/* TODO: Add support contact page */}
+                        <Link to="#" className='text-slate-800 text-base'>
+                            Support
+                        </Link>
                     </section>
                 </div>
 
