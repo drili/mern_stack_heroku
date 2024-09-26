@@ -31,7 +31,7 @@ const UploadImageForm = () => {
     const handleFormSubmit = async (event) => {
         event.preventDefault()
 
-        if(!selectedImage) {
+        if (!selectedImage) {
             return
         }
 
@@ -56,25 +56,58 @@ const UploadImageForm = () => {
 
     return (
         <div>
-            <span className='mb-5'>
-                <img 
-                    src={`${imageSrc}${profileImage}`}
-                    className="w-[100px] h-[100px] object-cover rounded-full text-center m-auto mb-5"
-                />
-                <h3 className='font-bold mb-5'><b>{user.username} - </b>{user.email}</h3>
-                <span className='bg-rose-100 text-rose-800 rounded-md py-1 px-2 text-xs font-bold'>{user.user_title}</span>
-                <hr className='mt-10'/>
-            </span>
+            <section className='mb-5'>
+                <span className='relative'>
+                    <img
+                        src={`${imageSrc}${profileImage}`}
+                        className="w-[100px] h-[100px] object-cover rounded text-center m-auto mb-1"
+                    />
+                    <span className='bg-teal-200 rounded py-1 px-2 text-xs font-bold'>{user.user_title}</span>
+                </span>
+                <span className='mt-10'>
+                    <span className='flex flex-col gap-0 mb-5 mt-5'>
+                        <h3 className='text-lg md:text-3xl text-black font-extrabold'>{user.username}</h3>
+                        <h3 className='font-light text-black'>{user.email}</h3>
+                    </span>
+                </span>
+            </section>
 
-            <form onSubmit={handleFormSubmit} className='mt-10'>
+            <hr className='mt-5' />
+
+            <section>
+                <div className=''>
+                    <h3 className='text-black text-lg font-medium text-left mt-5'>User stats</h3>
+                </div>
+
+                <div className='grid grid-cols-12 gap-4 mt-5'>
+                    <div className="col-span-6 bg-white rounded py-4 px-2">
+                        <h3 className='mb-2 mt-0 text-lg text-slate-800 font-bold'>Hours registered</h3>
+                        <p className='text-pink-700 font-extrabold text-3xl mt-3'>0</p>
+                    </div>
+                    <div className="col-span-6 bg-white rounded py-4 px-2">
+                        <h3 className='mb-2 mt-0 text-lg text-slate-800 font-bold'>Tasks completed</h3>
+                        <p className='text-pink-700 font-extrabold text-3xl mt-3'>0</p>
+                    </div>
+                    <div className="col-span-6 bg-white rounded py-4 px-2">
+                        <h3 className='mb-2 mt-0 text-lg text-slate-800 font-bold'>Hours allocated</h3>
+                        <p className='text-pink-700 font-extrabold text-3xl mt-3'>0</p>
+                    </div>
+                    <div className="col-span-6 bg-white rounded py-4 px-2">
+                        <h3 className='mb-2 mt-0 text-lg text-slate-800 font-bold'>Tasks created</h3>
+                        <p className='text-pink-700 font-extrabold text-3xl mt-3'>0</p>
+                    </div>
+                </div>
+            </section>
+
+            <form onSubmit={handleFormSubmit} className='mt-10 opacity-0 hidden' disabled>
                 <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 ">Update Image</label>
                 <input type="file" accept="image/*" onChange={handleImageUpload} />
                 <input
-                    required 
+                    required
                     className='my-button button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '
                     type="submit"
                     value="Upload New Image"
-                    />
+                />
             </form>
         </div>
     )

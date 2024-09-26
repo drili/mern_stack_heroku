@@ -167,7 +167,7 @@ router.route("/profile/update").put((req, res) => {
                 profile_image: updatedUser.profileImage,
                 user_role: updatedUser.userRole,
                 user_title: updatedUser.userTitle,
-                tenant_id: user.tenantId,
+                tenant_id: tenantId,
             }
         })
 })
@@ -197,10 +197,11 @@ router.put("/profile/update-password", async (req, res) => {
         //     return res.status(400).json({ msg: "::: Current password is incorrect" });
         // }
 
-        // const salt = await bcrypt.genSalt(10)
-        // const hashedPassword = await bcrypt.hash(newPassword, salt)
-
-        user.password = newPassword
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt)
+        console.log({hashedPassword})
+        
+        user.password = hashedPassword
         await user.save()
 
         res.json({ msg: "Password updated successfully" });
