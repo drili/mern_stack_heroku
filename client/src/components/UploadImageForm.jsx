@@ -3,6 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import userImage from "../assets/profile-pics/default-image.jpg"
 import { ConfigContext } from '../context/ConfigContext';
+import WorkInProgressLabel from './WorkInProgressLabel';
 
 const UploadImageForm = () => {
     const [selectedImage, setSelectedImage] = useState(null)
@@ -74,7 +75,7 @@ const UploadImageForm = () => {
 
             <hr className='mt-5' />
 
-            <section>
+            <section className='relative'>
                 <div className=''>
                     <h3 className='text-black text-lg font-medium text-left mt-5'>User stats</h3>
                 </div>
@@ -97,6 +98,8 @@ const UploadImageForm = () => {
                         <p className='text-pink-700 font-extrabold text-3xl mt-3'>0</p>
                     </div>
                 </div>
+
+                <WorkInProgressLabel smallVersion={false} />
             </section>
 
             <form onSubmit={handleFormSubmit} className='mt-10 opacity-0 hidden' disabled>
