@@ -6,13 +6,16 @@ import PageHeading from '../components/PageHeading'
 import SprintOverviewFilters from '../components/sprintoverview/SprintOverviewFilters'
 import DefaultAccordion from '../components/sprintoverview/Accordion'
 import { ConfigContext } from '../context/ConfigContext'
+import { UserContext } from '../context/UserContext'
 
 const SprintOverview = () => {
     const [selectedSprint, setSelectedSprint] = useState("")
     const [activeUsers, setActiveUsers] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const { user } = useContext(UserContext)
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const handleSprintChange = (selectedValue, selectedSprint) => {
         setSelectedSprint(selectedSprint)
@@ -24,7 +27,7 @@ const SprintOverview = () => {
     
     const fetchActiveUsers = async () => {
         try {
-            const response = await axios.get(`${baseURL}/users/fetch-active-users`)
+            const response = await axios.get(`${tenantBaseURL}/users/fetch-active-users`)
             if (response.status == 200) {
                 setTimeout(() => {
                     setActiveUsers(response.data)
