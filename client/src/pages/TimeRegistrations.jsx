@@ -136,7 +136,7 @@ const TimeRegistrations = () => {
                 </div>
 
                 <div className='col-span-5'>
-                    <Card className='h-auto'>
+                    <Card className='py-4 px-4 col-span-6 flex rounded-lg border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-auto border-gray-200 shadow-none'>
                         <h3 className="text-black text-lg font-medium">Your time registrations</h3>
                         <span className='flex gap-1 items-center flex-row'>
                             <AiFillInfoCircle />
