@@ -25,6 +25,7 @@ const TimeRegistrations = () => {
     const [eventsByDate, setEventsByDate] = useState([])
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const CustomEvent = ({ event }) => {
         return (
@@ -36,8 +37,7 @@ const TimeRegistrations = () => {
 
     const fetchUserRegistrations = async (userId) => {
         try {
-            const response = await axios.post(`${baseURL}/time-registrations/time-registered-by-user`, { userId })
-
+            const response = await axios.post(`${tenantBaseURL}/time-registrations/time-registered-by-user`, { userId })
             const formattedEvents = response.data.map(item => {
                 const itemDate = item.currentTime
                 const formattedNewDate = formatDateToISO(itemDate)
@@ -57,7 +57,7 @@ const TimeRegistrations = () => {
 
     const fetchRegistrationsByDate = async (date) => {
         try {
-            const response = await axios.get(`${baseURL}/time-registrations/time-registrations-by-date/${date}/${user.id}`)
+            const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registrations-by-date/${date}/${user.id}`)
             setEventsByDate(response.data)
 
         } catch (error) {
@@ -113,15 +113,16 @@ const TimeRegistrations = () => {
                             eventPropGetter={
                                 (event, start, end, isSelected) => {
                                     let newStyle = {
-                                        backgroundColor: "#fecdd3",
-                                        color: 'white',
+                                        backgroundColor: "#fbcfe8",
+                                        color: 'black',
                                         // borderRadius: "0px",
-                                        border: "none"
+                                        // border: "1px solid #be185d"
                                     };
 
                                     const numericPart = parseFloat(event.title.match(/\d+(\.\d+)?/)[0]);
                                     if (numericPart >= 7.5) {
-                                        newStyle.backgroundColor = "#9f1239"
+                                        newStyle.backgroundColor = "#be185d"
+                                        newStyle.color = "#fff"
                                     }
 
                                     return {
@@ -136,10 +137,10 @@ const TimeRegistrations = () => {
 
                 <div className='col-span-5'>
                     <Card className='h-auto'>
-                        <h3 className="font-bold">Your time registrations</h3>
+                        <h3 className="text-black text-lg font-medium">Your time registrations</h3>
                         <span className='flex gap-1 items-center flex-row'>
                             <AiFillInfoCircle />
-                            <p className='text-xs font-thin'>Pick date to see your time registrations.</p>
+                            <p className='text-xs text-zinc-800'>Pick date to see your time registrations.</p>
                         </span>
 
                         <span className='relative'>
@@ -148,6 +149,7 @@ const TimeRegistrations = () => {
                                 toast={toast}
                                 fetchUserRegistrations={fetchUserRegistrations}
                                 userId={user.id}
+                                tenantId={user.tenant_id}
                             />
                         </span>
                     </Card>

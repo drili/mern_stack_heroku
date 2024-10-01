@@ -9,8 +9,9 @@
 }
 
 .rbc-calendar .rbc-active {
-    background-color: #9f1239 !important;
+    background-color: #be185d !important;
     color: #fff !important;
+    /* border: 1px solid #f5f5f4 !important; */
 }
 
 .rbc-row-segment {

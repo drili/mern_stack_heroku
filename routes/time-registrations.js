@@ -199,7 +199,7 @@ router.route("/time-registered-by-user").post(async (req, res) => {
     }
 
     try {
-        const timeRegistrations = await TimeRegistration.find({ _id: userId, tenantId: tenantId });
+        const timeRegistrations = await TimeRegistration.find({ userId: userId, tenantId: tenantId });
 
         const aggregatedData = timeRegistrations.reduce((acc, item) => {
             const key = item.currentTime
