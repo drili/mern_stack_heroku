@@ -17,11 +17,11 @@ const Footer = () => {
 
                 <div className='col-span-9'>
                     <section className='flex flex-col gap-4'>
-                        <Link to={`/${tenantId}/release-notes`} className='text-slate-800 text-base'>
+                        <Link to={`/${tenantId}/release-notes`} className='text-black text-base'>
                             Release Notes
                         </Link>
 
-                        <Link to={`/${tenantId}/notifications`} className='text-slate-800 text-base'>
+                        <Link to={`/${tenantId}/notifications`} className='text-black text-base'>
                             Notifications
                         </Link>
 
