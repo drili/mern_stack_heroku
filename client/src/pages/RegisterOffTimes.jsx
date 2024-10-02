@@ -89,7 +89,7 @@ const RegisterOffTimes = () => {
             />
 
             <section className='grid grid-cols-12'>
-                <Card className='py-4 px-4 col-span-6 flex rounded-lg border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none'>
+                <Card className='py-4 px-4 col-span-6 flex border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none rounded-[20px]'>
                     <h3 className="text-black text-lg font-medium">Fill out the form to register your off- or sicktime.</h3>
                     <hr />
 
