@@ -16,8 +16,8 @@ const CustomersFilters = ({ onSelectedSprint }) => {
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
     
-    const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
+    const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
     const fetchSprints = async () => {
         try {
@@ -52,7 +52,7 @@ const CustomersFilters = ({ onSelectedSprint }) => {
                 <div id="CustomersFilter-links">
                     <span className='h-full flex flex-row items-center gap-2 justify-center text-xs font-medium'>
                         <Link to="create-customer">
-                            <button type="submit" className='border border-rose-500 h-fit whitespace-nowrap button text-black hover:bg-rose-800 focus:ring-4 focus:outline-none hover:text-white focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Create / Edit Customer</button>
+                            <button type="submit" className={`${inputClasses} bg-pink-700 text-white border-none`}>Create / Edit Customer</button>
                         </Link>
 
                         <AiFillPlusCircle size={20} color='' />
@@ -62,7 +62,7 @@ const CustomersFilters = ({ onSelectedSprint }) => {
             
             <section className='flex justify-end gap-8'>
                 <div id='CustomersFilter-activeSprint'>
-                    <span className='h-full flex flex-col justify-center bg-slate-500 text-white border rounded-md px-4 py-1 text-xs font-medium'>
+                    <span className={`${labelClasses}`}>
                         {currentSprint && currentSprint?.sprintMonth} {currentSprint && currentSprint?.sprintYear}
                     </span>
                 </div>

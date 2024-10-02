@@ -170,7 +170,7 @@ router.route("/fetch-by-customer-sprint/:customerId").get(async (req, res) => {
     const { customerId } = req.params
     const { month, year, time_reg } = req.query
 
-    if (!tenantId || !customerId || month || year) {
+    if (!tenantId || !customerId || !month || !year) {
         return res.status(400).json({ error: "tenantId, month, year & customerId is required" })
     }
 

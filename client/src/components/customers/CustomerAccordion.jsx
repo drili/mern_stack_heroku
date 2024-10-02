@@ -20,6 +20,7 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const fetchTasks = () => {
         return
@@ -37,7 +38,7 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
 
     const fetchSprintData = async (activeSprintArray) => {
         try {
-            const response = await axios.get(`${baseURL}/tasks/fetch-by-customer-sprint/${customerObject._id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}&time_reg=1`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-customer-sprint/${customerObject._id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}&time_reg=1`)
             
             setSprintData(response.data)
 
@@ -115,36 +116,36 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                 <div className='flex gap-5 items-center'>
                                     <span>
                                         <span className='flex gap-3'>
-                                            <h2 className='text-lg font-bold text-gray-900'>{customerObject.customerName}</h2>
+                                            <h2 className='text-xl font-extrabold text-black'>{customerObject.customerName}</h2>
                                         </span>
                                     </span>
                                 </div>
 
-                                <div className='absolute right-[100px] translate-y-[-5px]'>
+                                <div className='absolute right-[100px] translate-y-[-5px] top-[5px]'>
                                     {accumulatedValues[customerObject._id] ? (
                                         <div id="taskInfoLabels" className='flex gap-4'>
                                             <span className='text-center'>
-                                                <label htmlFor="" className='text-sm'>Low</label>
+                                                <label htmlFor="" className='text-sm text-black'>Low</label>
                                                 {accumulatedValues[customerObject._id] ? (
-                                                    <p className='bg-rose-900 text-white rounded-md text-sm py-2 px-2 min-w-[50px]'>{accumulatedValues[customerObject._id].low}</p>
+                                                    <p className='bg-rose-900 text-white rounded text-base py-2 px-4 min-w-[50px] font-extrabold'>{accumulatedValues[customerObject._id].low}</p>
                                                 ) : (
                                                     <></>
                                                 )}
                                             </span>
 
                                             <span className='text-center'>
-                                                <label htmlFor="" className='text-sm'>High</label>
+                                                <label htmlFor="" className='text-sm text-black'>High</label>
                                                 {accumulatedValues[customerObject._id] ? (
-                                                    <p className='bg-rose-900 text-white rounded-md text-sm py-2 px-2 min-w-[50px]'>{accumulatedValues[customerObject._id].high}</p>
+                                                    <p className='bg-rose-900 text-white rounded text-base py-2 px-4 min-w-[50px] font-extrabold'>{accumulatedValues[customerObject._id].high}</p>
                                                 ) : (
                                                     <></>
                                                 )}
                                             </span>
 
                                             <span className='text-center'>
-                                                <label htmlFor="" className='text-sm'>Median</label>
+                                                <label htmlFor="" className='text-sm text-black'>Median</label>
                                                 {accumulatedValues[customerObject._id] ? (
-                                                    <p className='bg-rose-900 text-white rounded-md text-sm py-2 px-2 min-w-[50px]'>{(accumulatedValues[customerObject._id].low + accumulatedValues[customerObject._id].high) / 2}</p>
+                                                    <p className='bg-rose-900 text-white rounded text-base py-2 px-4 min-w-[50px] font-extrabold'>{(accumulatedValues[customerObject._id].low + accumulatedValues[customerObject._id].high) / 2}</p>
                                                 ) : (
                                                     <></>
                                                 )}
@@ -161,25 +162,25 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                 <>
                                     <Table className='relative'>
                                         <Table.Head>
-                                            <Table.HeadCell className='text-left'>
+                                            <Table.HeadCell className='text-left text-black'>
                                                 Task Name
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left'>
+                                            <Table.HeadCell className='text-left text-black'>
                                                 Customer
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left'>
+                                            <Table.HeadCell className='text-left text-black'>
                                                 Low
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left'>
+                                            <Table.HeadCell className='text-left text-black'>
                                                 High
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left'>
+                                            <Table.HeadCell className='text-left text-black'>
                                                 Percent Allocation
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left'>
+                                            <Table.HeadCell className='text-left text-black'>
                                                 Time Registered
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-center'>
+                                            <Table.HeadCell className='text-center text-black'>
                                                 Done
                                             </Table.HeadCell>
                                         </Table.Head>
@@ -210,7 +211,7 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                                         }
                                                     </Table.Cell>
                                                     <Table.Cell>
-                                                        <p className='text-xs font-extrabold underline'>{data.timeRegistrations.reduce((totalTime, registration) => totalTime + registration.timeRegistered, 0)}</p>
+                                                        <p className='text-xs text-black font-extrabold underline'>{data.timeRegistrations.reduce((totalTime, registration) => totalTime + registration.timeRegistered, 0)}</p>
                                                     </Table.Cell>
 
                                                     <Table.Cell>
@@ -230,10 +231,10 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                                     </Table.Cell> */}
                                                     <Table.Cell>
                                                         <a
-                                                            className="font-medium cursor-pointer text-slate-500 hover:underline "
+                                                            className="font-medium cursor-pointer text-slate-800 hover:underline "
                                                             onClick={() => handleTaskModal(data._id)}
                                                         >
-                                                            <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-xs'>
+                                                            <p className='border border-zinc-400 rounded text-center px-2 py-1 font-bold text-xs'>
                                                                 Open
                                                             </p>
                                                         </a>
