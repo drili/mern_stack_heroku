@@ -18,12 +18,13 @@ router.route("/time-registrations-verticals-aggregated/:sprintId").get(async (re
 
     try {
         const objectIdSprintId = new mongoose.Types.ObjectId(sprintId)
+        const objectTenantId = new mongoose.Types.ObjectId(tenantId)
 
         const aggregatedData = await TimeRegistration.aggregate([
             {
                 $match: {
                     sprintId: objectIdSprintId,
-                    tenantId: tenantId,
+                    tenantId: objectTenantId,
                 }
             },
             {
@@ -63,7 +64,7 @@ router.route("/time-registrations-verticals-aggregated/:sprintId").get(async (re
     }
 })
 
-router.route("/fetch-users-time-regs-by-sprint/:sprintId/:tenantId").get(async (req, res) => {
+router.route("/fetch-users-time-regs-by-sprint/:sprintId").get(async (req, res) => {
     const { sprintId } = req.params
     // const { tenantId } = req.params
     const baseUrl = req.baseUrl

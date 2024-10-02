@@ -1,5 +1,4 @@
-import React from 'react'
-import PageHeading from '../../components/PageHeading'
+import React, { useState } from 'react'
 import { Card } from "flowbite-react"
 import { AiOutlineClockCircle, AiOutlineUsergroupAdd } from "react-icons/ai"
 import { FiUsers } from "react-icons/fi"
@@ -9,136 +8,84 @@ import { HiOutlineArrowSmRight, HiOutlineCog } from "react-icons/hi"
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiMedicalClipboard } from "react-icons/ci";
 
+import PageHeading from '../../components/PageHeading'
+import GeneralFeatures from './GeneralFeatures'
+import Groups from './Groups'
+import PersonsOverview from './PersonsOverview'
+import Register from './Register'
+import TaskVerticalsOverview from './TaskVerticalsOverview'
+import TimeRegistrationsOverview from './TimeRegistrationsOverview'
+
 const Admin = () => {
+    const [activeComponent, setActiveComponent] = useState("GeneralFeatures")
+
+    const sections = [
+        { name: 'GeneralFeatures', label: 'General Features', icon: HiOutlineCog },
+        { name: 'TimeRegistrationsOverview', label: 'Time Registrations', icon: AiOutlineClockCircle },
+        { name: 'Users', label: 'Users', icon: FiUsers },
+        { name: 'TaskVerticalsOverview', label: 'Task Vertical', icon: BsListTask },
+        { name: 'Groups', label: 'Groups', icon: AiOutlineUsergroupAdd },
+        { name: 'ArchivedTasks', label: 'Archived Tasks', icon: FaRegTrashAlt },
+        { name: 'Holidays', label: 'Holidays', icon: FaRegTrashAlt }
+    ]
+
+    const renderComponent = () => {
+        switch (activeComponent) {
+            case 'GeneralFeatures':
+                return <GeneralFeatures />
+            case 'TimeRegistrationsOverview':
+                return <TimeRegistrationsOverview />
+            case 'Users':
+                return <PersonsOverview />
+            case 'TaskVerticalsOverview':
+                return <TaskVerticalsOverview />;
+            case 'Groups':
+                return <Groups />
+            case 'ArchivedTasks':
+                return <div>Archived Tasks Component</div>
+            case 'Holidays':
+                return <div>Holidays Component</div>;
+
+            default:
+                return <GeneralFeatures />
+        }
+    }
+
     return (
         <div id='AdminPage'>
-            <PageHeading 
+            <PageHeading
                 heading="Admin"
                 subHeading={`Welcome to your admin page`}
                 suffix="Select which feature you would like to use."
             />
 
-            <section id='AdminCards' className='grid gap-10 grid-cols-2'>
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <HiOutlineCog size={40} color=''/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">General Features</h2>
-                            <h2 className="text-sm font-light text-zinc-500">Create new <b className='font-bold'>Months</b>, and more. (new features TBA)</h2>
-                        </span>
-                    </div>
+            <div className='grid grid-cols-12 gap-10'>
+                <section id='AdminCards' className='flex flex-col gap-4 col-span-2'>
+                    {sections.map((section) => (
+                        <div
+                            key={section.name}
+                            className={`
+                                rounded text-slate-800 text-sm cursor-pointer py-2 px-4 
+                                ${activeComponent === section.name ? 'bg-stone-100' : ''}`
+                            }
+                            onClick={() => setActiveComponent(section.name)}
+                        >
+                            <div className='flex gap-4 items-center'>
+                                <span>
+                                    <section.icon size={20} />
+                                </span>
+                                <span>
+                                    <h3 className='text-sm text-black font-bold'>{section.label}</h3>
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </section>
 
-                    <Link
-                        to="general-features" 
-                        className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <AiOutlineClockCircle size={40} color=''/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">Time Registrations Overview</h2>
-                            <h2 className="text-sm font-light text-zinc-500">Admin Panel View</h2>
-                        </span>
-                    </div>
-
-                    <Link
-                        to="time-registrations-overview" 
-                        className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <FiUsers size={40}/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">Users Overview</h2>
-                            <h2 className="text-sm font-light text-zinc-500">Admin Panel View</h2>
-                        </span>
-                    </div>
-
-                    <Link 
-                        to="persons-overview"
-                        className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <BsListTask size={40}/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">Task Vertical Overview</h2>
-                            <h2 className="text-sm font-light text-zinc-500">Admin Panel View</h2>
-                        </span>
-                    </div>
-
-                    <Link 
-                        to="task-verticals-overview"
-                        className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-                
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <AiOutlineUsergroupAdd size={40}/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">Groups</h2>
-                            <h2 className="text-sm font-light text-zinc-500">Admin Panel View</h2>
-                        </span>
-                    </div>
-
-                    <Link className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <FaRegTrashAlt size={40}/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">Archived Tasks</h2>
-                            <h2 className="text-sm font-light text-zinc-500">View and restore archived tasks</h2>
-                        </span>
-                    </div>
-
-                    <Link className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-
-                <Card className="h-full">
-                    <div className='flex gap-4 items-center'>
-                        <span>
-                            <FaRegTrashAlt size={40}/>
-                        </span>
-                        <span>
-                            <h2 className="text-lg font-bold text-gray-900">Vacation & Sick days</h2>
-                            <h2 className="text-sm font-light text-zinc-500">View time registration for vacations and sick days</h2>
-                        </span>
-                    </div>
-
-                    <Link className='flex items-center align-center justify-center text-center text-black rounded-md border py-1 mt-2 border-none text-sm hover:bg-rose-800 hover:text-white'>
-                        View <HiOutlineArrowSmRight/>
-                    </Link>
-                </Card>
-            </section>
+                <section className='flex flex-col col-span-10 w-full'>
+                    {renderComponent()}
+                </section>
+            </div>
         </div>
     )
 }

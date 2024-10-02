@@ -8,6 +8,8 @@ import PageHeading from '../../components/PageHeading'
 import CustomCodeBlock from '../../components/CustomCodeBlock'
 import PersonsOverviewFilter from '../../components/admin/PersonsOverviewFilter'
 import { ConfigContext } from '../../context/ConfigContext'
+import { UserContext } from '../../context/UserContext'
+import Register from './Register'
 
 const PersonsOverview = () => {
     const [usersData, setUsersData] = useState([])
@@ -17,14 +19,16 @@ const PersonsOverview = () => {
     const [editedUsers, setEditedUsers] = useState({});
     const [isChecked, setIsChecked] = useState({})
 
+    const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${baseURL}/users/fetch-all-users`)
+            const response = await axios.get(`${tenantBaseURL}/users/fetch-all-users`)
             if (response.status === 200) {
                 setUsersData(response.data)
                 setTimeout(() => {
@@ -55,7 +59,7 @@ const PersonsOverview = () => {
         }
 
         try {
-            const response = await axios.put(`${baseURL}/users/update-users/${userId}`, editedData)
+            const response = await axios.put(`${tenantBaseURL}/users/update-users/${userId}`, editedData)
 
             if(response.status === 200) {
                 toast(`${response.data.username} updated successfully!`, {
@@ -83,7 +87,7 @@ const PersonsOverview = () => {
         }));
 
         try {
-            const response = await axios.put(`${baseURL}/users/update-user-activation/${userId}`, {
+            const response = await axios.put(`${tenantBaseURL}/users/update-user-activation/${userId}`, {
                 isActivated: checked,
             })
 
@@ -104,13 +108,10 @@ const PersonsOverview = () => {
 
     return (
         <div id='PersonsOverviewPage'>
-            <PageHeading
-                heading="Users Overview"
-                subHeading={`An overview of active and archived users`}
-                suffix="Edit users and their information below."
-            />
+            <h2 className='text-black text-xl font-bold mb-2'>Users overview</h2>
+            <p className='text-neutral-500 text-sm mb-10'>An overview of active and archived users</p>
 
-            <PersonsOverviewFilter/>
+            <PersonsOverviewFilter userObject={user} />
 
             <div id='PersonsOverviewPage-table'>
                 <Accordion collapseAll={false}>
@@ -127,31 +128,31 @@ const PersonsOverview = () => {
                             <section className='overflow-x-auto'>
                                 <Table className='relative'>
                                     <Table.Head>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black hidden'>
                                             User ID
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
-                                            User Status
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Status
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
-                                            Profile Image
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Image
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
-                                            User Email
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Email
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Username
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Password
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
-                                            User Title
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Title
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Role
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Slack ID
                                         </Table.HeadCell>
                                     </Table.Head>
@@ -169,13 +170,13 @@ const PersonsOverview = () => {
                                             usersData &&
                                             usersData.map((user) => (
                                                 <Table.Row className="bg-white  " key={user._id}>
-                                                    <Table.Cell className="whitespace-nowrap font-light text-gray-900 ">
+                                                    <Table.Cell className="whitespace-nowrap font-light text-gray-900 hidden">
                                                         <input className={inputClasses} value={user._id} disabled />
                                                     </Table.Cell>
 
                                                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                                         {/* {user.isActivated === true ? "Active" : "Archived"} */}
-                                                        <label className="relative inline-flex items-center mb-5 cursor-pointer">
+                                                        <label className="relative inline-flex items-center mb-0 cursor-pointer">
                                                             <input
                                                                 type="checkbox" 
                                                                 className="sr-only peer"
@@ -190,7 +191,7 @@ const PersonsOverview = () => {
 
                                                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                                                         <img 
-                                                        className='w-[40px] h-[40px] rounded-full object-cover ml-2'
+                                                        className='w-[40px] h-[40px] rounded object-cover ml-2'
                                                         src={`${imageSrc}${user.profileImage}`} /
                                                         >
                                                     </Table.Cell>
@@ -243,10 +244,10 @@ const PersonsOverview = () => {
 
                                                     <Table.Cell>
                                                         <a
-                                                            className="font-medium text-cyan-600 hover:underline "
+                                                            className="font-medium cursor-pointer text-slate-800 hover:underline"
                                                             onClick={() => handleEditUser(user._id)}
                                                         >
-                                                            <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-xs'>
+                                                            <p className='border border-zinc-400 rounded text-center px-2 py-1 font-bold text-xs'>
                                                                 Update
                                                             </p>
                                                         </a>
@@ -261,6 +262,10 @@ const PersonsOverview = () => {
                         </Accordion.Content>
                     </Accordion.Panel>
                 </Accordion>
+            </div>
+
+            <div className='mt-20'>
+                <Register userObject={user} fetchUsers={fetchUsers} />
             </div>
 
         </div >
