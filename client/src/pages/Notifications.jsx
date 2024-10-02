@@ -7,6 +7,7 @@ import PageHeading from '../components/PageHeading'
 import NotificationsFilter from '../components/notifications/NotificationsFilter'
 import userImageDefault from "../assets/profile-pics/default-image.jpg"
 import TaskModal from '../components/task/TaskModal'
+import WorkInProgressLabel from '../components/WorkInProgressLabel';
 
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext';
@@ -27,11 +28,12 @@ const Notifications = () => {
 
     const { user, setHasUnreadNotifications, hasUnreadNotifications } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     // *** Server requests
     const handleUpdateNotificationIsRead = async (notificationId) => {
         try {
-            const response = await axios.put(baseURL + "/notifications/update-user-notification-read", {
+            const response = await axios.put(tenantBaseURL + "/notifications/update-user-notification-read", {
                 notificationId
             })
 
@@ -50,7 +52,7 @@ const Notifications = () => {
 
     const fetchNotifications = async (userId) => {
         try {
-            const response = await axios.post(baseURL + "/notifications/fetch-user-notifications", {
+            const response = await axios.post(tenantBaseURL + "/notifications/fetch-user-notifications", {
                 userId: userId
             })
 
@@ -62,7 +64,7 @@ const Notifications = () => {
 
     const fetchUnreadNotifications = async (userId) => {
         try {
-            const response = await axios.post(baseURL + "/notifications/fetch-unread-notifications", {
+            const response = await axios.post(tenantBaseURL + "/notifications/fetch-unread-notifications", {
                 userId: userId
             })
 
@@ -183,8 +185,11 @@ const Notifications = () => {
 
                 </section>
 
-                <section id='NotificationsTasks' className='col-span-1'>
-                    <h2 className='font-bold mb-5'>Tasks you have recently been added to</h2>
+                <section id='NotificationsTasks' className='col-span-1 relative'>
+                    <span className='relative'>
+                        <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Tasks you have recently been added to</h2>
+                        <WorkInProgressLabel smallVersion={true} />
+                    </span>
                 </section>
             </div>
 

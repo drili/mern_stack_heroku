@@ -1,10 +1,10 @@
 const express = require("express")
 const router = express.Router()
 
-const { NotificationChatTask } = require("../models/NotificationChatTask")
+const { NotificationChatTask, NotificationChatTaskSchema } = require("../models/NotificationChatTask")
 const { User } = require("../models/User")
-const Customer = require("../models/Customer")
-const Task = require("../models/Task")
+const { Customer } = require("../models/Customer")
+const { Task } = require("../models/Task")
 
 const notificationType = "user_tagging_task"
 const sendSlackMessage = require("../functions/slackMessageUser")

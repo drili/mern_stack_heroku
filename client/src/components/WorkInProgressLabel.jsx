@@ -16,7 +16,7 @@ const WorkInProgressLabel = ({ smallVersion }) => {
                     // clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0 80%)'
                 }}
                 >
-                <p className={`${smallVersion ? "text-base" : "text-2xl"} font-bold text-white uppercase`}>Work in progress</p>
+                <p className={`${smallVersion ? "text-base" : "text-2xl"} font-bold text-white uppercase text-center`}>Work in progress</p>
             </span>
         </span>
     )

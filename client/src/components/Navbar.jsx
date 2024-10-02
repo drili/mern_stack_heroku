@@ -156,7 +156,7 @@ const Navbar = () => {
             </Link>
 
             <span className='flex items-center'>
-                <Link to="/notifications">
+                <Link to={`/${tenantId}/notifications`}>
                     <div className='mr-5 ml-1 relative hover:cursor-pointer'>
                         <FaBell className='text-slate-900' size={18} />
 
