@@ -5,8 +5,6 @@ import PageHeading from '../../components/PageHeading'
 import TaskModal from '../../components/task/TaskModal'
 import useTaskModal from '../../functions/useTaskModal'
 
-// TODO: Finish task view
-// Trello: https://trello.com/c/GcEGA8db/43-new-task-view
 const TaskView = () => {
     const [taskID, setTaskID] = useState(null)
     const { showModal, setShowModal, handleTaskModal, onCloseModal } = useTaskModal()
@@ -38,7 +36,7 @@ const TaskView = () => {
                     <section className='flex'>
                         <button 
                             onClick={() => handleTaskModal(taskID)}
-                            className='my-button button text-white bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center'>Re-open Task</button>
+                            className='rounded text-sm min-h-[45px] border border-zinc-400 cursor-pointer  bg-pink-700 border-none text-white'>Re-open Task</button>
                     </section>
 
                     <TaskModal 
