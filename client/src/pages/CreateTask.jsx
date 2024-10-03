@@ -3,17 +3,21 @@ import PageHeading from '../components/PageHeading'
 import axios from "axios"
 import Select from "react-select"
 import toast, { Toaster } from 'react-hot-toast'
+import { Modal } from "flowbite-react";
 
 import { BiSolidTimeFive } from "react-icons/bi"
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { FaDivide } from "react-icons/fa";
+import { AiFillPlusCircle } from "react-icons/ai"
 
 import { UserContext } from '../context/UserContext'
 import TaskModal from '../components/task/TaskModal'
 import TaskCard from '../components/task/TaskCard'
 import getCurrentSprint from '../functions/getCurrentSprint'
 import { ConfigContext } from '../context/ConfigContext'
+import ModalCreateLabel from '../components/modals/ModalCreateLabel'
+import ModalCreateVertical from '../components/modals/ModalCreateVertical'
 
 const CreateTask = () => {
     const [customers, setCustomers] = useState([])
@@ -51,12 +55,13 @@ const CreateTask = () => {
     const { baseURL } = useContext(ConfigContext);
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
-    // const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-    // const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
-
     const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
+    const inputClasses2 = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-1"
     const labelClasses = "text-sm font-medium mb-2 block "
     const imageSrc = baseURL + "/uploads/"
+
+    const [openFlowbiteModal_label, setOpenFlowbiteModal_label] = useState(false)
+    const [openFlowbiteModal_vertical, setOpenFlowbiteModal_vertical] = useState(false)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -136,7 +141,7 @@ const CreateTask = () => {
     const fetchLabels = async () => {
         try {
             const response = await axios.get(`${tenantBaseURL}/labels/fetch-labels?tenantId=${user.tenant_id}`);
-            
+
             const labelsData = response.data;
             const defaultLabelId = labelsData.find(label => label.labelName === "Ingen label")?._id;
 
@@ -290,7 +295,7 @@ const CreateTask = () => {
             )
         );
     }
-    
+
     const updateTaskDataWithNewPercentages = () => {
         return percentageAllocations
     }
@@ -323,22 +328,22 @@ const CreateTask = () => {
 
                                 <div className='flex items-start pb-0 rounded-t'>
                                     <button
-                                        className={`${toggleViewState === "timedTask" ? 
+                                        className={`${toggleViewState === "timedTask" ?
                                             "bg-pink-700 text-white" : ""} 
                                             rounded-none flex gap-2 items-center focus:outline-none border-none`}
                                         onClick={() => handleViewState("timedTask")}
                                         type='button'
                                     >
-                                        Timed Task <AiOutlineClockCircle />
+                                        Timed task <AiOutlineClockCircle />
                                     </button>
                                     <button
-                                        className={`${toggleViewState === "quickTask" ? 
+                                        className={`${toggleViewState === "quickTask" ?
                                             "bg-teal-200 text-white border-none" : ""} 
                                             rounded-none flex gap-2 items-center focus:outline-none border-none`}
                                         onClick={() => handleViewState("quickTask")}
                                         type='button'
                                     >
-                                        Quick Task <BsFillLightningChargeFill />
+                                        Quick task <BsFillLightningChargeFill />
                                     </button>
                                 </div>
                             </section>
@@ -347,7 +352,7 @@ const CreateTask = () => {
                         </span>
 
                         <div>
-                            <label htmlFor="taskName" className={labelClasses}>Task Name</label>
+                            <label htmlFor="taskName" className={labelClasses}>Task name</label>
                             <input type="text" name="taskName" value={taskData.taskName} onChange={handleFormChange} placeholder="Task Name" required
                                 className={inputClasses} />
                         </div>
@@ -355,12 +360,12 @@ const CreateTask = () => {
                         {toggleViewState === "timedTask" ? (
                             <span className='grid grid-cols-2 gap-4'>
                                 <div>
-                                    <label className={labelClasses} htmlFor="taskTimeLow">Task Time Low</label>
+                                    <label className={labelClasses} htmlFor="taskTimeLow">Task time low</label>
                                     <input type="number" name="taskTimeLow" value={taskData.taskTimeLow} onChange={handleFormChange} placeholder="Task Time Low" required
                                         className={inputClasses} />
                                 </div>
                                 <div>
-                                    <label className={labelClasses} htmlFor="taskTimeHigh">Task Time High</label>
+                                    <label className={labelClasses} htmlFor="taskTimeHigh">Task time high</label>
                                     <input type="number" name="taskTimeHigh" value={taskData.taskTimeHigh} onChange={handleFormChange} placeholder="Task Time High" required
                                         className={inputClasses} />
                                 </div>
@@ -382,7 +387,7 @@ const CreateTask = () => {
                                     />
                                 </span>
                                 <div>
-                                    <label className={labelClasses} htmlFor="estimatedTime">Estimated Time <span className='text-slate-300'>optional</span></label>
+                                    <label className={labelClasses} htmlFor="estimatedTime">Estimated time <span className='text-slate-300'>optional</span></label>
                                     <input type="number" name="estimatedTime" value={taskData.estimatedTime} onChange={handleFormChange} placeholder="Estimated Task Time"
                                         className={inputClasses} />
                                 </div>
@@ -394,12 +399,12 @@ const CreateTask = () => {
                         )}
 
                         <div>
-                            <label className={labelClasses} htmlFor="taskDescription">Task Description (optional)</label>
+                            <label className={labelClasses} htmlFor="taskDescription">Task description (optional)</label>
                             <textarea required={false} name="taskDescription" value={taskData.taskDescription} onChange={handleFormChange} placeholder="Task Description"
                                 className={`${inputClasses} py-3 min-h-[100px]`} />
                         </div>
                         <div>
-                            <label className={labelClasses} htmlFor="taskCustomer">Task Customer</label>
+                            <label className={labelClasses} htmlFor="taskCustomer">Task customer</label>
                             <select
                                 name="taskCustomer"
                                 onChange={handleFormChange}
@@ -407,7 +412,7 @@ const CreateTask = () => {
                                 required
                                 className={inputClasses}
                             >
-                                <option>Select Customer</option>
+                                <option>Select customer</option>
                                 {customers
                                     .filter((customer) => !customer.archived)
                                     .map((customer) => (
@@ -418,15 +423,15 @@ const CreateTask = () => {
                         </div>
                         <span className='grid grid-cols-2 gap-4'>
                             <div>
-                                <label className={labelClasses} htmlFor="taskLabel">Task Label</label>
+                                <label className={labelClasses} htmlFor="taskLabel">Task label</label>
                                 <select
                                     onChange={handleFormChange}
                                     name="taskLabel"
-                                    placeholder='Task Label'
+                                    placeholder='Task label'
                                     required
                                     value={taskData.taskLabel}
-                                    className={inputClasses}>
-                                    <option disabled>Select Label</option>
+                                    className={`${inputClasses2}`}>
+                                    <option disabled>Select label</option>
                                     {labels
                                         .map((label) => (
                                             <option
@@ -436,27 +441,37 @@ const CreateTask = () => {
                                         ))
                                     }
                                 </select>
+                                {user?.user_role == "1" ? (
+                                    <p className='text-sm flex items-center gap-1 mb-4 text-teal-500 cursor-pointer' onClick={() => setOpenFlowbiteModal_label(true)}>Create new label <AiFillPlusCircle size={15} /></p>
+                                ) : (
+                                    <span className='mb-4 block'></span>
+                                )}
                             </div>
                             <div>
-                                <label className={labelClasses} htmlFor="taskVertical">Task Vertical</label>
+                                <label className={labelClasses} htmlFor="taskVertical">Task vertical</label>
                                 <select
                                     onChange={handleFormChange}
                                     name="taskVertical"
-                                    placeholder='Task Vertical'
+                                    placeholder='Task vertical'
                                     required
-                                    className={inputClasses}>
-                                    <option disabled>Select Vertical</option>
+                                    className={inputClasses2}>
+                                    <option disabled>Select vertical</option>
                                     {verticals
                                         .map((vertical) => (
                                             <option value={vertical._id} key={vertical._id}>{vertical.verticalName}</option>
                                         ))
                                     }
                                 </select>
+                                {user?.user_role == "1" ? (
+                                    <p className='text-sm flex items-center gap-1 mb-4 text-teal-500 cursor-pointer' onClick={() => setOpenFlowbiteModal_vertical(true)}>Create new vertical <AiFillPlusCircle size={15} /></p>
+                                ) : (
+                                    <span className='mb-4 block'></span>
+                                )}
                             </div>
                         </span>
 
                         <div className='mt-0'>
-                            <label className={labelClasses} htmlFor="taskPersons">Task Persons</label>
+                            <label className={labelClasses} htmlFor="taskPersons">Task persons</label>
                             <Select
                                 name="taskPersons"
                                 onChange={handleFormChangeUsers}
@@ -501,7 +516,7 @@ const CreateTask = () => {
                         </div>
 
                         <div className='mt-4'>
-                            <label className={labelClasses} htmlFor="taskSprints">Task Month</label>
+                            <label className={labelClasses} htmlFor="taskSprints">Task month</label>
                             {activeSprint && selectedSprints && sprints && (
                                 <Select
                                     name="taskSprints"
@@ -565,6 +580,21 @@ const CreateTask = () => {
                         </span>
                     </div>
                 </span>
+
+                <ModalCreateLabel 
+                    openFlowbiteModal={openFlowbiteModal_label}
+                    setOpenFlowbiteModal={setOpenFlowbiteModal_label}
+                    tenantBaseURL={tenantBaseURL}
+                    fetchVerticals={fetchVerticals}
+                    fetchLabels={fetchLabels}
+                />
+                <ModalCreateVertical 
+                    openFlowbiteModal={openFlowbiteModal_vertical}
+                    setOpenFlowbiteModal={setOpenFlowbiteModal_vertical}
+                    tenantBaseURL={tenantBaseURL}
+                    fetchVerticals={fetchVerticals}
+                    fetchLabels={fetchLabels}
+                />
             </section>
 
             {selectedTaskId && (
@@ -576,7 +606,6 @@ const CreateTask = () => {
                     fetchTasks={fetchTasks}
                 />
             )}
-
         </div>
     )
 }
