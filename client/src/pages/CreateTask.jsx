@@ -202,6 +202,14 @@ const CreateTask = () => {
         }))
     }
 
+    const createTaskNotification = async (data) => {  
+        try {
+            const response = await axios.post(baseURL + "/notifications/create-notification-task", { data })
+        } catch (error) {
+            console.error('Failed to create task notification', error)
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -215,7 +223,6 @@ const CreateTask = () => {
             }
         }
 
-        console.log({finalTaskData})
 
         try {
             const response = await axios.post(baseURL + "/tasks/create", finalTaskData)
@@ -232,9 +239,9 @@ const CreateTask = () => {
                 })
 
                 fetchTasks()
+                createTaskNotification(response.data)
             }
 
-            console.log(response.data);
         } catch (error) {
             console.error('Failed to create task', error)
             toast('There was an error creating task', {
