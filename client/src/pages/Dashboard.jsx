@@ -35,14 +35,14 @@ const Dashboard = () => {
     const fetchTimeRegistrationsBySprint = async (sprintId) => {
         try {
             if(sprintId) {
-                const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}/${user.tenant_id}`)
-
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}`)
+                console.log({response})
                 if (response.status === 200) {
                     setTimeRegisteredAll(response.data)
                 }
             }
         } catch (error) {
-            
+            console.error(error)
         }
     }
 
