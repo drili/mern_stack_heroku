@@ -47,6 +47,7 @@ function AppRoutes() {
                 <Route path="/contact" element={<LayoutPre><Contact /></LayoutPre>} />
                 <Route path="/registration" element={<LayoutPre><Registration /></LayoutPre>} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/user-not-activated" element={<UserNotActivated />} />
                 
                 {/* TEST */}
                 {/* <Route 
@@ -121,7 +122,6 @@ function AppRoutes() {
                                 } />
 
                                 <Route path="*" element={<NotFound />} />
-                                <Route path="user-not-activated" element={<UserNotActivated />} />
                             </Routes>
                         </Layout>
                     }
