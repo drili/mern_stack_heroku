@@ -239,6 +239,7 @@ const CreateTask = () => {
                 })
 
                 fetchTasks()
+                console.log(response.data)
                 createTaskNotification(response.data)
             }
 
