@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import Navbar from './Navbar'
 import { Link, useLocation } from 'react-router-dom'
-import { BsHouseDoor, BsList, BsCalendar, BsClock, BsPeople, BsPerson, BsGear, BsCurrencyDollar, BsFillHeartPulseFill, BsThreeDots } from 'react-icons/bs'
+import { BsHouseDoor, BsList, BsCalendar, BsClock, BsPeople, BsPerson, BsGear, BsCurrencyDollar, BsFillHeartPulseFill, BsThreeDots, BsCalendar2Week } from 'react-icons/bs'
 import { AiOutlineMenu } from "react-icons/ai"
 import SidebarLink from './navbar/SidebarLink'
 import { UserContext } from '../context/UserContext'
@@ -104,6 +104,13 @@ const Layout = ({ children }) => {
                                 linkText="User Profile"
                                 currentPath={currentPath}
                                 iconComponent={BsPerson}
+                            />
+
+                            <SidebarLink
+                                menuLink={`/${tenantId}/holiday`}
+                                linkText="Holiday"
+                                currentPath={currentPath}
+                                iconComponent={BsCalendar2Week}
                             />
 
                             <span className='mt-[20px]'>
