@@ -115,7 +115,7 @@ function Login() {
                         </div>
 
                         <span className='flex justify-center'>
-                            <p className='mt-5'>Don't have an account? <a href="/registration" className='underline'>Register</a></p>
+                            <p className='mt-5'>Don't have an account? <a href="/registration" className='underline text-pink-700'>Register</a></p>
                         </span>
                     </form>
 

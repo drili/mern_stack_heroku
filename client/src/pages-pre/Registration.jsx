@@ -124,7 +124,7 @@ const Registration = () => {
                                 </form>
 
                                 <span className='flex justify-center'>
-                                    <p className='mt-5'>Don't have an account? <a href="#" className='underline' onClick={handleShowLoginForm}>Register</a></p>
+                                    <p className='mt-5'>Don't have an account? <a href="#" className='underline text-pink-700' onClick={handleShowLoginForm}>Register</a></p>
                                 </span>
                             </section>
                         )}
@@ -164,7 +164,7 @@ const Registration = () => {
                                 </form>
 
                                 <span className='flex justify-center'>
-                                    <p className='mt-5'>Account already created? <a href="/login" className='underline'>Login</a></p>
+                                    <p className='mt-5'>Account already created? <a href="/login" className='underline text-pink-700'>Login</a></p>
                                 </span>
                             </section>
                         ) : (
