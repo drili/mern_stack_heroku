@@ -22,11 +22,11 @@ const ReleaseNotes = () => {
                         <section className='col-span-3 sticky top-0'>
                             <span className='sticky top-[120px]'>
                                 <h3 className='text-neutral-500 text-sm'>{release.releaseDate}</h3>
-                                <h2 className='font-extrabold'>Version <span className='text-pink-700'>{release.releaseVersion}</span></h2>
+                                <h2 className='font-extrabold border-b-2 border-b-stone-300 border-dotted'>Version <span className='text-pink-700'>{release.releaseVersion}</span></h2>
                             </span>
                         </section>
 
-                        <section className='col-span-9'>
+                        <section className='col-span-9 border-l-stone-100 border-l-2 pl-8 border-dotted'>
                             <img className='rounded-extra-large max-h-[250px] w-full object-cover' src={release.releaseImageLink} />
 
                             <section className='mt-10'>
