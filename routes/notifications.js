@@ -80,6 +80,51 @@ router.route("/fetch-user-notifications").post(async (req, res) => {
     }
 })
 
+router.route("/create-notification-task").post(async (req, res) => {
+    const { data } = req.body
+
+    try {
+        data.forEach(async (task) => {
+            const taskPersons = task.taskPersons
+            taskPersons.forEach(async (taskPerson) => {
+                const userId = taskPerson.user
+                const notificationType = "task_create_tagging"
+                const notificationLink = `/task?taskId=${task._id}`
+                const notificationMessage = "You have been added to a new task."
+                const taskId = task._id
+                const customerId = task.taskCustomer
+                const mentionedBy = task.createdBy
+                const taskName = task.taskName
+
+                const newNotification = new NotificationChatTask({
+                    userId: userId,
+                    notificationType: notificationType,
+                    notificationLink: notificationLink,
+                    notificationMessage: notificationMessage,
+                    taskId: taskId,
+                    taskCustomer: customerId,
+                    mentionedBy: mentionedBy
+                })
+
+                await newNotification.save()
+
+                // *** Emit a WebSocket event to the user
+                req.app.get("io").to(userId).emit("new-notification", {
+                    message: "You have a new notification"
+                })
+
+                const notifiedUser = await User.findById(userId)
+                const notifiedBy = await User.findById(mentionedBy)
+                if(notifiedUser.slackId) {
+                    sendSlackMessage(`${notifiedBy.username} added you to a new task: <https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}|${taskName}>`, notifiedUser.slackId)
+                }
+            })            
+        })
+    } catch (error) {
+        console.error(error)   
+    }
+})
+
 router.route("/create-notification").post(async (req, res) => {
     const {
         mentionedUsers,

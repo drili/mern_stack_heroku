@@ -5,8 +5,6 @@ import PageHeading from '../../components/PageHeading'
 import TaskModal from '../../components/task/TaskModal'
 import useTaskModal from '../../functions/useTaskModal'
 
-// TODO: Finish task view
-// Trello: https://trello.com/c/GcEGA8db/43-new-task-view
 const TaskView = () => {
     const [taskID, setTaskID] = useState(null)
     const { showModal, setShowModal, handleTaskModal, onCloseModal } = useTaskModal()

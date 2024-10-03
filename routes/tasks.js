@@ -89,27 +89,29 @@ router.route("/create").post(async (req, res) => {
     } = req.body
 
     try {
-        taskSprints.forEach(async (sprintId) => {
-            const task = new Task({
-                taskName,
-                taskTimeLow,
-                taskTimeHigh,
-                taskDescription,
-                taskCustomer,
-                taskLabel,
-                taskVertical,
-                taskPersons,
-                taskSprints: [sprintId],
-                createdBy,
-                taskDeadline,
-                estimatedTime,
-                taskType,
+        const tasksSaved = await Promise.all(
+            taskSprints.map(async (sprintId) => {
+                const task = new Task({
+                    taskName,
+                    taskTimeLow,
+                    taskTimeHigh,
+                    taskDescription,
+                    taskCustomer,
+                    taskLabel,
+                    taskVertical,
+                    taskPersons,
+                    taskSprints: [sprintId],
+                    createdBy,
+                    taskDeadline,
+                    estimatedTime,
+                    taskType,
+                })
+
+                return await task.save()
             })
+        )
 
-            const taskSaved = await task.save()
-        });
-
-        res.json({ message: "Tasks created successfully" });
+        res.json(tasksSaved);
     } catch (error) {
         console.error("Failed to create tasks", error);
         res.status(500).json({ error: "Failed to create tasks" });
