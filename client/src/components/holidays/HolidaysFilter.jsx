@@ -9,7 +9,7 @@ import { ConfigContext } from '../../context/ConfigContext'
 import { BsCalendarFill } from 'react-icons/bs'
 import { BiUser } from 'react-icons/bi'
 
-const HolidaysFilter = ({ onSelectedSprint, fetchAllHolidays }) => {
+const HolidaysFilter = ({ onSelectedSprint, fetchAllHolidays, handleFilterChange }) => {
     const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
     const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
@@ -35,9 +35,10 @@ const HolidaysFilter = ({ onSelectedSprint, fetchAllHolidays }) => {
     const handleUserChange = async (event) => {
         const userId = event
         const selectedUser = users.find((user) => user._id === userId)
-        
+
         setActiveFilterUser(selectedUser)
         fetchAllHolidays(userId)
+        handleFilterChange(userId)
     }
 
     useEffect(() => {

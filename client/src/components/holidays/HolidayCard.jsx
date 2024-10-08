@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 
-const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays }) => {
+const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays, activeFilter }) => {
     if (!holidayObj) {
         return false
     }
@@ -10,7 +10,7 @@ const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays }) =>
         if (holidayId) {
             try {
                 const response = await axios.put(`${baseURL}/${userLoggedIn.tenant_id}/holidays/approve-holiday/${holidayId}`)
-                fetchAllHolidays("0")
+                fetchAllHolidays(activeFilter)
             } catch (error) {
                 console.error("Error approving holiday", error)
             }
@@ -21,7 +21,7 @@ const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays }) =>
         if (holidayId) {
             try {
                 const response = await axios.put(`${baseURL}/${userLoggedIn.tenant_id}/holidays/decline-holiday/${holidayId}`)
-                fetchAllHolidays("0")
+                fetchAllHolidays(activeFilter)
             } catch (error) {
                 console.error("Error declining holiday", error)
             }

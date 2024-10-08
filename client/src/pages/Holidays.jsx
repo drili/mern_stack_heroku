@@ -22,10 +22,15 @@ const Holidays = () => {
     const [allHolidays, setAllHolidays] = useState([])
     const [events, setEvents] = useState([])
     const [viewMode, setViewMode] = useState("card")
+    const [activeFilter, setActiveFilter] = useState([])
 
     const handleSprintChange = (selectedValue, selectedSprint) => {
         setSelectedSprint(selectedSprint)
         setIsLoading(true)
+    }
+
+    const handleFilterChange = async (filter) => {
+        setActiveFilter(filter)
     }
 
     const handleViewMode = async (option) => {
@@ -70,7 +75,7 @@ const Holidays = () => {
 
             <div className='grid grid-cols-12 gap-10'>
                 <div className='col-span-12'>
-                    <HolidaysFilter onSelectedSprint={handleSprintChange} fetchAllHolidays={fetchAllHolidays} />
+                    <HolidaysFilter onSelectedSprint={handleSprintChange} fetchAllHolidays={fetchAllHolidays} handleFilterChange={handleFilterChange} />
                 </div>
 
                 <div id='calendarCol' className='col-span-12 min-h-[750px] py-10 px-10 flex rounded-lg border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-auto border-gray-200 shadow-none'>
@@ -156,7 +161,7 @@ const Holidays = () => {
                                     {allHolidays
                                         .filter(holiday => holiday.status === "pending")
                                         .map((holiday, index) => (
-                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} />
+                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} activeFilter={activeFilter} />
                                         ))}
                                 </div>
                                 <div className="col-span-4">
@@ -164,7 +169,7 @@ const Holidays = () => {
                                     {allHolidays
                                         .filter(holiday => holiday.status === "approved")
                                         .map((holiday, index) => (
-                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} />
+                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} activeFilter={activeFilter} />
                                         ))}
                                 </div>
 
