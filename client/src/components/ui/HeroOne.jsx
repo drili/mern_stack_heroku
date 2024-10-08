@@ -24,7 +24,7 @@ const HeroOne = () => {
                         clipPath: 'polygon(0 0, 100% 0, 100% 80%, 0 80%)'
                     }}
                 ></div>
-                <section id='HeroOne' className='relative z-10 pt-10  md:pt-20'>
+                <section id='HeroOne' className='relative z-10 pt-10  md:pt-20 overflow-hidden'>
                     <div className='container'>
                         <div className="flex justify-center mb-5">
                             <ButtonSmall>Get started now by signing up <FaArrowRightLong /></ButtonSmall>
@@ -44,8 +44,15 @@ const HeroOne = () => {
                         </div>
                     </div>
 
-                    <section className='container px-4'>
-                        <Parallax translateY={['100px', '-200px']} easing={"[0.2, -0.6, 1, -0.6]"}>
+                    <section className='container px-4 z-50'>
+                        <Parallax
+                            translateY={['50px', '-100px']}
+                            scale={[1, 1.15]}
+                            startScroll={0.5} // Start parallax when the element is 50% in view
+                            endScroll={500} // End parallax after scrolling 100px from the element's starting point
+                            shouldAlwaysCompleteAnimation={false} // Ensures the animation only starts in view
+                            // opacity={[0, 1]}
+                        >
                             <div className="relative bg-stone-100 p-2 mt-10 rounded-extra-large md:p-5">
                                 <img src={OverlappingImage} alt="Overlapping" className="shadow-lg w-full rounded-extra-large" />
                             </div>
