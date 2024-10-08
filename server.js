@@ -15,6 +15,7 @@ const labelRouter = require("./routes/labels")
 const verticalRouter = require("./routes/verticals")
 const commentsRouter = require("./routes/comments")
 const notificationsRouter = require("./routes/notifications")
+const holidaysRouter = require("./routes/holidays")
 
 const accountRouter = require("./routes/account")
 
@@ -51,6 +52,7 @@ app.use("/:tenantId/labels", labelRouter)
 app.use("/:tenantId/verticals", verticalRouter)
 app.use("/:tenantId/comments", commentsRouter)
 app.use("/:tenantId/notifications", notificationsRouter)
+app.use("/:tenantId/holidays", holidaysRouter)
 
 app.use("/sprints", sprintRouter)
 app.use("/api/account", accountRouter)

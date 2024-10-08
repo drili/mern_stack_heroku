@@ -1,4 +1,5 @@
-.rbc-event, .rbc-day-slot .rbc-background-event {
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
     /* background-color: #312e81 !important; */
 }
 
@@ -21,4 +22,13 @@
 .rbc-row-segment .rbc-event-content {
     padding: 10px 0;
     text-align: center;
+}
+
+.holidaysCalendar .rbc-row-segment .rbc-event-content {
+    padding: 0;
+}
+
+.holidaysCalendar .rbc-event {
+    background-color: #000 !important;
+    margin-bottom: 1px;
 }

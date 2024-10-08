@@ -47,7 +47,7 @@ const CustomersFilters = ({ onSelectedSprint }) => {
     }, [activeSprint])
 
     return (
-        <div id='SprintOverviewFilters' className='items-center py-4 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-row justify-between w-full outline-none focus:outline-none mb-10'>
+        <div id='SprintOverviewFilters' className='items-center py-4 px-5 border-0 rounded-lg bg-[#f2f3f4] relative flex flex-row justify-between w-full outline-none focus:outline-none mb-10'>
             <section className='flex gap-4'>
                 <div id="CustomersFilter-links">
                     <span className='h-full flex flex-row items-center gap-2 justify-center text-xs font-medium'>

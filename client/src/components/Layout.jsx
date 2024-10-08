@@ -107,8 +107,8 @@ const Layout = ({ children }) => {
                             />
 
                             <SidebarLink
-                                menuLink={`/${tenantId}/holiday`}
-                                linkText="Holiday"
+                                menuLink={`/${tenantId}/holidays`}
+                                linkText="Holidays"
                                 currentPath={currentPath}
                                 iconComponent={BsCalendar2Week}
                             />

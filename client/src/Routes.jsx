@@ -27,6 +27,8 @@ import GeneralFeatures from './pages/admin/GeneralFeatures';
 import TaskVerticalsOverview from './pages/admin/TaskVerticalsOverview';
 import ReleaseNotes from './pages/ReleaseNotes';
 import TaskView from './pages/tasks/TaskView';
+import Holidays from './pages/Holidays';
+import RegisterHolidays from './pages/RegisterHolidays';
 
 import LayoutPre from './pages-pre/LayoutPre';
 import Registration from './pages-pre/Registration';
@@ -85,6 +87,12 @@ function AppRoutes() {
                                 <Route path="workflow" element={<ProtectedRoute><Workflow /></ProtectedRoute>} />
                                 <Route path="register-offtime" element={<ProtectedRoute><RegisterOffTimes /></ProtectedRoute>} />
                                 <Route path="notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+                                <Route
+                                    path='holidays'
+                                >
+                                    <Route index={true} element={<ProtectedRoute><Holidays /></ProtectedRoute>}></Route>
+                                    <Route path='register-holidays' element={<ProtectedRoute><RegisterHolidays /></ProtectedRoute>}></Route>
+                                </Route>
 
                                 <Route path="admin" element={<ProtectedRoute>
                                     <AdminRoute>

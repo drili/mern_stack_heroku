@@ -134,7 +134,7 @@ const RegisterOffTimes = () => {
                             </select>
                         </span>
 
-                        <button type="submit" className='bg-black text-white py-3 rounded mt-5'>Register Time</button>
+                        <button type="submit" className='bg-black text-white py-3 rounded mt-5'>Register time</button>
                     </form>
                 </Card>
             </section>
