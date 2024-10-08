@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from "moment"
 import axios from 'axios'
+import { Table } from 'flowbite-react'
 
 import PageHeading from '../components/PageHeading'
 import HolidaysFilter from '../components/holidays/HolidaysFilter'
 import HolidayCard from '../components/holidays/HolidayCard'
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext'
-import { Table } from 'flowbite-react'
+import exportToCSV from '../functions/exportToCSV'
 
 const Holidays = () => {
     const [selectedSprint, setSelectedSprint] = useState("")
@@ -35,6 +36,12 @@ const Holidays = () => {
 
     const handleViewMode = async (option) => {
         setViewMode(option)
+    }
+
+    const exportToCSVFunc = (holidays) => {
+        const csvHeader = ["User", "Start Date", "End Date", "Total Days", "Status"];
+
+        exportToCSV(csvHeader, holidays, `t8-holidays-${activeFilter}`)
     }
 
     const fetchAllHolidays = async (userId) => {
@@ -101,57 +108,60 @@ const Holidays = () => {
                         </div>
 
                         {viewMode === "table" && (
-                            <section className='col-span-12'>
-                                <Table className='w-full'>
-                                    <Table.Head className='w-full'>
-                                        <Table.HeadCell className='text-left text-black'>
-                                            User
-                                        </Table.HeadCell>
-                                        <Table.HeadCell className='text-left text-black'>
-                                            Start date
-                                        </Table.HeadCell>
-                                        <Table.HeadCell className='text-left text-black'>
-                                            End date
-                                        </Table.HeadCell>
-                                        <Table.HeadCell className='text-left text-black'>
-                                            Total days
-
-                                        </Table.HeadCell>
-                                        <Table.HeadCell className='text-left text-black'>
-                                            Status
-                                        </Table.HeadCell>
-                                    </Table.Head>
-                                    <Table.Body className="divide-y">
-                                        {allHolidays.map((holiday) => (
-                                            <Table.Row className="bg-white" key={holiday._id}>
-                                                <Table.Cell className="flex gap-2 items-center">
-                                                    <img src={`${baseURL}/uploads/${holiday.userId.profileImage}`} className='h-8 w-8 rounded object-cover' />
-                                                    <p className='font-bold text-black'>{holiday.userId.username}</p>
-                                                </Table.Cell>
-                                                <Table.Cell className="">
-                                                    <p className='font-bold text-neutral-500'>{holiday.startTime}</p>
-                                                </Table.Cell>
-                                                <Table.Cell className="">
-                                                    <p className='font-bold text-neutral-500'>{holiday.endTime}</p>
-                                                </Table.Cell>
-                                                <Table.Cell className="">
-                                                    <p className='font-bold text-neutral-500'>{holiday.totalDays}</p>
-                                                </Table.Cell>
-                                                <Table.Cell className="">
-                                                    <p className={`
-                                                        ${
-                                                            holiday.status === "approved" ? "text-green-500" : 
-                                                            holiday.status === "pending" ? "text-yellow-500" : 
-                                                            "text-neutral-500"} font-bold`
+                            <>
+                                <section className='col-span-12 text-right'>
+                                    <button onClick={() => exportToCSVFunc(allHolidays)} className='text-black cursor-pointer bg-transparent underline text-base m-0 p-0'>Export to CSV</button>
+                                </section>
+                                <section className='col-span-12'>
+                                    <Table className='w-full'>
+                                        <Table.Head className='w-full'>
+                                            <Table.HeadCell className='text-left text-black'>
+                                                User
+                                            </Table.HeadCell>
+                                            <Table.HeadCell className='text-left text-black'>
+                                                Start date
+                                            </Table.HeadCell>
+                                            <Table.HeadCell className='text-left text-black'>
+                                                End date
+                                            </Table.HeadCell>
+                                            <Table.HeadCell className='text-left text-black'>
+                                                Total days
+                                            </Table.HeadCell>
+                                            <Table.HeadCell className='text-left text-black'>
+                                                Status
+                                            </Table.HeadCell>
+                                        </Table.Head>
+                                        <Table.Body className="divide-y">
+                                            {allHolidays.map((holiday) => (
+                                                <Table.Row className="bg-white" key={holiday._id}>
+                                                    <Table.Cell className="flex gap-2 items-center">
+                                                        <img src={`${baseURL}/uploads/${holiday.userId.profileImage}`} className='h-8 w-8 rounded object-cover' />
+                                                        <p className='font-bold text-black'>{holiday.userId.username}</p>
+                                                    </Table.Cell>
+                                                    <Table.Cell className="">
+                                                        <p className='font-bold text-neutral-500'>{holiday.startTime}</p>
+                                                    </Table.Cell>
+                                                    <Table.Cell className="">
+                                                        <p className='font-bold text-neutral-500'>{holiday.endTime}</p>
+                                                    </Table.Cell>
+                                                    <Table.Cell className="">
+                                                        <p className='font-bold text-neutral-500'>{holiday.totalDays}</p>
+                                                    </Table.Cell>
+                                                    <Table.Cell className="">
+                                                        <p className={`
+                                                        ${holiday.status === "approved" ? "text-green-500" :
+                                                                holiday.status === "pending" ? "text-yellow-500" :
+                                                                    "text-neutral-500"} font-bold`
                                                         }>
-                                                        {holiday.status}
-                                                    </p>
-                                                </Table.Cell>
-                                            </Table.Row>
-                                        ))}
-                                    </Table.Body>
-                                </Table>
-                            </section>
+                                                            {holiday.status}
+                                                        </p>
+                                                    </Table.Cell>
+                                                </Table.Row>
+                                            ))}
+                                        </Table.Body>
+                                    </Table>
+                                </section>
+                            </>
                         )}
 
                         {viewMode === "card" && (
