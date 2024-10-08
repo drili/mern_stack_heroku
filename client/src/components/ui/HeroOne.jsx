@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Parallax } from 'react-scroll-parallax';
 
 import BackgroundImage from "../../assets/images/65c5ecddff8cba0a5346c654_hero-bg-image.png"
 import OverlappingImage from "../../assets/images/screenshot_dashboard1.png"
@@ -44,9 +45,11 @@ const HeroOne = () => {
                     </div>
 
                     <section className='container px-4'>
-                        <div className="relative bg-stone-100 p-2 mt-10 rounded-extra-large md:p-5">
-                            <img src={OverlappingImage} alt="Overlapping" className="shadow-lg w-full rounded-extra-large" />
-                        </div>
+                        <Parallax translateY={['100px', '-200px']} easing={"[0.2, -0.6, 1, -0.6]"}>
+                            <div className="relative bg-stone-100 p-2 mt-10 rounded-extra-large md:p-5">
+                                <img src={OverlappingImage} alt="Overlapping" className="shadow-lg w-full rounded-extra-large" />
+                            </div>
+                        </Parallax>
                     </section>
                 </section>
             </div>

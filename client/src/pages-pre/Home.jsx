@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ParallaxProvider } from 'react-scroll-parallax';
 
 import HeroOne from '../components/ui/HeroOne';
 import FeatureSection from '../components/ui/FeatureSection';
@@ -18,13 +19,15 @@ function Home() {
 
     return (
         <section id='pages-pre-Home'>
-            <HeroOne />
-            <FeatureSection />
-            <HowItWorksSlider />
-            <NewsletterPricing />
-            <FAQSection />
-            <ContactForm />
-            <FooterUI />
+            <ParallaxProvider>
+                <HeroOne />
+                <FeatureSection />
+                <HowItWorksSlider />
+                <NewsletterPricing />
+                <FAQSection />
+                <ContactForm />
+                <FooterUI />
+            </ParallaxProvider>
         </section>
     )
 }
