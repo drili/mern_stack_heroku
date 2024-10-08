@@ -8,6 +8,7 @@ import HolidaysFilter from '../components/holidays/HolidaysFilter'
 import HolidayCard from '../components/holidays/HolidayCard'
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext'
+import { Table } from 'flowbite-react'
 
 const Holidays = () => {
     const [selectedSprint, setSelectedSprint] = useState("")
@@ -20,15 +21,20 @@ const Holidays = () => {
 
     const [allHolidays, setAllHolidays] = useState([])
     const [events, setEvents] = useState([])
+    const [viewMode, setViewMode] = useState("card")
 
     const handleSprintChange = (selectedValue, selectedSprint) => {
         setSelectedSprint(selectedSprint)
         setIsLoading(true)
     }
 
-    const fetchAllHolidays = async () => {
+    const handleViewMode = async (option) => {
+        setViewMode(option)
+    }
+
+    const fetchAllHolidays = async (userId) => {
         try {
-            const response = await axios.get(`${baseURL}/${user.tenant_id}/holidays/fetch-all-holidays`)
+            const response = await axios.get(`${baseURL}/${user.tenant_id}/holidays/fetch-all-holidays/${userId}`)
             if (response.status === 200) {
                 setAllHolidays(response.data)
             }
@@ -51,7 +57,7 @@ const Holidays = () => {
     }, [allHolidays])
 
     useEffect(() => {
-        fetchAllHolidays()
+        fetchAllHolidays("0")
     }, [])
 
     return (
@@ -64,7 +70,7 @@ const Holidays = () => {
 
             <div className='grid grid-cols-12 gap-10'>
                 <div className='col-span-12'>
-                    <HolidaysFilter onSelectedSprint={handleSprintChange} />
+                    <HolidaysFilter onSelectedSprint={handleSprintChange} fetchAllHolidays={fetchAllHolidays} />
                 </div>
 
                 <div id='calendarCol' className='col-span-12 min-h-[750px] py-10 px-10 flex rounded-lg border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-auto border-gray-200 shadow-none'>
@@ -80,35 +86,99 @@ const Holidays = () => {
 
                 <div className='col-span-12 bg-[#f2f3f4] rounded-lg p-5'>
                     <section className='grid grid-cols-12 gap-10'>
-                        <div className="col-span-12">
+                        <div className="col-span-12 flex justify-between">
                             <h2 className='font-extrabold text-3xl'>Holiday overview <span className='text-pink-700'>2024</span></h2>
+
+                            <span className='flex gap-2'>
+                                <button onClick={() => handleViewMode("card")} className={`${viewMode === "card" ? "bg-pink-700 text-white" : "bg-white"} rounded text-slate-800 text-sm min-h-[45px] cursor-pointer`}>Card list</button>
+                                <button onClick={() => handleViewMode("table")} className={`${viewMode === "table" ? "bg-pink-700 text-white" : "bg-white"} rounded text-slate-800 text-sm min-h-[45px] cursor-pointer`}>Table list</button>
+                            </span>
                         </div>
 
-                        <div className="col-span-4">
-                            <h3 className='font-bold mb-5 border-b pb-2'>Pending approval</h3>
-                            {allHolidays
-                                .filter(holiday => holiday.status === "pending")
-                                .map((holiday, index) => (
-                                    <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} />
-                                ))}
-                        </div>
-                        <div className="col-span-4">
-                            <h3 className='font-bold mb-5 border-b pb-2'>Approved</h3>
-                            {allHolidays
-                                .filter(holiday => holiday.status === "approved")
-                                .map((holiday, index) => (
-                                    <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} />
-                                ))}
-                        </div>
+                        {viewMode === "table" && (
+                            <section className='col-span-12'>
+                                <Table className='w-full'>
+                                    <Table.Head className='w-full'>
+                                        <Table.HeadCell className='text-left text-black'>
+                                            User
+                                        </Table.HeadCell>
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Start date
+                                        </Table.HeadCell>
+                                        <Table.HeadCell className='text-left text-black'>
+                                            End date
+                                        </Table.HeadCell>
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Total days
 
-                        <div className="col-span-4">
-                            <h3 className='font-bold mb-5 border-b pb-2'>Completed</h3>
-                            {allHolidays
-                                .filter(holiday => holiday.status === "completed")
-                                .map((holiday, index) => (
-                                    <HolidayCard holidayObj={holiday} baseURL={baseURL} />
-                                ))}
-                        </div>
+                                        </Table.HeadCell>
+                                        <Table.HeadCell className='text-left text-black'>
+                                            Status
+                                        </Table.HeadCell>
+                                    </Table.Head>
+                                    <Table.Body className="divide-y">
+                                        {allHolidays.map((holiday) => (
+                                            <Table.Row className="bg-white" key={holiday._id}>
+                                                <Table.Cell className="flex gap-2 items-center">
+                                                    <img src={`${baseURL}/uploads/${holiday.userId.profileImage}`} className='h-8 w-8 rounded object-cover' />
+                                                    <p className='font-bold text-black'>{holiday.userId.username}</p>
+                                                </Table.Cell>
+                                                <Table.Cell className="">
+                                                    <p className='font-bold text-neutral-500'>{holiday.startTime}</p>
+                                                </Table.Cell>
+                                                <Table.Cell className="">
+                                                    <p className='font-bold text-neutral-500'>{holiday.endTime}</p>
+                                                </Table.Cell>
+                                                <Table.Cell className="">
+                                                    <p className='font-bold text-neutral-500'>{holiday.totalDays}</p>
+                                                </Table.Cell>
+                                                <Table.Cell className="">
+                                                    <p className={`
+                                                        ${
+                                                            holiday.status === "approved" ? "text-green-500" : 
+                                                            holiday.status === "pending" ? "text-yellow-500" : 
+                                                            "text-neutral-500"} font-bold`
+                                                        }>
+                                                        {holiday.status}
+                                                    </p>
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        ))}
+                                    </Table.Body>
+                                </Table>
+                            </section>
+                        )}
+
+                        {viewMode === "card" && (
+                            <section className='col-span-12 grid grid-cols-12 gap-4'>
+                                <div className="col-span-4">
+                                    <h3 className='font-bold mb-5 border-b pb-2'>Pending approval</h3>
+                                    {allHolidays
+                                        .filter(holiday => holiday.status === "pending")
+                                        .map((holiday, index) => (
+                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} />
+                                        ))}
+                                </div>
+                                <div className="col-span-4">
+                                    <h3 className='font-bold mb-5 border-b pb-2'>Approved</h3>
+                                    {allHolidays
+                                        .filter(holiday => holiday.status === "approved")
+                                        .map((holiday, index) => (
+                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} userLoggedIn={user} fetchAllHolidays={fetchAllHolidays} />
+                                        ))}
+                                </div>
+
+                                <div className="col-span-4">
+                                    <h3 className='font-bold mb-5 border-b pb-2'>Completed</h3>
+                                    {allHolidays
+                                        .filter(holiday => holiday.status === "completed")
+                                        .map((holiday, index) => (
+                                            <HolidayCard holidayObj={holiday} baseURL={baseURL} />
+                                        ))}
+                                </div>
+                            </section>
+                        )}
+
                     </section>
 
                     <section>

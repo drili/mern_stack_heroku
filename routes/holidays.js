@@ -55,21 +55,32 @@ router.route("/decline-holiday/:holidayId").put(async (req, res) => {
     }
 })
 
-router.route("/fetch-all-holidays").get(async (req, res) => {
+router.route("/fetch-all-holidays/:userId").get(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
+    const { userId } = req.params
 
     try {
-        const holidays = await Holidays.find({ tenantId })
-            .populate({
-                path: "userId",
-                model: User,
-                select: "username email profileImage",
-            })
-
+        let holidays = {}
+        if (userId && userId != 0) {
+            holidays = await Holidays.find({ tenantId, userId })
+                .populate({
+                    path: "userId",
+                    model: User,
+                    select: "username email profileImage",
+                })
+        } else {
+            holidays = await Holidays.find({ tenantId })
+                .populate({
+                    path: "userId",
+                    model: User,
+                    select: "username email profileImage",
+                })
+        }
+        
         return res.status(200).json(holidays)
     } catch (error) {
-        console.error("Error fetching all holidays")
+        console.error("Error fetching all holidays", error)
         return res.status(500).json({ error: "Error fetching all holidays" })
     }
 })

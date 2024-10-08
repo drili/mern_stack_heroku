@@ -10,7 +10,7 @@ const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays }) =>
         if (holidayId) {
             try {
                 const response = await axios.put(`${baseURL}/${userLoggedIn.tenant_id}/holidays/approve-holiday/${holidayId}`)
-                fetchAllHolidays()
+                fetchAllHolidays("0")
             } catch (error) {
                 console.error("Error approving holiday", error)
             }
@@ -21,7 +21,7 @@ const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays }) =>
         if (holidayId) {
             try {
                 const response = await axios.put(`${baseURL}/${userLoggedIn.tenant_id}/holidays/decline-holiday/${holidayId}`)
-                fetchAllHolidays()
+                fetchAllHolidays("0")
             } catch (error) {
                 console.error("Error declining holiday", error)
             }

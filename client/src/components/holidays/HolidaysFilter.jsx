@@ -9,7 +9,7 @@ import { ConfigContext } from '../../context/ConfigContext'
 import { BsCalendarFill } from 'react-icons/bs'
 import { BiUser } from 'react-icons/bi'
 
-const HolidaysFilter = ({ onSelectedSprint }) => {
+const HolidaysFilter = ({ onSelectedSprint, fetchAllHolidays }) => {
     const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
     const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
@@ -17,6 +17,7 @@ const HolidaysFilter = ({ onSelectedSprint }) => {
     const [currentSprint, setCurrentSprint] = useState([])
     const activeSprint = getCurrentSprint()
     const [users, setUsers] = useState([])
+    const [activeFilterUser, setActiveFilterUser] = useState()
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
@@ -33,7 +34,10 @@ const HolidaysFilter = ({ onSelectedSprint }) => {
 
     const handleUserChange = async (event) => {
         const userId = event
-        setActiveFilterUser(userId)
+        const selectedUser = users.find((user) => user._id === userId)
+        
+        setActiveFilterUser(selectedUser)
+        fetchAllHolidays(userId)
     }
 
     useEffect(() => {
@@ -56,6 +60,13 @@ const HolidaysFilter = ({ onSelectedSprint }) => {
             </section>
 
             <section className='flex justify-end gap-8'>
+                <div>
+                    {activeFilterUser !== "0" && activeFilterUser && (
+                        <span className={`${labelClasses}`}>
+                            {activeFilterUser.username}
+                        </span>
+                    )}
+                </div>
                 <div id='HolidaysFilter-filterUsers'>
                     <span className='flex gap-2 items-center'>
                         <select
@@ -64,6 +75,7 @@ const HolidaysFilter = ({ onSelectedSprint }) => {
                             onChange={(e) => handleUserChange(e.target.value)}
                         >
                             <option disabled value="">Select user</option>
+                            <option value="0">All</option>
                             {users.map((user) => (
                                 <option key={user?._id} value={`${user?._id}`}>{user?.username}</option>
                             ))}
