@@ -27,6 +27,10 @@ const RegisterHolidays = () => {
     })
     const [holidays, setHolidays] = useState([])
 
+    const [visiblePending, setVisiblePending] = useState(1)
+    const [visibleApproved, setVisibleApproved] = useState(1);
+    const [visibleDeclined, setVisibleDeclined] = useState(1);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormValues({
@@ -155,53 +159,53 @@ const RegisterHolidays = () => {
                 </span>
 
                 <div className='col-span-5 bg-stone-100 w-full p-[2rem] md:p-10 rounded-extra-large'>
-                    <span>
-                        <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Your pending holidays</h2>
-                        <hr className='mb-5' />
-                    </span>
+                    <HolidaySection
+                        title={"Your pending holidays"}
+                        holidays={holidays.filter(holiday => holiday.status === "pending")}
+                        visibleCount={visiblePending}
+                        onShowMore={() => setVisiblePending(visiblePending + 5)}
+                        baseURL={baseURL}
+                    />
 
-                    <span id='holidaysList' className='flex flex-col gap-2'>
-                        {holidays
-                            .filter(holiday => holiday.status === "pending")
-                            .map((holiday, index) => (
-                                <>
-                                    <HolidayCard key={holiday._id} holidayObj={holiday} baseURL={baseURL} />
-                                </>
-                            ))}
-                    </span>
+                    <HolidaySection
+                        title={"Your approved holidays"}
+                        holidays={holidays.filter(holiday => holiday.status === "approved")}
+                        visibleCount={visibleApproved}
+                        onShowMore={() => setVisibleApproved(visibleApproved + 5)}
+                        baseURL={baseURL}
+                    />
 
-                    <span>
-                        <h2 className='text-lg md:text-2xl text-black font-bold mb-3 mt-5'>Your approved holidays</h2>
-                        <hr className='mb-5' />
-                    </span>
-
-                    <span id='holidaysList' className='flex flex-col gap-2'>
-                        {holidays
-                            .filter(holiday => holiday.status === "approved")
-                            .map((holiday, index) => (
-                                <>
-                                    <HolidayCard key={holiday._id} holidayObj={holiday} baseURL={baseURL} />
-                                </>
-                            ))}
-                    </span>
-
-                    <span>
-                        <h2 className='text-lg md:text-2xl text-black font-bold mb-3 mt-5'>Your declined holidays</h2>
-                        <hr className='mb-5' />
-                    </span>
-
-                    <span id='holidaysList' className='flex flex-col gap-2'>
-                        {holidays
-                            .filter(holiday => holiday.status === "declined")
-                            .map((holiday, index) => (
-                                <>
-                                    <HolidayCard key={holiday._id} holidayObj={holiday} baseURL={baseURL} />
-                                </>
-                            ))}
-                    </span>
+                    <HolidaySection
+                        title={"Your declined holidays"}
+                        holidays={holidays.filter(holiday => holiday.status === "declined")}
+                        visibleCount={visibleDeclined}
+                        onShowMore={() => setVisibleDeclined(visibleDeclined + 5)}
+                        baseURL={baseURL}
+                    />
                 </div>
             </section>
         </div>
+    )
+}
+
+const HolidaySection = ({ title, holidays, visibleCount, onShowMore, baseURL }) => {
+    return (
+        <>
+            <h2 className='flex items-center gap-1 justify-between text-lg md:text-2xl text-black font-bold mb-3 mt-5'>{title} <span className='text-sm font-extrabold'>({holidays.length})</span></h2>
+            <hr className='mb-5' />
+
+            <span className='flex flex-col gap-2'>
+                {holidays.slice(0, visibleCount).map((holiday, index) => (
+                    <HolidayCard key={holiday._id} holidayObj={holiday} baseURL={baseURL} />
+                ))}
+            </span>
+
+            {visibleCount < holidays.length && (
+                <button onClick={onShowMore} className='rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer bg-white w-full'>
+                    Show more
+                </button>
+            )}
+        </>
     )
 }
 
