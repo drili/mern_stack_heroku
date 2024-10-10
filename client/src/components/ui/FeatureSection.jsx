@@ -5,6 +5,7 @@ import { FaBell } from "react-icons/fa6";
 import { FaUserGear } from "react-icons/fa6";
 
 import SubTitle from './elements/SubTitle'
+import { Parallax } from 'react-scroll-parallax';
 
 const FeatureSection = () => {
     const textClasses = "text-neutral-500 font-normal text-lg"
@@ -39,7 +40,14 @@ const FeatureSection = () => {
             </div>
 
             <span className='absolute top-0 bottom-0 left-0 right-0 flex mb-0 mr-auto ml-auto flex-col justify-center -z-10 opacity-5'>
-                <h1 className='rotate-90 md:rotate-0 text-[40vw] md:text-[15vw] text-center text-zinc-900 font-bold'>Features</h1>
+                <Parallax
+                    translateY={['-150px', '150px']}
+                    startScroll={0.5}
+                    shouldAlwaysCompleteAnimation={true}
+                    opacity={["1", "0.5"]}
+                >
+                    <h1 className='rotate-90 md:rotate-0 text-[40vw] md:text-[15vw] text-center text-zinc-900 font-bold'>Features</h1>
+                </Parallax>
             </span>
         </section>
     )
