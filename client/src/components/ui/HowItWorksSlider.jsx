@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Parallax } from 'react-scroll-parallax';
 
 import RegisterImage from "../../assets/Screenshot_1.png"
 import ManageTasksImage from "../../assets/Screenshot_1.png"
@@ -11,7 +12,7 @@ import SubTitle from './elements/SubTitle';
 import SubTitleSmall from './elements/SubTitleSmall';
 import { NextArrow, PrevArrow } from './elements/Arrows';
 
-const SliderItem = ({ imageSrc, title, description}) => {
+const SliderItem = ({ imageSrc, title, description }) => {
     return (
         <div className='pr-5 pl-5 lg:pr-20'>
             <div className='grid grid-cols-[2fr_3fr] bg-stone-100 rounded-extra-large'>
@@ -59,7 +60,16 @@ const HowItWorksSlider = () => {
         <section id='HowItWorksSlider' className='mx-auto py-10 overflow-hidden relative mb-40'>
             <div className='container'>
                 <div className='max-w-[400px] mb-20'>
-                    <HeadingTitle>How it works, a deep dive</HeadingTitle>
+                    <Parallax
+                        translateX={['10px', '100px']}
+                        startScroll="self"
+                        endScroll="self"
+                        shouldAlwaysCompleteAnimation={true}
+                        opacity={["1", "0.5"]}
+                        shouldStartAtBoundary={true}
+                    >
+                        <HeadingTitle>How it works, a deep dive</HeadingTitle>
+                    </Parallax>
                 </div>
             </div>
 
