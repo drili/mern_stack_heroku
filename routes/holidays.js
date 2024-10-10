@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const mongoose = require("mongoose")
+const moment = require("moment")
 
 const { Holidays, holidaysSchema } = require("../models/Holidays")
 const { User } = require("../models/User")
@@ -103,12 +104,16 @@ router.route("/fetch-all-holidays/:userId").get(async (req, res) => {
         today.setHours(0, 0, 0, 0)
 
         const updatedHolidays = holidays.map((holiday) => {
-            const holidayEndDate = new Date(holiday.endTime)
+            const holidayEndDate = moment(holiday.endTime, "DD-MM-YYYY").toDate();
 
-            return {
-                ...holiday._doc,
-                status: holidayEndDate > today ? "completed" : holiday.status
+            if (holidayEndDate instanceof Date && !isNaN(holidayEndDate) && holiday.status !== "declined") {
+                return {
+                  ...holiday._doc,
+                  status: holidayEndDate < today ? "completed" : holiday.status,
+                };
             }
+
+            return holiday
         })
         
         return res.status(200).json(updatedHolidays)
@@ -135,7 +140,23 @@ router.route("/fetch-holidays-by-user/:userId").get(async (req, res) => {
                 select: "username email profileImage",
             })
 
-        return res.status(200).json(holidaysByUser)
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        const updatedHolidays = holidaysByUser.map((holiday) => {
+            const holidayEndDate = moment(holiday.endTime, "DD-MM-YYYY").toDate();
+
+            if (holidayEndDate instanceof Date && !isNaN(holidayEndDate) && holiday.status !== "declined") {
+                return {
+                  ...holiday._doc,
+                  status: holidayEndDate < today ? "completed" : holiday.status,
+                };
+            }
+
+            return holiday
+        })
+
+        return res.status(200).json(updatedHolidays)
     } catch (error) {
         console.error('Failed to fetch holiday time by user', error)
         return res.status(500).json({ error: "Failed to fetch holiday time by user" })

@@ -57,7 +57,7 @@ const Holidays = () => {
 
     useEffect(() => {
         setEvents(allHolidays
-            .filter(holiday => holiday.status === "approved")
+            .filter(holiday => holiday.status === "approved" || holiday.status === "completed")
             .map(holiday => ({
                 id: holiday._id,
                 title: `${holiday.userId.username}`,

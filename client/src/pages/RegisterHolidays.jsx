@@ -30,6 +30,7 @@ const RegisterHolidays = () => {
     const [visiblePending, setVisiblePending] = useState(1)
     const [visibleApproved, setVisibleApproved] = useState(1);
     const [visibleDeclined, setVisibleDeclined] = useState(1);
+    const [visibleCompleted, setVisibleCompleted] = useState(1);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -184,6 +185,16 @@ const RegisterHolidays = () => {
                         holidays={holidays.filter(holiday => holiday.status === "declined")}
                         visibleCount={visibleDeclined}
                         onShowMore={() => setVisibleDeclined(visibleDeclined + 5)}
+                        baseURL={baseURL}
+                        user={user}
+                        fetchHolidaysByUser={fetchHolidaysByUser}
+                    />
+
+                    <HolidaySection
+                        title={"Your completed holidays"}
+                        holidays={holidays.filter(holiday => holiday.status === "completed")}
+                        visibleCount={visibleCompleted}
+                        onShowMore={() => setVisibleCompleted(visibleCompleted + 5)}
                         baseURL={baseURL}
                         user={user}
                         fetchHolidaysByUser={fetchHolidaysByUser}
