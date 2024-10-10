@@ -149,9 +149,11 @@ const Holidays = () => {
                                                     </Table.Cell>
                                                     <Table.Cell className="p-2">
                                                         <p className={`
-                                                        ${holiday.status === "approved" ? "text-green-500" :
-                                                                holiday.status === "pending" ? "text-yellow-500" :
-                                                                    "text-neutral-500"} font-bold`
+                                                        ${
+                                                            holiday.status === "approved" ? "text-green-500" :
+                                                            holiday.status === "pending" ? "text-yellow-500" :
+                                                            holiday.status === "completed" ? "text-teal-200" :
+                                                                "text-neutral-500"} font-bold`
                                                         }>
                                                             {holiday.status}
                                                         </p>

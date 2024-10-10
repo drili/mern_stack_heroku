@@ -98,8 +98,20 @@ router.route("/fetch-all-holidays/:userId").get(async (req, res) => {
                     select: "username email profileImage",
                 })
         }
+
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        const updatedHolidays = holidays.map((holiday) => {
+            const holidayEndDate = new Date(holiday.endTime)
+
+            return {
+                ...holiday._doc,
+                status: holidayEndDate > today ? "completed" : holiday.status
+            }
+        })
         
-        return res.status(200).json(holidays)
+        return res.status(200).json(updatedHolidays)
     } catch (error) {
         console.error("Error fetching all holidays", error)
         return res.status(500).json({ error: "Error fetching all holidays" })
