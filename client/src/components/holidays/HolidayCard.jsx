@@ -1,16 +1,27 @@
 import axios from 'axios'
 import React from 'react'
 
-const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays, activeFilter }) => {
+const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays, activeFilter, mode, fetchHolidaysByUser }) => {
     if (!holidayObj) {
         return false
+    }
+
+    const handleDelete = async (holidayId) => {
+        if (holidayId) {
+            try {
+                const response = await axios.delete(`${baseURL}/${userLoggedIn.tenant_id}/holidays/delete-holiday/${holidayId}`)
+                fetchHolidaysByUser(userLoggedIn.id)
+            } catch (error) {
+                console.error("Error deleting holiday", error)
+            }
+        }
     }
 
     const handleApprove = async (holidayId) => {
         if (holidayId) {
             try {
                 const response = await axios.put(`${baseURL}/${userLoggedIn.tenant_id}/holidays/approve-holiday/${holidayId}`)
-                fetchAllHolidays(activeFilter)
+                fetchAllHolidays(userLoggedIn.id)
             } catch (error) {
                 console.error("Error approving holiday", error)
             }
@@ -21,12 +32,13 @@ const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays, acti
         if (holidayId) {
             try {
                 const response = await axios.put(`${baseURL}/${userLoggedIn.tenant_id}/holidays/decline-holiday/${holidayId}`)
-                fetchAllHolidays(activeFilter)
+                fetchAllHolidays(userLoggedIn.id)
             } catch (error) {
                 console.error("Error declining holiday", error)
             }
         }
     }
+
     return (
         <div className={`${holidayObj.status === "declined" ? "bg-red-200" : "bg-white"} task-card flex justify-between p-3 mb-2 border border-custom-bg-gray rounded hover:bg-gray-100 cursor-pointer relative group`}>
             <div>
@@ -38,16 +50,22 @@ const HolidayCard = ({ holidayObj, baseURL, userLoggedIn, fetchAllHolidays, acti
                 <img className='h-8 w-8 rounded object-cover' src={`${baseURL}/uploads/${holidayObj.userId.profileImage}`} />
             </div>
 
-            {holidayObj.status === "pending" && userLoggedIn?.user_role === 1 && (
+            {holidayObj.status === "pending" && mode !== "registration" && userLoggedIn?.user_role === 1 && (
                 <div className='gap-4 absolute justify-center text-center margin-auto w-full top-0 left-0 items-center h-full z-10 hidden group-hover:flex bg-black/75 rounded'>
                     <button onClick={() => handleDecline(holidayObj._id)} className='rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer bg-white'>Decline</button>
                     <button onClick={() => handleApprove(holidayObj._id)} className='rounded text-sm min-h-[45px] cursor-pointer bg-pink-700 text-white border-none'>Approve</button>
                 </div>
             )}
 
-            {holidayObj.status === "approved" && userLoggedIn?.user_role === 1 && (
+            {holidayObj.status === "approved" && mode !== "registration" && userLoggedIn?.user_role === 1 && (
                 <div className='gap-4 absolute justify-center text-center margin-auto w-full top-0 left-0 items-center h-full z-10 hidden group-hover:flex bg-black/75 rounded'>
                     <button onClick={() => handleDecline(holidayObj._id)} className='rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer bg-white'>Decline</button>
+                </div>
+            )}
+
+            {mode === "registration" && holidayObj.status !== "approved" && (
+                <div className='gap-4 absolute justify-center text-center margin-auto w-full top-0 left-0 items-center h-full z-10 hidden group-hover:flex bg-black/75 rounded'>
+                    <button onClick={() => handleDelete(holidayObj._id)} className='rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer bg-white'>Delete</button>
                 </div>
             )}
         </div>

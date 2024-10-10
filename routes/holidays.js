@@ -5,6 +5,27 @@ const mongoose = require("mongoose")
 const { Holidays, holidaysSchema } = require("../models/Holidays")
 const { User } = require("../models/User")
 
+router.route("/delete-holiday/:holidayId").delete(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { holidayId } = req.params
+
+    if (!holidayId || !tenantId) {
+        return res.status(400).json({ error: "holidayId & tenantId is required" })
+    }
+
+    try {
+        const holiday = await Holidays.findOneAndDelete(
+            { _id: holidayId, tenantId }
+        )
+
+        res.status(200).send({ message: "Holiday deleted" })
+    } catch (error) {
+        console.error("Error deleting holiday", error)
+        return res.status(500).json({ error: "Error deleting holiday" })
+    }
+})
+
 router.route("/approve-holiday/:holidayId").put(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]

@@ -165,6 +165,8 @@ const RegisterHolidays = () => {
                         visibleCount={visiblePending}
                         onShowMore={() => setVisiblePending(visiblePending + 5)}
                         baseURL={baseURL}
+                        user={user}
+                        fetchHolidaysByUser={fetchHolidaysByUser}
                     />
 
                     <HolidaySection
@@ -173,6 +175,8 @@ const RegisterHolidays = () => {
                         visibleCount={visibleApproved}
                         onShowMore={() => setVisibleApproved(visibleApproved + 5)}
                         baseURL={baseURL}
+                        user={user}
+                        fetchHolidaysByUser={fetchHolidaysByUser}
                     />
 
                     <HolidaySection
@@ -181,6 +185,8 @@ const RegisterHolidays = () => {
                         visibleCount={visibleDeclined}
                         onShowMore={() => setVisibleDeclined(visibleDeclined + 5)}
                         baseURL={baseURL}
+                        user={user}
+                        fetchHolidaysByUser={fetchHolidaysByUser}
                     />
                 </div>
             </section>
@@ -188,7 +194,7 @@ const RegisterHolidays = () => {
     )
 }
 
-const HolidaySection = ({ title, holidays, visibleCount, onShowMore, baseURL }) => {
+const HolidaySection = ({ title, holidays, visibleCount, onShowMore, baseURL, user, fetchHolidaysByUser }) => {
     return (
         <>
             <h2 className='flex items-center gap-1 justify-between text-lg md:text-2xl text-black font-bold mb-3 mt-5'>{title} <span className='text-sm font-extrabold'>({holidays.length})</span></h2>
@@ -196,7 +202,7 @@ const HolidaySection = ({ title, holidays, visibleCount, onShowMore, baseURL }) 
 
             <span className='flex flex-col gap-2'>
                 {holidays.slice(0, visibleCount).map((holiday, index) => (
-                    <HolidayCard key={holiday._id} holidayObj={holiday} baseURL={baseURL} />
+                    <HolidayCard key={holiday._id} fetchHolidaysByUser={fetchHolidaysByUser} holidayObj={holiday} baseURL={baseURL} mode="registration" userLoggedIn={user} />
                 ))}
             </span>
 
