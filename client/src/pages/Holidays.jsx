@@ -115,39 +115,39 @@ const Holidays = () => {
                                 <section className='col-span-12'>
                                     <Table className='w-full'>
                                         <Table.Head className='w-full'>
-                                            <Table.HeadCell className='text-left text-black'>
+                                            <Table.HeadCell className='text-left text-black text-[10px] p-2'>
                                                 User
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left text-black'>
+                                            <Table.HeadCell className='text-left text-black text-[10px] p-2'>
                                                 Start date
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left text-black'>
+                                            <Table.HeadCell className='text-left text-black text-[10px] p-2'>
                                                 End date
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left text-black'>
+                                            <Table.HeadCell className='text-left text-black text-[10px] p-2'>
                                                 Total days
                                             </Table.HeadCell>
-                                            <Table.HeadCell className='text-left text-black'>
+                                            <Table.HeadCell className='text-left text-black text-[10px] p-2'>
                                                 Status
                                             </Table.HeadCell>
                                         </Table.Head>
                                         <Table.Body className="divide-y">
                                             {allHolidays.map((holiday) => (
                                                 <Table.Row className="bg-white" key={holiday._id}>
-                                                    <Table.Cell className="flex gap-2 items-center">
+                                                    <Table.Cell className="flex gap-2 items-center p-2">
                                                         <img src={`${baseURL}/uploads/${holiday.userId.profileImage}`} className='h-8 w-8 rounded object-cover' />
-                                                        <p className='font-bold text-black'>{holiday.userId.username}</p>
+                                                        <p className='font-bold text-black text-[12px]'>{holiday.userId.username}</p>
                                                     </Table.Cell>
-                                                    <Table.Cell className="">
-                                                        <p className='font-bold text-neutral-500'>{holiday.startTime}</p>
+                                                    <Table.Cell className="p-2">
+                                                        <p className='font-bold text-neutral-500 text-[12px]'>{holiday.startTime}</p>
                                                     </Table.Cell>
-                                                    <Table.Cell className="">
-                                                        <p className='font-bold text-neutral-500'>{holiday.endTime}</p>
+                                                    <Table.Cell className="p-2">
+                                                        <p className='font-bold text-neutral-500 text-[12px]'>{holiday.endTime}</p>
                                                     </Table.Cell>
-                                                    <Table.Cell className="">
-                                                        <p className='font-bold text-neutral-500'>{holiday.totalDays}</p>
+                                                    <Table.Cell className="p-2">
+                                                        <p className='font-bold text-neutral-500 text-[12px]'>{holiday.totalDays}</p>
                                                     </Table.Cell>
-                                                    <Table.Cell className="">
+                                                    <Table.Cell className="p-2">
                                                         <p className={`
                                                         ${holiday.status === "approved" ? "text-green-500" :
                                                                 holiday.status === "pending" ? "text-yellow-500" :
