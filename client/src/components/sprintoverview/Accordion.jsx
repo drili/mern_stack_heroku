@@ -125,7 +125,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
         <>
             <Accordion collapseAll >
                 <Accordion.Panel>
-                    <Accordion.Title id={`taskId_${userObject._id}`} className={user.id === userObject._id ? "bg-pink-50 rounded-t rounded-b-none" : ""}>
+                    <Accordion.Title id={`taskId_${userObject._id}`} className={user.id === userObject._id ? "bg-pink-50 rounded-t rounded-b-none relative" : "relative"}>
                         <span className='flex gap-5 flex-col items-start md:flex-row md:items-center'>
                             <div className='flex gap-5 items-center'>
                                 <img

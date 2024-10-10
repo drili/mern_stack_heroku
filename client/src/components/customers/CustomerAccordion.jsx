@@ -59,7 +59,7 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                 userAccumulatedValues[customerId].low += taskTimeLow;
                 userAccumulatedValues[customerId].high += taskTimeHigh;
             })
-            // console.log({userAccumulatedValues});
+            console.log({userAccumulatedValues});
             setAccumulatedValues(userAccumulatedValues);
         } catch (error) {
             console.error('Failed to fetch tasks', error)
@@ -111,7 +111,7 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
             <>
                 <Accordion collapseAll >
                     <Accordion.Panel>
-                        <Accordion.Title id={`taskId_${customerObject._id}`}>
+                        <Accordion.Title id={`taskId_${customerObject._id}`} className='relative'>
                             <span className='flex gap-5 items-center pb-3 pt-3'>
                                 <div className='flex gap-5 items-center'>
                                     <span>
@@ -189,8 +189,8 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                                 <Table.Row className="bg-white  " key={data._id}>
                                                     <Table.Cell className="flex items-center gap-2 whitespace-nowrap font-medium text-gray-900 ">
                                                         <p className='w-[250px] text-xs whitespace-nowrap overflow-hidden text-ellipsis'>{data.taskName}</p>
-                                                        {data.taskType === "timedTask" ? (
-                                                            <BsFillLightningChargeFill className='text-amber-500' />
+                                                        {data.taskType === "quickTask" ? (
+                                                            <BsFillLightningChargeFill className='text-teal-500' />
                                                         ) : null}
                                                     </Table.Cell>
                                                     <Table.Cell>
