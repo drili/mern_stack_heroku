@@ -15,7 +15,7 @@ const ContactForm = () => {
 
             <div className='container'>
                 <section className='mb-20 text-center max-w-screen-lg mr-auto ml-auto'>
-                    <HeadingTitle>Contact us now</HeadingTitle>
+                    <HeadingTitle animate={true}>Contact us now</HeadingTitle>
                     <p className='text-neutral-500 font-normal text-lg mt-10'>We believe in the power of connection. Your thoughts, queries, and ideas fuel our passion for innovation. Reach out to us and let's embark on a collaborative journey, transforming visions into tangible realities. Your message matters; drop us a line, and together, let's shape a better tomorrow.</p>
                 </section>
             </div>

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Accordion } from 'flowbite-react'
+
 import HeadingTitle from './elements/HeadingTitle'
 
 const FAQSection = () => {
@@ -7,7 +8,7 @@ const FAQSection = () => {
         <section id='FAQSection' className='max-w-screen-lg ml-auto mr-auto px-4'>
             <div className='container'>
                 <span className='flex justify-center mb-20'>
-                    <HeadingTitle>Frequently asked questions</HeadingTitle>
+                    <HeadingTitle animate={true}>Frequently asked questions</HeadingTitle>
                 </span>
 
                 <Accordion collapseAll >

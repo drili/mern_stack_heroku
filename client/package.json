@@ -15,6 +15,7 @@
     "@draft-js-plugins/mention": "^5.2.2",
     "@draft-js-plugins/static-toolbar": "^4.1.4",
     "@hookform/resolvers": "^3.6.0",
+    "aos": "^2.3.4",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "chart.js": "^4.4.0",
