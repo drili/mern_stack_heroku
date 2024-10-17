@@ -52,7 +52,7 @@ const CustomersFilters = ({ onSelectedSprint }) => {
                 <div id="CustomersFilter-links">
                     <span className='h-full flex flex-row items-center gap-2 justify-center text-xs font-medium'>
                         <Link to="create-customer">
-                            <button type="submit" className={`${inputClasses} bg-pink-700 text-white border-none`}>Create / Edit Customer</button>
+                            <button type="submit" className={`${inputClasses} bg-pink-700 text-white border-none`}>Create customer</button>
                         </Link>
 
                         <AiFillPlusCircle size={20} color='' />

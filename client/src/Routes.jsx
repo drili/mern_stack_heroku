@@ -36,6 +36,7 @@ import TestComponent from './test/TestComponent';
 import Features from './pages-pre/Features';
 import Pricing from './pages-pre/Pricing';
 import Contact from './pages-pre/Contact';
+import ViewCustomer from './pages/ViewCustomer';
 
 function AppRoutes() {
     return (
@@ -82,6 +83,7 @@ function AppRoutes() {
                                 >
                                     <Route index={true} element={<Customers />}></Route>
                                     <Route path="create-customer" element={<ProtectedRoute><CreateCustomer /></ProtectedRoute>} />
+                                    <Route path="customer-view" element={<ProtectedRoute><ViewCustomer /></ProtectedRoute>} />
                                 </Route>
                                 {/* <Route path="create-customer" element={<ProtectedRoute><CreateCustomer /></ProtectedRoute>} /> */}
                                 <Route path="workflow" element={<ProtectedRoute><Workflow /></ProtectedRoute>} />
