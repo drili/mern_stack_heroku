@@ -307,7 +307,9 @@ router.route("/time-registered/:taskId").get(async (req, res) => {
         const timeRegistrations = await TimeRegistration.find({
             taskId: taskId,
             tenantId: tenantId
-        })
+        }).populate(
+            "userId", ['_id', 'username', 'email', 'profileImage', 'userRole', 'userTitle']
+        )
 
         return res.status(200).json(timeRegistrations)
     } catch (error) {

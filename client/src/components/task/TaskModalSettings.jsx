@@ -342,7 +342,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     }, [task, fetchTaskData, taskID])
 
     return (
-        <div className='mt-5 py-5 px-5 border-0 rounded-extra-large bg-stone-100 relative flex flex-col w-full outline-none focus:outline-none'>
+        <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-stone-100 relative flex flex-col w-full outline-none focus:outline-none'>
             <h2 className='font-bold mb-5 text-lg'>Task settings</h2>
             <section className='flex gap-10'>
                 <span className='w-full'>

@@ -574,7 +574,7 @@ const CreateTask = () => {
                             {displayCount < tasks.length && (
                                 <button onClick={handleLoadMore}
                                     className='rounded w-full mt-5 text-sm min-h-[45px] border border-zinc-400 cursor-pointer  bg-pink-700 border-none text-white'>
-                                    Load More Tasks
+                                    Load more tasks
                                 </button>
                             )}
                         </span>

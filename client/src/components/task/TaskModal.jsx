@@ -11,6 +11,7 @@ import TaskChat from './TaskChat'
 import { ConfigContext } from '../../context/ConfigContext';
 import { UserContext } from '../../context/UserContext';
 import LabelSmall from '../LabelSmall';
+import TaskTimeRegistrations from './TaskTimeRegistrations';
 
 const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
     const { user } = useContext(UserContext)
@@ -90,7 +91,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
     // TODO: Finish function
     const handleClickOutside = (event) => {
-        
+
     }
 
     useEffect(() => {
@@ -130,11 +131,11 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                     }
                 })
             }
-            
+
             if (fetchTasks) {
                 fetchTasks()
             }
-            if(updateFunc) {
+            if (updateFunc) {
                 updateFunc()
             }
             if (fetchDeadlineTasks) {
@@ -165,7 +166,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                 <div className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                                     <div className='flex items-center gap-2 px-4 pt-10 pb-0 rounded-t md:px-10'>
-                                        <LabelSmall 
+                                        <LabelSmall
                                             classes={``}
                                             backgroundColor=""
                                             borderColor={task[0]?.taskCustomer?.customerColor}
@@ -176,7 +177,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                         <LabelSmall>
                                             {task[0]?.taskSprints[0]?.sprintName} <FaCalendar />
                                         </LabelSmall>
-                                        
+
                                         <LabelSmall>
                                             <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></span>
                                         </LabelSmall>
@@ -203,7 +204,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                             <h3 className="text-lg md:text-2xl text-black font-extrabold">
                                                 {formData["taskName"]}
                                             </h3>
-                                            
+
                                         </span>
                                         <button
                                             className="absolute right-10 top-10 text-white rounded-full h-[50px] w-[50px] bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150 flex justify-center items-center"
@@ -215,18 +216,21 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                     </div>
 
                                     <div className='flex items-start px-4 pb-0 rounded-t md:px-10'>
-                                        <button className={`${toggleViewState === "task" ? "bg-pink-700 text-white " : "bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("task")}>Task</button>
-                                        <button className={`${toggleViewState === "taskChat" ? "bg-pink-700 text-white " : " bg-pink-50"} rounded-none focus:outline-none focus:border-none border-none outline-none`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
+                                        <button className={`${toggleViewState === "task" ? "bg-pink-700 text-white " : "bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none mr-1`} onClick={() => handleViewState("task")}>Task</button>
+                                        <button className={`${toggleViewState === "taskChat" ? "bg-pink-700 text-white " : " bg-pink-50"} rounded-none focus:outline-none focus:border-none border-none outline-none mr-1`} onClick={() => handleViewState("taskChat")}>Task settings</button>
+                                        {task[0]?.taskType !== "quickTask" && (
+                                            <button className={`${toggleViewState === "taskTimeRegistrations" ? "bg-pink-700 text-white " : " bg-pink-50"} rounded-none focus:outline-none focus:border-none border-none outline-none mr-1`} onClick={() => handleViewState("taskTimeRegistrations")}>Time registrations</button>
+                                        )}
                                     </div>
 
                                     {toggleViewState === "task" ? (
                                         <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
                                             <hr />
-                                            
+
                                             <div className={`${task[0]?.taskType !== "quickTask" ? "md:grid-cols-2 gap-5 md:gap-10" : "md:grid-cols-0"} grid`}>
                                                 <section className='mt-5'>
                                                     {task[0]?.taskType !== "quickTask" && (
-                                                        <div className='mt-5 pt-6 px-6 border-0 bg-stone-100  rounded-extra-large relative flex flex-col w-full outline-none focus:outline-none h-full'>
+                                                        <div className='mt-5 pt-6 px-6 border-0 bg-stone-100 rounded-lg relative flex flex-col w-full outline-none focus:outline-none h-full'>
                                                             {task && (
                                                                 <TaskTimeRegistration
                                                                     labelClasses={labelClasses}
@@ -240,9 +244,9 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         </div>
                                                     )}
                                                 </section>
-                                                
+
                                                 <section id='taskModalUpdate' className="mt-5">
-                                                    <form className='mt-5 pt-6 pb-4 px-6 bg-white rounded-extra-large relative flex flex-col w-full focus:outline-none h-full border border-gray-200' onSubmit={handleUpdateTask}>
+                                                    <form className='mt-5 pt-6 pb-4 px-6 bg-white rounded-lg relative flex flex-col w-full focus:outline-none h-full border border-gray-200' onSubmit={handleUpdateTask}>
                                                         <div>
                                                             <h2 className='font-bold mb-5 text-lg'>Update task</h2>
                                                         </div>
@@ -285,10 +289,10 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                                     </span>
                                                                     <div>
                                                                         <label className={labelClasses} htmlFor="estimatedTime">Estimated time <span className='text-slate-300'>optional</span></label>
-                                                                        <input 
+                                                                        <input
                                                                             type="number" name="estimatedTime" value={formData["estimatedTime"]} placeholder="Estimated Task Time"
                                                                             onChange={(e) => handleInputChange(e)}
-                                                                            className={inputClasses} 
+                                                                            className={inputClasses}
                                                                         />
                                                                     </div>
                                                                 </>
@@ -311,15 +315,15 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                 <>
                                                     <h2 className='text-lg md:text-2xl text-black font-extrabold'>Task chat</h2>
                                                     {taskID && (
-                                                        <TaskChat 
-                                                            taskID={taskID} 
+                                                        <TaskChat
+                                                            taskID={taskID}
                                                             taskCustomer={task[0]?.taskCustomer?._id}
                                                         />
                                                     )}
                                                 </>
                                             </div>
                                         </div>
-                                    ) : (
+                                    ) : toggleViewState === "taskChat" ? (
                                         <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
                                             <hr />
 
@@ -340,6 +344,16 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         activeFilterUser={activeFilterUser}
                                                         newSprintArray={newSprintArray}
                                                     />
+                                                </section>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
+                                            <hr />
+
+                                            <div className='grid grid-cols-1 gap-5 md:gap-10'>
+                                                <section id="taskTimeRegistrations" className='mt-5'>
+                                                    <TaskTimeRegistrations taskId={taskID} />
                                                 </section>
                                             </div>
                                         </div>
