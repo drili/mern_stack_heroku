@@ -10,6 +10,7 @@ const GenericForm = ({
     inputClass = "",
     buttonClass = "",
     onSubmit,
+    buttonValue,
 }) => {
     const [formData, setFormData] = useState(fieldValues)
 
@@ -55,7 +56,7 @@ const GenericForm = ({
             <input 
                 className={`${buttonClass} w-full bg-black text-white py-3 rounded mt-5`}
                 type="submit" 
-                value="Submit" 
+                value={`${buttonValue ? buttonValue : "Submit"}`}
             />
         </form>
     )

@@ -3,6 +3,7 @@ import { Card } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { BsArrowLeft } from 'react-icons/bs'
 
 import PageHeading from '../components/PageHeading'
 import { UserContext } from '../context/UserContext'
@@ -154,7 +155,8 @@ const RegisterHolidays = () => {
                         <button disabled={!!error} type="submit" className={`${error ? "opacity-50" : ""} bg-black text-white py-3 rounded mt-5`}>Register holiday</button>
                     </form>
 
-                    <Link to={`/${user.tenant_id}/holidays`} className='text-pink-700 text-center mt-5'>
+                    <Link to={`/${user.tenant_id}/holidays`} className='text-pink-700 text-center mt-5 flex gap-2 items-center justify-center'>
+                        <BsArrowLeft />
                         Go back to holidays overview
                     </Link>
                 </span>
