@@ -293,6 +293,7 @@ router.route("/fetch-by-id/:taskId").get(async (req, res) => {
             })
             .populate("taskSprints", ["_id", "sprintName", "sprintMonth", "sprintYear"])
             .populate("taskCustomer", ["_id", "customerName", "customerColor"])
+            .populate("createdBy", ['_id', 'username', 'email', 'profileImage', 'userRole', 'userTitle'])
 
         res.json(task)
     } catch (error) {

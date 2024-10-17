@@ -149,7 +149,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const handleUpdateSprint = async (event) => {
         event.preventDefault()
         if (formDataSprint.taskSprintId == "") return
-        
+
         try {
             const response = await axios.put(`${tenantBaseURL}/tasks/update-sprint/${taskID}`, formDataSprint)
             if (response.status === 200) {
@@ -337,6 +337,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         } else {
             setSprintToUse(newSprintArray)
         }
+
+
     }, [task, fetchTaskData, taskID])
 
     return (
@@ -345,7 +347,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
             <section className='flex gap-10'>
                 <span className='w-full'>
                     <span id='sprints'>
-                        <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateSprint}>
+                        <form className='grid grid-cols-12 gap-1 mb-1' onSubmit={handleUpdateSprint}>
                             <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task month</label>
                             <span className='w-[100%] col-span-6 pr-5'>
                                 <select
@@ -371,7 +373,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                     </span>
 
                     <span id='customers'>
-                        <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateCustomers}>
+                        <form className='grid grid-cols-12 gap-1 mb-1' onSubmit={handleUpdateCustomers}>
                             <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task customer</label>
                             <span className='w-[100%] col-span-6 pr-5'>
                                 <select
@@ -395,7 +397,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                             </span>
                         </form>
 
-                        <form className='grid grid-cols-12 gap-1 mb-5' onSubmit={handleUpdateVertical}>
+                        <form className='grid grid-cols-12 gap-1 mb-1' onSubmit={handleUpdateVertical}>
                             <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task vertical</label>
                             <span className='w-[100%] col-span-6 pr-5'>
                                 <select
@@ -420,7 +422,10 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                         </form>
                     </span>
 
-
+                    <span>
+                        <h2 className='font-bold text-lg'>Task created by</h2>
+                        <p>{task[0].createdBy.username}</p>
+                    </span>
                 </span>
 
                 <div className="border-l-[1px] border-gray-200 h-auto"></div>
