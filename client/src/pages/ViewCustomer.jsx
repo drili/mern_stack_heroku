@@ -20,6 +20,7 @@ const ViewCustomer = () => {
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const [customer, setCustomer] = useState([])
+    const [customerTargets, setCustomerTargets] = useState([])
 
     const handleUpdateCustomerTargets = (data) => {
         console.log({ data });
@@ -29,12 +30,36 @@ const ViewCustomer = () => {
         console.log({ data })
     }
 
-    const fetchCustomer = async (urlCustomerId) => {
+    const fetchCustomerTargets = async (urlCustomerId) => {
+        if (urlCustomerId) {
+            try {
+                const response = await axios.get(`${tenantBaseURL}/customer-targets/fetch-customer-targets-by-id?customerId=${urlCustomerId}`)
 
+                console.log(response.data.length)
+                if (response.data.length === 0) {
+                    setCustomerTargets({
+                        spendGoogleAds: '100',
+                        spendMeta: '200',
+                        spendLinkedIn: '300',
+                        customerTarget: '400',
+                        percentageIncrease: '500',
+                    })
+
+                    console.log({ customerTargets })
+                } else {
+                    console.log("NULL")
+                    setCustomerTargets(response.data[0])
+                }
+            } catch (error) {
+                console.error("Failed to fetch customer targets by ID", error)
+            }
+        }
+    }
+
+    const fetchCustomer = async (urlCustomerId) => {
         if (urlCustomerId) {
             try {
                 const response = await axios.get(`${tenantBaseURL}/customers/fetch-customer?customerId=${urlCustomerId}`)
-                console.log(response.data)
                 setCustomer(response.data)
             } catch (error) {
                 console.error("Failed to fetch customer by ID", error)
@@ -44,6 +69,7 @@ const ViewCustomer = () => {
 
     useEffect(() => {
         fetchCustomer(urlCustomerId)
+        fetchCustomerTargets(urlCustomerId)
     }, [urlCustomerId])
 
     return (
@@ -106,18 +132,26 @@ const ViewCustomer = () => {
                                     </Accordion.Title>
 
                                     <Accordion.Content>
-                                        <GenericForm
-                                            fieldCount={5}
-                                            inputTypes={['number', 'number', 'number', 'number', 'number']}
-                                            fieldNames={[`Google Ads adspend`, `Meta adspend`, `LinkedIn adspend`, `Customer target`, `Customer increase %`]}
-                                            fieldValues={[``, ``, ``, ``, ``]}
-                                            required={[]}
-                                            formClass="my-form"
-                                            inputClass="my-input"
-                                            buttonClass="my-button"
-                                            onSubmit={(data) => handleUpdateCustomerTargets(data)}
-                                            buttonValue="Update targets & adspends"
-                                        />
+                                        {customerTargets && customerTargets.length > 0 && (
+                                            <GenericForm
+                                                fieldCount={5}
+                                                inputTypes={['number', 'number', 'number', 'number', 'number']}
+                                                fieldNames={[`Google Ads adspend`, `Meta adspend`, `LinkedIn adspend`, `Customer target`, `Customer increase %`]}
+                                                fieldValues={[
+                                                    customerTargets.spendGoogleAds,
+                                                    customerTargets.spendMeta,
+                                                    customerTargets.spendLinkedIn,
+                                                    customerTargets.customerTarget,
+                                                    customerTargets.percentageIncrease
+                                                ]}
+                                                required={[]}
+                                                formClass="my-form"
+                                                inputClass="my-input"
+                                                buttonClass="my-button"
+                                                onSubmit={(data) => handleUpdateCustomerTargets(data)}
+                                                buttonValue="Update targets & adspends"
+                                            />
+                                        )}
                                     </Accordion.Content>
 
                                 </Accordion.Panel>
