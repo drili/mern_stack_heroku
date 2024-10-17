@@ -20,7 +20,7 @@ const ViewCustomer = () => {
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const [customer, setCustomer] = useState([])
-    const [customerTargets, setCustomerTargets] = useState([])
+    const [customerTargets, setCustomerTargets] = useState(null)
 
     const handleUpdateCustomerTargets = (data) => {
         console.log({ data });
@@ -36,6 +36,7 @@ const ViewCustomer = () => {
                 const response = await axios.get(`${tenantBaseURL}/customer-targets/fetch-customer-targets-by-id?customerId=${urlCustomerId}`)
 
                 console.log(response.data.length)
+                
                 if (response.data.length === 0) {
                     setCustomerTargets({
                         spendGoogleAds: '100',
@@ -132,7 +133,7 @@ const ViewCustomer = () => {
                                     </Accordion.Title>
 
                                     <Accordion.Content>
-                                        {customerTargets && customerTargets.length > 0 && (
+                                        {customerTargets && (
                                             <GenericForm
                                                 fieldCount={5}
                                                 inputTypes={['number', 'number', 'number', 'number', 'number']}
