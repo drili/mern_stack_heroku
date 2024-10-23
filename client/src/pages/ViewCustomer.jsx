@@ -115,11 +115,11 @@ const ViewCustomer = () => {
 
                 if (response.data.length === 0) {
                     setCustomerTargets({
-                        spendGoogleAds: '100',
-                        spendMeta: '200',
-                        spendLinkedIn: '300',
-                        customerTarget: '400',
-                        percentageIncrease: '500',
+                        spendGoogleAds: '0',
+                        spendMeta: '0',
+                        spendLinkedIn: '0',
+                        customerTarget: '0',
+                        percentageIncrease: '0',
                     })
 
                     console.log({ customerTargets })
@@ -241,7 +241,7 @@ const ViewCustomer = () => {
                     <div className='p-10 rounded-extra-large bg-stone-100 h-full relative'>
                         <span className='flex flex-col m-auto text-center sticky top-[150px] gap-8'>
                             <span>
-                                <h3 class="text-lg md:text-3xl text-black font-extrabold">{customer[0]?.customerName}</h3>
+                                <h3 class="text-lg md:text-3xl text-pink-700 font-extrabold ">{customer[0]?.customerName}</h3>
 
                                 <h3 className="text-black text-lg font-medium mt-5 mb-5">Customer targets</h3>
                                 <div id="recentActivity" className="grid grid-cols-12 place-items-center text-center bg-white rounded-extra-large relative">
@@ -256,17 +256,17 @@ const ViewCustomer = () => {
                                     <div className="w-full py-5 px-2 border-r-0 border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendGoogleAds}</h2>
                                         <p className='text-xs'>Google adspend</p>
-                                        <div className='flex items-center text-center justify-center mt-3 text-pink-700'><SiGoogleads size={30} /></div>
+                                        <div className='flex items-center text-center justify-center mt-3 text-yellow-200'><SiGoogleads size={30} /></div>
                                     </div>
                                     <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendMeta}</h2>
                                         <p className='text-xs'>Meta adspend</p>
-                                        <div className='flex items-center text-center justify-center mt-3 text-pink-700'><SiFacebook size={30} /></div>
+                                        <div className='flex items-center text-center justify-center mt-3 text-blue-500'><SiFacebook size={30} /></div>
                                     </div>
                                     <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendLinkedIn}</h2>
                                         <p className='text-xs'>Linkedn adpsend</p>
-                                        <div className='flex items-center text-center justify-center mt-3 text-pink-700'><SiLinkedin size={30} /></div>
+                                        <div className='flex items-center text-center justify-center mt-3 text-blue-700'><SiLinkedin size={30} /></div>
                                     </div>
                                 </div>
                             </span>
