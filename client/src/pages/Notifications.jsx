@@ -56,6 +56,7 @@ const Notifications = () => {
                 userId: userId
             })
 
+            console.log(response.data)
             setNotificationsArray(response.data)
         } catch (error) {
             console.error("Error fetching notifications", error)
@@ -108,8 +109,8 @@ const Notifications = () => {
 
     const filteredNotifications = notificationsArray.filter(notification => {
         const notificationMessageMatch = notification.notificationMessage.toLowerCase().includes(searchTerm.toLowerCase())
-        const taskNameMatch = notification.taskId.taskName.toLowerCase().includes(searchTerm.toLowerCase())
-        const taskCustomerMatch = notification.taskCustomer.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+        const taskNameMatch = notification?.taskId?.taskName?.toLowerCase().includes(searchTerm.toLowerCase())
+        const taskCustomerMatch = notification?.taskCustomer?.customerName?.toLowerCase().includes(searchTerm.toLowerCase())
         return notificationMessageMatch || taskNameMatch || taskCustomerMatch
     })
     const visibleNotifications = filteredNotifications.slice(0, visibleCount);
@@ -149,34 +150,34 @@ const Notifications = () => {
 
                                     <span className='flex ml-5'>
                                         <img
-                                            src={`${baseURL}/uploads/${notification.mentionedBy.profileImage}`}
+                                            src={`${baseURL}/uploads/${notification?.mentionedBy?.profileImage}`}
                                             className="min-w-[50px] h-[50px] object-cover rounded-md"
                                         />
                                     </span>
 
                                     <span className='flex flex-1 flex-col overflow-hidden mr-5'>
                                         <h3 className='font-bold flex gap-2 items-center'>
-                                            {notification.mentionedBy.username}
+                                            {notification?.mentionedBy?.username}
                                             <Badge
                                                 className='py-[1px]'
                                                 style={{
-                                                    border: `1px solid ${notification.taskCustomer.customerColor}`,
-                                                    color: `${notification.taskCustomer.customerColor}`,
+                                                    border: `1px solid ${notification?.taskCustomer?.customerColor}`,
+                                                    color: `${notification?.taskCustomer?.customerColor}`,
                                                     fontSize: "10px"
                                                 }}
-                                            >{notification.taskCustomer.customerName}</Badge>
+                                            >{notification?.taskCustomer?.customerName}</Badge>
                                         </h3>
                                         <span className='flex justify-between gap-2 items-center'>
-                                            <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>Mentioned you in task "{notification.taskId.taskName}"</p>
-                                            <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatDate(notification.createdAt)}</p>
+                                            <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>Mentioned you in task "{notification?.taskId?.taskName}"</p>
+                                            <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatDate(notification?.createdAt)}</p>
                                         </span>
-                                        <p className='trunateCustom align'>{stripHtml(notification.notificationMessage)}</p>
+                                        <p className='trunateCustom align'>{stripHtml(notification?.notificationMessage)}</p>
                                     </span>
                                 </div>
                             ))}
 
                             {filteredNotifications.length > visibleCount && (
-                                <button onClick={() => setVisibleCount(visibleCount + 10)} className="mt-4">
+                                <button onClick={() => setVisibleCount(visibleCount + 10)} className="rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer mt-4 bg-white">
                                     Show More
                                 </button>
                             )}
