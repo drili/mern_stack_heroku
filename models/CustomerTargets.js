@@ -7,7 +7,8 @@ const customerTargetsSchema = new mongoose.Schema({
     },
     customerRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Customer"
+        ref: "Customer",
+        required: true,
     },
     spendGoogleAds: {
         type: String,

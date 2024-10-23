@@ -26,17 +26,38 @@ router.route("/fetch-customer-targets-by-id").get(async (req, res) => {
     }
 })
 
-router.route("/update-customer-targets-by-id").put(async (req, res) => {
+router.route("/update-customer-targets-by-id").post(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
-    const { customerId } = req.query
+    const { 
+        customerId,
+        spendGoogleAds,
+        spendMeta,
+        spendLinkedIn,
+        customerTarget,
+        percentageIncrease 
+    } = req.body
 
     if (!tenantId || !customerId) {
         return res.status(400).json({ error: "tenantId & customerId is required" })
     }
 
     try {
-        
+        const updatedTarget = await CustomerTargets.findOneAndUpdate(
+            { customerRef: customerId },
+            {
+                $set: {
+                    spendGoogleAds,
+                    spendMeta,
+                    spendLinkedIn,
+                    customerTarget,
+                    percentageIncrease,
+                },
+            },
+            { new: true, upsert: true } // Create new if not exists
+        )
+
+        return res.status(200).json({ message: "Customer targets updated successfully", data: updatedTarget })
     } catch (error) {
         console.error("Failed to update customer targets by id", error)
         res.status(500).json({ error: "Failed to update customer targets by id" })

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { BsArrowLeft } from "react-icons/bs";
 import { Accordion } from 'flowbite-react'
+import toast from 'react-hot-toast';
 
 import PageHeading from '../components/PageHeading'
 import { UserContext } from '../context/UserContext'
@@ -22,8 +23,38 @@ const ViewCustomer = () => {
     const [customer, setCustomer] = useState([])
     const [customerTargets, setCustomerTargets] = useState(null)
 
-    const handleUpdateCustomerTargets = (data) => {
-        console.log({ data });
+    const handleUpdateCustomerTargets = async (data) => {
+        const customerTargets = {
+            customerId: urlCustomerId,
+            spendGoogleAds: data[0],
+            spendMeta: data[1],
+            spendLinkedIn: data[2],
+            customerTarget: data[3],
+            percentageIncrease: data[4],
+        }
+
+        const response = await axios.post(`${tenantBaseURL}/customer-targets/update-customer-targets-by-id`, customerTargets)
+
+        if (response.status === 200) {
+            toast('Customer targets has successfully updated', {
+                duration: 4000,
+                position: 'top-center',
+                style: {
+                    background: '#22c55e',
+                    color: "#fff"
+                }
+            })
+            fetchCustomerTargets(urlCustomerId)
+        } else {
+            toast('There was an error updating customer targets', {
+                duration: 4000,
+                position: 'top-center',
+                style: {
+                    background: '#ef4444',
+                    color: "#fff"
+                }
+            })
+        }
     }
 
     const handleUpdateCustomer = (data) => {
@@ -36,7 +67,7 @@ const ViewCustomer = () => {
                 const response = await axios.get(`${tenantBaseURL}/customer-targets/fetch-customer-targets-by-id?customerId=${urlCustomerId}`)
 
                 console.log(response.data.length)
-                
+
                 if (response.data.length === 0) {
                     setCustomerTargets({
                         spendGoogleAds: '100',
@@ -48,7 +79,7 @@ const ViewCustomer = () => {
 
                     console.log({ customerTargets })
                 } else {
-                    console.log("NULL")
+                    console.log(response.data)
                     setCustomerTargets(response.data[0])
                 }
             } catch (error) {
@@ -163,10 +194,36 @@ const ViewCustomer = () => {
 
                 <span className='flex flex-col gap-10 col-span-6'>
                     <div className='p-10 rounded-extra-large bg-stone-100 h-full relative'>
-                        <span className='flex flex-col m-auto text-center sticky top-[150px]'>
+                        <span className='flex flex-col m-auto text-center sticky top-[150px] gap-8'>
                             <span>
                                 <h3 class="text-lg md:text-3xl text-black font-extrabold">{customer[0]?.customerName}</h3>
 
+                                <h3 className="text-black text-lg font-medium mt-5 mb-5">Customer targets</h3>
+                                <div id="recentActivity" className="grid grid-cols-12 place-items-center text-center bg-white rounded-extra-large relative">
+                                    <div className="w-full py-5 px-2 border-r-0 border-b border-solid border-stone-100 col-span-6">
+                                        <h2 className={`font-bold`}>{customerTargets?.customerTarget}</h2>
+                                        <p>Customer target</p>
+                                    </div>
+                                    <div className="w-full py-5 px-2 border-l border-b border-solid border-stone-100 col-span-6">
+                                        <h2 className={`font-bold`}>{customerTargets?.percentageIncrease}</h2>
+                                        <p>Customer increase %</p>
+                                    </div>
+                                    <div className="w-full py-5 px-2 border-r-0 border-t-0 border-solid border-stone-100 col-span-4">
+                                        <h2 className={`font-bold text-lg`}>{customerTargets?.spendGoogleAds}</h2>
+                                        <p className='text-xs'>Google adspend</p>
+                                    </div>
+                                    <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
+                                        <h2 className={`font-bold text-lg`}>{customerTargets?.spendMeta}</h2>
+                                        <p className='text-xs'>Meta adspend</p>
+                                    </div>
+                                    <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
+                                        <h2 className={`font-bold text-lg`}>{customerTargets?.spendLinkedIn}</h2>
+                                        <p className='text-xs'>Linkedn adpsend</p>
+                                    </div>
+                                </div>
+                            </span>
+
+                            <span>
                                 <h3 className="text-black text-lg font-medium mt-5 mb-5">Customer metrics</h3>
                                 <div id="recentActivity" className="grid grid-cols-2 place-items-center text-center bg-white rounded-extra-large relative">
                                     <div className="w-full py-5 px-2 border-r-0 border-b border-solid border-stone-100">
