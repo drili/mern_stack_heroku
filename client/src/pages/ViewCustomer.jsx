@@ -4,6 +4,7 @@ import axios from 'axios'
 import { BsArrowLeft } from "react-icons/bs";
 import { Accordion } from 'flowbite-react'
 import toast from 'react-hot-toast';
+import { SiGoogleads, SiFacebook, SiLinkedin } from "react-icons/si";
 
 import PageHeading from '../components/PageHeading'
 import { UserContext } from '../context/UserContext'
@@ -57,8 +58,52 @@ const ViewCustomer = () => {
         }
     }
 
-    const handleUpdateCustomer = (data) => {
-        console.log({ data })
+    const isValidHexColor = (hex) => {
+        const hexColorPattern = /^#([0-9A-F]{3}){1,2}$/i;
+        return hexColorPattern.test(hex);
+    };
+
+    const handleUpdateCustomer = async (data) => {
+        const customerName = data[0]
+        const customerColor = data[1]
+
+        if (!isValidHexColor(customerColor)) {
+            toast('Error - Customer color must be in correct hex-color values', {
+                duration: 6000,
+                position: 'top-center',
+                style: {
+                    background: '#ef4444',
+                    color: "#fff"
+                }
+            })
+
+            return
+        }
+
+        const customerInfo = {
+            customerId: urlCustomerId,
+            customerName,
+            customerColor
+        }
+
+        try {
+            const response = await axios.post(`${tenantBaseURL}/customers/update-customer`, customerInfo)
+
+            if (response.status === 200) {
+                toast('Customer has been successfully updated', {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#22c55e',
+                        color: "#fff"
+                    }
+                })
+
+                fetchCustomer(urlCustomerId)
+            }
+        } catch (error) {
+            console.error("Failed to update customer info by ID", error)
+        }
     }
 
     const fetchCustomerTargets = async (urlCustomerId) => {
@@ -211,14 +256,17 @@ const ViewCustomer = () => {
                                     <div className="w-full py-5 px-2 border-r-0 border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendGoogleAds}</h2>
                                         <p className='text-xs'>Google adspend</p>
+                                        <div className='flex items-center text-center justify-center mt-3'><SiGoogleads size={30} /></div>
                                     </div>
                                     <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendMeta}</h2>
                                         <p className='text-xs'>Meta adspend</p>
+                                        <div className='flex items-center text-center justify-center mt-3'><SiFacebook size={30} /></div>
                                     </div>
                                     <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendLinkedIn}</h2>
                                         <p className='text-xs'>Linkedn adpsend</p>
+                                        <div className='flex items-center text-center justify-center mt-3'><SiLinkedin size={30} /></div>
                                     </div>
                                 </div>
                             </span>

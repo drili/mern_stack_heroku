@@ -2,6 +2,38 @@ const express = require('express')
 const router = express.Router()
 const {Customer} = require('../models/Customer')
 
+router.route("/update-customer").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { customerId, customerName, customerColor } = req.body
+
+    if (!tenantId || !customerId) {
+        return res.status(400).json({ error: "tenantId & customerId is required" })
+    }
+
+    try {
+        const updatedCustomer = await Customer.findOneAndUpdate(
+            { _id: customerId },
+            {
+                $set: {
+                    customerName,
+                    customerColor
+                },
+            },
+            { new: true }
+        )
+
+        if (!updatedCustomer) {
+            return res.status(404).json({ error: "Customer not found" });
+        }
+
+        return res.status(200).json({ message: "Customer updated successfully", data: updatedCustomer })
+    } catch (error) {
+        console.error("Failed to update customer by id", error)
+        res.status(500).json({ error: "Failed to update customer by id" })
+    }
+})
+
 router.route("/fetch-customer").get(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
