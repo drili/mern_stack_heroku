@@ -11,6 +11,7 @@ import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext'
 import GenericForm from '../components/GenericForm'
 import WorkInProgressLabel from '../components/WorkInProgressLabel'
+import CustomerNotes from '../components/customers/CustomerNotes';
 
 const ViewCustomer = () => {
     const location = useLocation()
@@ -296,6 +297,11 @@ const ViewCustomer = () => {
                             </span>
                         </span>
                     </div>
+                </span>
+
+                <span className='flex flex-col gap-10 col-span-12'>
+                    <hr className='mt-10' />
+                    <CustomerNotes customerId={urlCustomerId} />
                 </span>
             </section>
         </div>
