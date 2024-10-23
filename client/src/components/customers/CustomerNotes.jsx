@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { BsEye, BsFileEarmarkPlus } from "react-icons/bs";
+
 import CustomerNotesFilter from './CustomerNotesFilter'
+import ViewCustomerNotesComponent from './customer-notes/ViewCustomerNotesComponent';
+import CreateCustomerNotesComponent from './customer-notes/CreateCustomerNotesComponent';
 
 const CustomerNotes = ({ customerId }) => {
+    const [activeComponent, setActiveComponent] = useState("ViewCustomerNotes")
+
+    const sections = [
+        { name: 'ViewCustomerNotes', label: 'View notes', icon: BsEye },
+        { name: 'CreateCustomerNotes', label: 'Create notes', icon: BsFileEarmarkPlus },
+    ]
+
+    const renderComponent = () => {
+        switch (activeComponent) {
+            case "ViewCustomerNotes":
+                return <ViewCustomerNotesComponent />
+            case "CreateCustomerNotes":
+                return <CreateCustomerNotesComponent />
+            default:
+                return <ViewCustomerNotesComponent />
+        }
+    }
+
     return (
         <section id='CustomerNotes' className='grid grid-cols-12 gap-4'>
             <span className='col-span-12'>
@@ -15,12 +37,32 @@ const CustomerNotes = ({ customerId }) => {
 
             <span className='col-span-12'>
                 <div className="grid grid-cols-12 gap-10">
-                    <section className='col-span-7'>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, fuga corporis minus autem eligendi mollitia vel, iure accusantium vero perspiciatis architecto quasi laboriosam dolorum sunt placeat. Eos atque deserunt dolorem cumque commodi sint provident officia repellendus obcaecati, enim suscipit quod.</p>
+                    <section id="CustomerNotesCards" className='flex flex-col gap-4 col-span-2'>
+                        {sections.map((section) => (
+                            <div
+                                key={section.name}
+                                className={`
+                                    rounded text-slate-800 text-sm cursor-pointer py-2 px-4 
+                                    ${activeComponent === section.name ? 'bg-stone-100' : ''}
+                                `}
+                                onClick={() => setActiveComponent(section.name)}
+                            >
+                                <div className='flex gap-4 items-center'>
+                                    <span>
+                                        <section.icon size={20} />
+                                    </span>
+                                    <span>
+                                        <h3 className='text-sm text-black font-bold'>
+                                            {section.label}
+                                        </h3>
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
                     </section>
 
-                    <section className='col-span-5'>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, fuga corporis minus autem eligendi mollitia vel, iure accusantium vero perspiciatis architecto quasi laboriosam dolorum sunt placeat. Eos atque deserunt dolorem cumque commodi sint provident officia repellendus obcaecati, enim suscipit quod.</p>
+                    <section className='flex flex-col col-span-10 w-full'>
+                        {renderComponent()}
                     </section>
                 </div>
             </span>
