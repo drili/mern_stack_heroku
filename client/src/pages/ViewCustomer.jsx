@@ -256,17 +256,17 @@ const ViewCustomer = () => {
                                     <div className="w-full py-5 px-2 border-r-0 border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendGoogleAds}</h2>
                                         <p className='text-xs'>Google adspend</p>
-                                        <div className='flex items-center text-center justify-center mt-3'><SiGoogleads size={30} /></div>
+                                        <div className='flex items-center text-center justify-center mt-3 text-pink-700'><SiGoogleads size={30} /></div>
                                     </div>
                                     <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendMeta}</h2>
                                         <p className='text-xs'>Meta adspend</p>
-                                        <div className='flex items-center text-center justify-center mt-3'><SiFacebook size={30} /></div>
+                                        <div className='flex items-center text-center justify-center mt-3 text-pink-700'><SiFacebook size={30} /></div>
                                     </div>
                                     <div className="w-full py-5 px-2 border-l border-t-0 border-solid border-stone-100 col-span-4">
                                         <h2 className={`font-bold text-lg`}>{customerTargets?.spendLinkedIn}</h2>
                                         <p className='text-xs'>Linkedn adpsend</p>
-                                        <div className='flex items-center text-center justify-center mt-3'><SiLinkedin size={30} /></div>
+                                        <div className='flex items-center text-center justify-center mt-3 text-pink-700'><SiLinkedin size={30} /></div>
                                     </div>
                                 </div>
                             </span>
