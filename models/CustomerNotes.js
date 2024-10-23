@@ -25,11 +25,17 @@ const customerNotesSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    noteTitle: {
+        type: String,
+        required: true,
+    },
     noteContent: {
         type: String,
         required: true,
     },
-})
+},
+{ timestamps: true }
+)
 
 const CustomerNotes = mongoose.model("CustomerNotes", customerNotesSchema)
 
