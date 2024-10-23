@@ -11,6 +11,7 @@ import WorkInProgressLabel from '../components/WorkInProgressLabel';
 
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext';
+import TaskCard from '../components/task/TaskCard';
 
 const formatDate = (dateString) => {
     const options = { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -25,12 +26,22 @@ const Notifications = () => {
     const [showModal, setShowModal] = useState(false)
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [visibleCount, setVisibleCount] = useState(10);
+    const [recentTasks, setRecentTasks] = useState(null)
 
     const { user, setHasUnreadNotifications, hasUnreadNotifications } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     // *** Server requests
+    const handleFetchRecentTasks = async (userId) => {
+        try {
+            const response = await axios.get(`${tenantBaseURL}/tasks/recent-tasks/${userId}`)
+            setRecentTasks(response.data)
+        } catch (error) {
+            console.error("Error fetching tasks by user", error)
+        }
+    }
+
     const handleUpdateNotificationIsRead = async (notificationId) => {
         try {
             const response = await axios.put(tenantBaseURL + "/notifications/update-user-notification-read", {
@@ -56,7 +67,6 @@ const Notifications = () => {
                 userId: userId
             })
 
-            console.log(response.data)
             setNotificationsArray(response.data)
         } catch (error) {
             console.error("Error fetching notifications", error)
@@ -105,6 +115,7 @@ const Notifications = () => {
 
     useEffect(() => {
         fetchNotifications(user.id)
+        handleFetchRecentTasks(user.id)
     }, [user])
 
     const filteredNotifications = notificationsArray.filter(notification => {
@@ -187,10 +198,37 @@ const Notifications = () => {
                 </section>
 
                 <section id='NotificationsTasks' className='col-span-1 relative'>
-                    <span className='relative'>
-                        <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Tasks you have recently been added to</h2>
-                        <WorkInProgressLabel smallVersion={true} />
-                    </span>
+                    <div className='bg-stone-100 w-full p-[2rem] md:p-10 rounded-extra-large'>
+                        <span>
+                            <h2 className='text-lg md:text-lg text-black font-bold mb-3'>Tasks you recently have been added to</h2>
+                            <hr className='mb-5' />
+                        </span>
+
+                        <span id='tasksList' className='flex flex-col gap-2'>
+                            {recentTasks && recentTasks.map((task) => (
+                                <span
+                                    key={task._id}
+                                    onClick={() => handleTaskModal(task._id)}
+                                >
+                                    <TaskCard
+                                        key={task._id}
+                                        taskId={task._id}
+                                        taskName={task.taskName}
+                                        taskDescription={task.taskDescription}
+                                        taskPersons={task.taskPersons}
+                                        customerName={task.taskCustomer.customerName}
+                                        customerColor={task.taskCustomer.customerColor}
+                                        taskLow={task.taskTimeLow}
+                                        taskHigh={task.taskTimeHigh}
+                                        taskSprintName={task.taskSprints[0].sprintName}
+                                        taskType={task.taskType}
+                                        estimatedTime={task?.estimatedTime}
+                                        taskDeadline={task?.taskDeadline}
+                                    ></TaskCard>
+                                </span>
+                            ))}
+                        </span>
+                    </div>
                 </section>
             </div>
 

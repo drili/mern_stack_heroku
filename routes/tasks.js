@@ -5,6 +5,32 @@ const {Sprints} = require("../models/Sprints")
 const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
 
+router.route("/recent-tasks/:userId").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { userId } = req.params
+    
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
+    try {
+        const objectIdUserId = new mongoose.Types.ObjectId(userId)
+        const fetchedTasksByUser = await Task.find(
+            {
+                'taskPersons.user': objectIdUserId,
+                tenantId: tenantId,
+            }
+        )
+        .sort({ createdAt: -1 })
+        .limit(10)
+
+        res.json(fetchedTasksByUser)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 router.route("/fetch-deadlines").get(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
