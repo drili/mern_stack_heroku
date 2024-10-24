@@ -60,7 +60,10 @@ const ViewCustomerNotesComponent = ({ customerId, selectedSprint }) => {
                         <span className="text-sm text-gray-500">Created: {note.createdAt}</span>
                     </div>
 
-                    <p className="text-gray-700">{note.noteContent}</p>
+                    <div
+                        className="text-gray-700"
+                        dangerouslySetInnerHTML={{ __html: note.noteContent }}
+                    />
 
                     <div className="flex justify-between items-center relative">
                         <span className="text-sm text-gray-400">Created by: {note.createdBy.username}</span>

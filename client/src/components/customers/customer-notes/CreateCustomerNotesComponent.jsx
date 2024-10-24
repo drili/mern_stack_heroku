@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import GenericForm from '../../GenericForm'
 import { UserContext } from '../../../context/UserContext';
 import { ConfigContext } from '../../../context/ConfigContext';
+import RichTextEditor from '../../utils/RichTextEditor';
 
 const CreateCustomerNotesComponent = ({ customerId, selectedSprint }) => {
     const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
@@ -12,6 +13,7 @@ const CreateCustomerNotesComponent = ({ customerId, selectedSprint }) => {
 
     const [sprints, setSprints] = useState([])
     const [activeSprintId, setActiveSprintId] = useState(null)
+    const [noteContent, setNoteContent] = useState("")
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
@@ -34,9 +36,9 @@ const CreateCustomerNotesComponent = ({ customerId, selectedSprint }) => {
             userId: user.id,
             sprintId: data.target["selectMonth"].value,
             noteTitle: data.target["noteTitle"].value,
-            noteContent: data.target["noteContent"].value
+            noteContent: noteContent.htmlContent
         }
-
+        
         if (formData && data.target["selectMonth"].value != 0) {
             try {
                 const response = await axios.post(`${tenantBaseURL}/customer-notes/create-note`, formData);
@@ -71,9 +73,10 @@ const CreateCustomerNotesComponent = ({ customerId, selectedSprint }) => {
                     <label className={labelClasses}>Title</label>
                     <input type="text" required className={inputClasses} name='noteTitle' />
 
+                    {/* <textarea type="text" required className="min-h-[200px] w-full rounded" name='noteContent' /> */}
                     <label className={labelClasses}>Note content</label>
-                    <textarea type="text" required className="min-h-[200px] w-full rounded" name='noteContent' />
-
+                    <RichTextEditor onContentChange={(content) => setNoteContent(content)} />
+                    
                     <label className={labelClasses}>Select sprint</label>
                     <select
                         className={`${inputClasses} min-w-[200px]`}
