@@ -2,6 +2,25 @@ const express = require('express')
 const router = express.Router()
 
 const { CustomerNotes } = require("../models/CustomerNotes")
+const { User } = require("../models/User")
+
+router.route("/delete-customer-notes/:noteId").delete(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { noteId } = req.params
+
+    if (!tenantId || !noteId) {
+        return res.status(400).json({ error: "tenantId & noteId is required" })
+    }
+
+    try {
+        const deleteNote = await CustomerNotes.findOneAndDelete({ _id: noteId, tenantId })
+        res.status(200).send({ message: "Note deleted" })
+    } catch (error) {
+        console.error("Failed to deleting customer notes by id", error)
+        res.status(500).json({ error: "Failed to deleting customer notes by id" })
+    }
+})
 
 router.route("/fetch-customer-notes").get(async (req, res) => {
     const baseUrl = req.baseUrl
@@ -16,7 +35,13 @@ router.route("/fetch-customer-notes").get(async (req, res) => {
     }
 
     try {
-        const customerNotes = await CustomerNotes.find({ customerRef: customerId, sprintId })
+        const customerNotes = await CustomerNotes.find(
+            { customerRef: customerId, sprintId }
+        ).populate({
+            path: "createdBy",
+            model: User,
+            select: "_id username email profileImage"
+        })
 
         if (!customerNotes.length) {
             return res.json([])
