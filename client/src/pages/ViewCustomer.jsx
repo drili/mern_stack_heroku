@@ -272,7 +272,7 @@ const ViewCustomer = () => {
                                 </div>
                             </span>
 
-                            <span>
+                            <span className='hidden'>
                                 <h3 className="text-black text-lg font-medium mt-5 mb-5">Customer metrics</h3>
                                 <div id="recentActivity" className="grid grid-cols-2 place-items-center text-center bg-white rounded-extra-large relative">
                                     <div className="w-full py-5 px-2 border-r-0 border-b border-solid border-stone-100">
