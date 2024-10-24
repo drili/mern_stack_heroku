@@ -36,15 +36,24 @@ const GenericForm = ({
                     className={`${labelClasses}`}>
                         {fieldNames[index] || `Field ${index + 1}`}
                     </label>
-                <input
-                    required={required[index] || true}
-                    type={inputTypes[index] || 'text'}
-                    value={formData[index] || ''}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder={fieldNames[index] || `Field ${index + 1}`}
-                    name="password"
-                    className={`${inputClasses} `}
-                />
+                
+                {inputTypes[index] === "textarea" ? (
+                    <textarea
+                        className='w-full rounded min-h-[200px]'
+                        required={required[index] || true}
+                        onChange={(e) => handleInputChange(index, e)}
+                    >{formData[index] || ''}</textarea>
+                ) : (
+                    <input
+                        required={required[index] || true}
+                        type={inputTypes[index] || 'text'}
+                        value={formData[index] || ''}
+                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder={fieldNames[index] || `Field ${index + 1}`}
+                        name="password"
+                        className={`${inputClasses} `}
+                    />
+                )}
             </span>
         ));
     };

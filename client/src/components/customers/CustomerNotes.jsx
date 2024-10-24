@@ -1,28 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsEye, BsFileEarmarkPlus } from "react-icons/bs";
 
 import CustomerNotesFilter from './CustomerNotesFilter'
 import ViewCustomerNotesComponent from './customer-notes/ViewCustomerNotesComponent';
 import CreateCustomerNotesComponent from './customer-notes/CreateCustomerNotesComponent';
 
-const CustomerNotes = ({ customerId }) => {
-    const [activeComponent, setActiveComponent] = useState("ViewCustomerNotes")
-
+const CustomerNotes = ({ customerId, sprintId }) => {
     const sections = [
         { name: 'ViewCustomerNotes', label: 'View notes', icon: BsEye },
         { name: 'CreateCustomerNotes', label: 'Create notes', icon: BsFileEarmarkPlus },
     ]
 
-    const renderComponent = () => {
+    const [activeComponent, setActiveComponent] = useState("ViewCustomerNotes")
+    const [selectedSprint, setSelectedSprint] = useState(null)
+
+    const handleSprintSelection = (sprint) => {
+        setSelectedSprint(sprint);
+    }
+
+    const renderComponent = (customerId, selectedSprint) => {
+        console.log({selectedSprint})
         switch (activeComponent) {
             case "ViewCustomerNotes":
-                return <ViewCustomerNotesComponent />
+                return <ViewCustomerNotesComponent
+                    customerId={customerId}
+                    selectedSprint={selectedSprint}
+                />
             case "CreateCustomerNotes":
-                return <CreateCustomerNotesComponent />
-            default:
-                return <ViewCustomerNotesComponent />
+                return <CreateCustomerNotesComponent
+                    customerId={customerId}
+                />
         }
     }
+
+    useEffect(() => {
+        setActiveComponent("ViewCustomerNotes")
+    }, [selectedSprint])
 
     return (
         <section id='CustomerNotes' className='grid grid-cols-12 gap-4'>
@@ -32,7 +45,10 @@ const CustomerNotes = ({ customerId }) => {
             </span>
 
             <span className='col-span-12'>
-                <CustomerNotesFilter />
+                <CustomerNotesFilter
+                    selectedSprint={selectedSprint}
+                    onSprintChange={handleSprintSelection}
+                />
             </span>
 
             <span className='col-span-12'>
@@ -62,7 +78,11 @@ const CustomerNotes = ({ customerId }) => {
                     </section>
 
                     <section className='flex flex-col col-span-10 w-full'>
-                        {renderComponent()}
+                        {selectedSprint && (
+                            <>
+                                {renderComponent(customerId, selectedSprint)}
+                            </>
+                        )}
                     </section>
                 </div>
             </span>

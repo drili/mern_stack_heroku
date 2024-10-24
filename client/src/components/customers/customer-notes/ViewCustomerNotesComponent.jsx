@@ -1,38 +1,54 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../../../context/UserContext';
+import { ConfigContext } from '../../../context/ConfigContext';
 
-const ViewCustomerNotesComponent = () => {
+const ViewCustomerNotesComponent = ({ customerId, selectedSprint }) => {
+    const { user } = useContext(UserContext)
+    const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
+
+    const [customerNotes, setCustomerNotes] = useState([])
+
+    const handleFetchCustomerNotes = async (customerId, selectedSprint) => {
+        let sprintId
+        if (selectedSprint.sprintId) {
+            sprintId = selectedSprint.sprintId
+        } else {
+            sprintId = selectedSprint._id
+        }
+        
+        if (customerId && sprintId) {
+            try {
+                const response = await axios.get(`${tenantBaseURL}/customer-notes/fetch-customer-notes?customerId=${customerId}&sprintId=${sprintId}`)
+                setCustomerNotes(response.data)
+            } catch (error) {
+                console.error("Error fetching customer notes", error)
+            }
+        }
+    }
+
+    useEffect(() => {
+        handleFetchCustomerNotes(customerId, selectedSprint)
+    }, [selectedSprint, customerId])
+
     return (
         <div id='ViewCustomerNotesComponent'>
-            <div class="py-6 mx-auto bg-white space-y-4 border-b border-stone-100">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-bold">Note Title</h2>
-                    <span class="text-sm text-gray-500">Created: 2023-10-01</span>
+            {customerNotes.length < 1 && (
+                <p>No notes found.</p>
+            )}
+            {customerNotes && customerNotes.map(note => (
+                <div className="py-6 mx-auto bg-white space-y-4 border-b border-stone-100" key={note._id}>
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-xl font-bold">{note.noteTitle}</h2>
+                        <span className="text-sm text-gray-500">Created: {note.createdAt}</span>
+                    </div>
+                    <p className="text-gray-700">{note.noteContent}</p>
+                    <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-400">Created by: {note.createdBy}</span>
+                    </div>
                 </div>
-                <p class="text-gray-700">This is the note content. It could be multiple lines of text that provides details about the customer.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">Created by: John Doe</span>
-                </div>
-            </div>
-            <div class="py-6 mx-auto bg-white space-y-4 border-b border-stone-100">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-bold">Note Title</h2>
-                    <span class="text-sm text-gray-500">Created: 2023-10-01</span>
-                </div>
-                <p class="text-gray-700">This is the note content. It could be multiple lines of text that provides details about the customer.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">Created by: John Doe</span>
-                </div>
-            </div>
-            <div class="py-6 mx-auto bg-white space-y-4 border-b border-stone-100">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-bold">Note Title</h2>
-                    <span class="text-sm text-gray-500">Created: 2023-10-01</span>
-                </div>
-                <p class="text-gray-700">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis sequi cupiditate dolores nisi voluptate ea? Magnam pariatur optio, iure numquam alias recusandae commodi officiis, minus magni quas possimus enim aperiam, accusantium velit! Dicta velit, eum, enim veniam sed sit quasi aspernatur, eos eligendi obcaecati aliquam. Ut quod, nisi at labore alias deserunt, distinctio quasi autem dolore minima eaque iste reprehenderit facilis architecto quaerat dolorem neque. Laboriosam dolore sint vero, alias voluptatibus atque exercitationem ad nisi optio repellat fugit? Accusantium dolore tempora sunt facilis provident. Ipsam, unde? Debitis, repellendus possimus distinctio pariatur similique vitae laudantium. In distinctio temporibus inventore tempora commodi!</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">Created by: John Doe</span>
-                </div>
-            </div>
+            ))}
         </div>
     )
 }

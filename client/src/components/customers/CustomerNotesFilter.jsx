@@ -6,12 +6,11 @@ import { ConfigContext } from '../../context/ConfigContext'
 import getCurrentSprint from '../../functions/getCurrentSprint'
 import axios from 'axios'
 
-const CustomerNotesFilter = () => {
+const CustomerNotesFilter = ({ selectedSprint, onSprintChange }) => {
     const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
     const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
     const [sprints, setSprints] = useState([])
-    const [currentSprint, setCurrentSprint] = useState([])
     const activeSprint = getCurrentSprint()
 
     const { user } = useContext(UserContext)
@@ -20,11 +19,10 @@ const CustomerNotesFilter = () => {
 
     const handleSprintChange = (e) => {
         const selectedValue = e.target.value
-        
         const selectedSprint = sprints.find((sprint) => sprint._id === selectedValue)
-        // console.log({selectedSprint})
+
         if (selectedSprint) {
-            setCurrentSprint(selectedSprint)
+            onSprintChange(selectedSprint)
         }
     }
 
@@ -40,7 +38,7 @@ const CustomerNotesFilter = () => {
 
     useEffect(() => {
         fetchSprints()
-        setCurrentSprint(activeSprint)
+        onSprintChange(activeSprint)
     }, [activeSprint])
 
     return (
@@ -49,7 +47,7 @@ const CustomerNotesFilter = () => {
                 <section className='flex justify-end gap-8'>
                     <div id='CustomerNotesFilter-activeSprint'>
                         <span className={`${labelClasses} `}>
-                            {currentSprint && currentSprint?.sprintMonth} {currentSprint && currentSprint?.sprintYear}
+                            {selectedSprint && selectedSprint?.sprintMonth} {selectedSprint && selectedSprint?.sprintYear}
                         </span>
                     </div>
 

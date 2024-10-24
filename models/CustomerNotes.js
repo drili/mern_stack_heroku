@@ -11,11 +11,11 @@ const customerNotesSchema = new mongoose.Schema({
         ref: "Customer",
         required: true,
     },
-    taskSprints: [{
+    sprintId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Sprints',
         required: true,
-    }],
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
