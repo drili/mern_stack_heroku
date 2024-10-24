@@ -3,6 +3,7 @@ import Editor from '@draft-js-plugins/editor';
 import { EditorState, RichUtils, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { stateToHTML } from "draft-js-export-html"
+import { MdFormatListBulleted, MdOutlineCode } from "react-icons/md";
 
 const RichTextEditor = ({ onContentChange }) => {
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
@@ -20,10 +21,14 @@ const RichTextEditor = ({ onContentChange }) => {
         setEditorState(RichUtils.toggleInlineStyle(editorState, style));
     };
 
+    const toggleBlockType = (blockType) => {
+        setEditorState(RichUtils.toggleBlockType(editorState, blockType));
+    };
+
     const handleEditorChange = (state) => {
         setEditorState(state);
         const contentState = state.getCurrentContent();
-        const rawContent = convertToRaw(contentState); 
+        const rawContent = convertToRaw(contentState);
         const plainText = contentState.getPlainText();
         const htmlContent = stateToHTML(contentState);
         onContentChange({ rawContent, plainText, htmlContent });
@@ -39,7 +44,7 @@ const RichTextEditor = ({ onContentChange }) => {
                     placeholder="Write your note here..."
                 />
             </div>
-            <div className="mt-2">
+            <div className="mt-2 flex">
                 <button
                     type="button"
                     className="mr-2 px-3 py-1 border rounded bg-gray-200 text-sm"
@@ -59,6 +64,46 @@ const RichTextEditor = ({ onContentChange }) => {
                     }}
                 >
                     I
+                </button>
+                <button
+                    type="button"
+                    className="mr-2 px-3 py-1 border rounded bg-gray-200 underline text-sm"
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        toggleInlineStyle('UNDERLINE');
+                    }}
+                >
+                    U
+                </button>
+                <button
+                    type="button"
+                    className="mr-2 px-3 py-1 border rounded bg-gray-200 line-through text-sm"
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        toggleInlineStyle('STRIKETHROUGH');
+                    }}
+                >
+                    S
+                </button>
+                <button
+                    type="button"
+                    className="mr-2 px-3 py-1 border rounded bg-gray-200 text-sm"
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        toggleInlineStyle('CODE');
+                    }}
+                >
+                    <MdOutlineCode />
+                </button>
+                <button
+                    type="button"
+                    className="mr-2 px-3 py-1 border rounded bg-gray-200 text-sm"
+                    onMouseDown={(e) => {
+                        e.preventDefault();
+                        toggleBlockType('unordered-list-item');
+                    }}
+                >
+                    <MdFormatListBulleted />
                 </button>
             </div>
         </div>
