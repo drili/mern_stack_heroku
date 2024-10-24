@@ -29,6 +29,7 @@ const CustomerNotes = ({ customerId, sprintId }) => {
             case "CreateCustomerNotes":
                 return <CreateCustomerNotesComponent
                     customerId={customerId}
+                    selectedSprint={selectedSprint}
                 />
         }
     }

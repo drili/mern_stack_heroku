@@ -6,11 +6,12 @@ import GenericForm from '../../GenericForm'
 import { UserContext } from '../../../context/UserContext';
 import { ConfigContext } from '../../../context/ConfigContext';
 
-const CreateCustomerNotesComponent = ({ customerId, sprintId }) => {
+const CreateCustomerNotesComponent = ({ customerId, selectedSprint }) => {
     const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
     const labelClasses = "text-sm font-medium mb-2 block "
 
     const [sprints, setSprints] = useState([])
+    const [activeSprintId, setActiveSprintId] = useState(null)
 
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
@@ -54,8 +55,14 @@ const CreateCustomerNotesComponent = ({ customerId, sprintId }) => {
     }
 
     useEffect(() => {
+        if (selectedSprint._id) {
+            setActiveSprintId(selectedSprint._id)
+        } else if (selectedSprint.sprintId) {
+            setActiveSprintId(selectedSprint.sprintId)
+        }
+        
         fetchSprints()
-    }, [customerId])
+    }, [customerId, selectedSprint])
 
     return (
         <div id='CreateCustomerNotesComponent' className='grid grid-cols-12'>
@@ -77,6 +84,7 @@ const CreateCustomerNotesComponent = ({ customerId, sprintId }) => {
                             <option
                                 key={sprint?._id}
                                 value={`${sprint?._id}`}
+                                selected={sprint?._id === activeSprintId ? "true" : ""}
                             >
                                 {sprint?.sprintName}
                             </option>
