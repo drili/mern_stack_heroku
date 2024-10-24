@@ -57,7 +57,7 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                     )}
 
                 </section>
-                <h3 className='font-bold mt-4 leading-5'>{truncatedTaskName}</h3>
+                <h3 className={`${toggleSmallCards ? "text-sm leading-4" : "leading-4"} font-bold mt-4`}>{truncatedTaskName}</h3>
             </span>
 
             {!toggleSmallCards && (
