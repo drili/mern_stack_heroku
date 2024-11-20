@@ -119,7 +119,7 @@ const CreateTask = () => {
 
     const fetchSprints = async () => {
         try {
-            const response = await axios.get(baseURL + "/sprints/fetch")
+            const response = await axios.get(baseURL + "/sprints/fetch?activeYear=" + user.active_year)
             setSprints(response.data)
         } catch (error) {
             console.error('Failed to fetch sprints', error);
