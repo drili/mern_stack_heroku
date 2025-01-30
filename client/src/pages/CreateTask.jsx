@@ -414,7 +414,7 @@ const CreateTask = () => {
                             >
                                 <option>Select customer</option>
                                 {customers
-                                    .filter((customer) => !customer.archived)
+                                    .filter((customer) => !customer.isArchived)
                                     .map((customer) => (
                                         <option value={customer._id} key={customer._id}>{customer.customerName}</option>
                                     ))
