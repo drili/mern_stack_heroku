@@ -131,9 +131,10 @@ router.route("/create").post(async (req, res) => {
     }
 
     try {
-        taskSprints.forEach(async (sprintId) => {
-            const task = new Task({
-                taskName,
+        const tasksSaved = await Promise.all(
+            taskSprints.map(async (sprintId) => {
+                const task = new Task({
+                    taskName,
                 taskTimeLow,
                 taskTimeHigh,
                 taskDescription,
@@ -147,6 +148,9 @@ router.route("/create").post(async (req, res) => {
                 estimatedTime,
                 taskType,
                 tenantId,
+                })
+
+                return await task.save()
             })
         )
 

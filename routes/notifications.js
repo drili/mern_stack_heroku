@@ -118,6 +118,7 @@ router.route("/create-notification-task").post(async (req, res) => {
                     const mentionedBy = task.createdBy
                     const taskName = task.taskName
                     const taskDeadline = task.taskDeadline
+                    const tenantId = task.tenantId
 
                     const newNotification = new NotificationChatTask({
                         userId: userId,
@@ -126,7 +127,8 @@ router.route("/create-notification-task").post(async (req, res) => {
                         notificationMessage: notificationMessage,
                         taskId: taskId,
                         taskCustomer: customerId,
-                        mentionedBy: mentionedBy
+                        mentionedBy: mentionedBy,
+                        tenantId: tenantId,
                     })
 
                     await newNotification.save()

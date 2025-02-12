@@ -218,7 +218,7 @@ const CreateTask = () => {
 
     const createTaskNotification = async (data) => {  
         try {
-            const response = await axios.post(baseURL + "/notifications/create-notification-task", { data })
+            const response = await axios.post(tenantBaseURL + "/notifications/create-notification-task", { data })
         } catch (error) {
             console.error('Failed to create task notification', error)
         }
