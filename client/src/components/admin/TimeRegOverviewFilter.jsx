@@ -12,8 +12,8 @@ const TimeRegOverviewFilter = ({ onSelectedSprint }) => {
 
     const { baseURL } = useContext(ConfigContext);
 
-    const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
+    const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
     const fetchSprints = async () => {
         try {
@@ -42,7 +42,7 @@ const TimeRegOverviewFilter = ({ onSelectedSprint }) => {
     }, [activeSprint])
 
     return (
-        <div id='TimeRegOverviewFilter' className='items-center py-4 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-row justify-between w-full outline-none focus:outline-none mb-10'>
+        <div id='TimeRegOverviewFilter' className='py-4 px-5 rounded-lg bg-[#f2f3f4] relative flex flex-col w-full outline-none focus:outline-none mb-10'>
             <section className='flex gap-4'>
 
             </section>
@@ -50,7 +50,7 @@ const TimeRegOverviewFilter = ({ onSelectedSprint }) => {
             <section className='flex justify-end gap-8'>
 
                 <div id='WorkflowFilters-activeSprint'>
-                    <span className='h-full flex flex-col justify-center bg-slate-500 text-white border rounded-md px-4 py-1 text-xs font-medium'>
+                    <span className={`${labelClasses} `}>
                         {currentSprint && currentSprint?.sprintMonth} {currentSprint && currentSprint?.sprintYear}
                     </span>
                 </div>

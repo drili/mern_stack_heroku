@@ -7,9 +7,11 @@ import PageHeading from '../components/PageHeading'
 import NotificationsFilter from '../components/notifications/NotificationsFilter'
 import userImageDefault from "../assets/profile-pics/default-image.jpg"
 import TaskModal from '../components/task/TaskModal'
+import WorkInProgressLabel from '../components/WorkInProgressLabel';
 
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext';
+import TaskCard from '../components/task/TaskCard';
 
 const formatDate = (dateString) => {
     const options = { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -24,14 +26,25 @@ const Notifications = () => {
     const [showModal, setShowModal] = useState(false)
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [visibleCount, setVisibleCount] = useState(10);
+    const [recentTasks, setRecentTasks] = useState(null)
 
     const { user, setHasUnreadNotifications, hasUnreadNotifications } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     // *** Server requests
+    const handleFetchRecentTasks = async (userId) => {
+        try {
+            const response = await axios.get(`${tenantBaseURL}/tasks/recent-tasks/${userId}`)
+            setRecentTasks(response.data)
+        } catch (error) {
+            console.error("Error fetching tasks by user", error)
+        }
+    }
+
     const handleUpdateNotificationIsRead = async (notificationId) => {
         try {
-            const response = await axios.put(baseURL + "/notifications/update-user-notification-read", {
+            const response = await axios.put(tenantBaseURL + "/notifications/update-user-notification-read", {
                 notificationId
             })
 
@@ -50,7 +63,7 @@ const Notifications = () => {
 
     const fetchNotifications = async (userId) => {
         try {
-            const response = await axios.post(baseURL + "/notifications/fetch-user-notifications", {
+            const response = await axios.post(tenantBaseURL + "/notifications/fetch-user-notifications", {
                 userId: userId
             })
 
@@ -62,7 +75,7 @@ const Notifications = () => {
 
     const fetchUnreadNotifications = async (userId) => {
         try {
-            const response = await axios.post(baseURL + "/notifications/fetch-unread-notifications", {
+            const response = await axios.post(tenantBaseURL + "/notifications/fetch-unread-notifications", {
                 userId: userId
             })
 
@@ -102,12 +115,13 @@ const Notifications = () => {
 
     useEffect(() => {
         fetchNotifications(user.id)
+        handleFetchRecentTasks(user.id)
     }, [user])
 
     const filteredNotifications = notificationsArray.filter(notification => {
         const notificationMessageMatch = notification.notificationMessage.toLowerCase().includes(searchTerm.toLowerCase())
-        const taskNameMatch = notification.taskId.taskName.toLowerCase().includes(searchTerm.toLowerCase())
-        const taskCustomerMatch = notification.taskCustomer.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+        const taskNameMatch = notification?.taskId?.taskName?.toLowerCase().includes(searchTerm.toLowerCase())
+        const taskCustomerMatch = notification?.taskCustomer?.customerName?.toLowerCase().includes(searchTerm.toLowerCase())
         return notificationMessageMatch || taskNameMatch || taskCustomerMatch
     })
     const visibleNotifications = filteredNotifications.slice(0, visibleCount);
@@ -147,25 +161,24 @@ const Notifications = () => {
 
                                     <span className='flex ml-5'>
                                         <img
-                                            src={`${baseURL}/uploads/${notification.mentionedBy.profileImage}`}
+                                            src={`${baseURL}/uploads/${notification?.mentionedBy?.profileImage}`}
                                             className="min-w-[50px] h-[50px] object-cover rounded-md"
                                         />
                                     </span>
 
                                     <span className='flex flex-1 flex-col overflow-hidden mr-5'>
                                         <h3 className='font-bold flex gap-2 items-center'>
-                                            {notification.mentionedBy.username}
+                                            {notification?.mentionedBy?.username}
                                             <Badge
                                                 className='py-[1px]'
                                                 style={{
-                                                    border: `1px solid ${notification.taskCustomer.customerColor}`,
-                                                    color: `${notification.taskCustomer.customerColor}`,
+                                                    border: `1px solid ${notification?.taskCustomer?.customerColor}`,
+                                                    color: `${notification?.taskCustomer?.customerColor}`,
                                                     fontSize: "10px"
                                                 }}
-                                            >{notification.taskCustomer.customerName}</Badge>
+                                            >{notification?.taskCustomer?.customerName}</Badge>
                                         </h3>
                                         <span className='flex justify-between gap-2 items-center'>
-
                                             {notification.notificationType == "task_create_tagging" ? (
                                                <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>
                                                 Added you in task "{notification.taskId.taskName}"</p>
@@ -175,13 +188,13 @@ const Notifications = () => {
 
                                             <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatDate(notification.createdAt)}</p>
                                         </span>
-                                        <p className='trunateCustom align'>{stripHtml(notification.notificationMessage)}</p>
+                                        <p className='trunateCustom align'>{stripHtml(notification?.notificationMessage)}</p>
                                     </span>
                                 </div>
                             ))}
 
                             {filteredNotifications.length > visibleCount && (
-                                <button onClick={() => setVisibleCount(visibleCount + 10)} className="mt-4">
+                                <button onClick={() => setVisibleCount(visibleCount + 10)} className="rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer mt-4 bg-white">
                                     Show More
                                 </button>
                             )}
@@ -190,8 +203,38 @@ const Notifications = () => {
 
                 </section>
 
-                <section id='NotificationsTasks' className='col-span-1'>
-                    <h2 className='font-bold mb-5'>Tasks you have recently been added to</h2>
+                <section id='NotificationsTasks' className='col-span-1 relative'>
+                    <div className='bg-stone-100 w-full p-[2rem] md:p-10 rounded-extra-large'>
+                        <span>
+                            <h2 className='text-lg md:text-lg text-black font-bold mb-3'>Tasks you recently have been added to</h2>
+                            <hr className='mb-5' />
+                        </span>
+
+                        <span id='tasksList' className='flex flex-col gap-2'>
+                            {recentTasks && recentTasks.map((task) => (
+                                <span
+                                    key={task._id}
+                                    onClick={() => handleTaskModal(task._id)}
+                                >
+                                    <TaskCard
+                                        key={task._id}
+                                        taskId={task._id}
+                                        taskName={task.taskName}
+                                        taskDescription={task.taskDescription}
+                                        taskPersons={task.taskPersons}
+                                        customerName={task.taskCustomer.customerName}
+                                        customerColor={task.taskCustomer.customerColor}
+                                        taskLow={task.taskTimeLow}
+                                        taskHigh={task.taskTimeHigh}
+                                        taskSprintName={task.taskSprints[0].sprintName}
+                                        taskType={task.taskType}
+                                        estimatedTime={task?.estimatedTime}
+                                        taskDeadline={task?.taskDeadline}
+                                    ></TaskCard>
+                                </span>
+                            ))}
+                        </span>
+                    </div>
                 </section>
             </div>
 

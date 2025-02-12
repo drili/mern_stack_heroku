@@ -1,6 +1,10 @@
 const mongoose = require("mongoose")
 
 const customerSchema = new mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     customerName: {
         type: String,
         required: true
@@ -22,4 +26,7 @@ const customerSchema = new mongoose.Schema({
 
 const Customer = mongoose.model("Customer", customerSchema)
 
-module.exports = Customer
+module.exports = {
+    Customer: Customer,
+    CustomerSchema: customerSchema
+};

@@ -20,6 +20,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
     const [showModal, setShowModal] = useState(false)
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const handleTaskModal = (taskId) => {
         setShowModal(true)
@@ -56,7 +57,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
 
     const fetchSprintData = async (activeSprintArray) => {
         try {
-            const response = await axios.get(`${baseURL}/tasks/fetch-by-user-sprint/${userObject._id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}&time_reg=1`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user-sprint/${userObject._id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}&time_reg=1`)
 
             setSprintData(response.data)
 
@@ -124,29 +125,29 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
         <>
             <Accordion collapseAll >
                 <Accordion.Panel>
-                    <Accordion.Title id={`taskId_${userObject._id}`} className={user.id === userObject._id ? "bg-rose-50 rounded-none" : ""}>
+                    <Accordion.Title id={`taskId_${userObject._id}`} className={user.id === userObject._id ? "bg-pink-50 rounded-t rounded-b-none relative" : "relative"}>
                         <span className='flex gap-5 flex-col items-start md:flex-row md:items-center'>
                             <div className='flex gap-5 items-center'>
                                 <img
-                                    className='w-[60px] h-[60px] rounded-full object-cover'
+                                    className='w-[60px] h-[60px] rounded object-cover'
                                     src={`${baseURL}/uploads/${userObject.profileImage}`}
                                 />
                                 <span>
-                                    <span className='flex gap-3'>
-                                        <h2 className='text-lg font-bold text-gray-900'>{userObject.username}</h2>
-                                        <label className='bg-rose-100 text-rose-800 rounded-md py-1 px-2 text-xs font-bold h-fit'>{userObject.userTitle}</label>
+                                    <span className='flex gap-3 items-center'>
+                                        <h2 className='text-lg font-extrabold text-gray-900'>{userObject.username}</h2>
+                                        <span className='bg-teal-200 rounded py-1 px-2 text-xs font-bold'>{userObject.userTitle}</span>
                                     </span>
-                                    <h2 className='text-sm font-light text-zinc-500'>{userObject.email}</h2>
+                                    <h2 className='text-sm text-neutral-500'>{userObject.email}</h2>
                                 </span>
                             </div>
 
-                            <div className='relative right-0 md:absolute md:right-[100px]'>
+                            <div className='relative right-0 md:absolute md:right-[100px] top-[5px]'>
                                 {accumulatedValues[userObject._id] ? (
                                     <div id="taskInfoLabels" className='flex gap-4'>
                                         <span className='text-center'>
-                                            <label htmlFor="" className='text-sm'>Low</label>
+                                            <label htmlFor="" className='text-sm text-black'>Low</label>
                                             {accumulatedValues[userObject._id] ? (
-                                                <p className='bg-rose-900 text-white rounded-md text-sm py-2 px-2 min-w-[50px]'>
+                                                <p className='bg-rose-900 text-white rounded text-base py-2 px-4 min-w-[50px] font-extrabold'>
                                                     {(accumulatedValues[userObject._id].low).toFixed(2)}
                                                 </p>
                                             ) : (
@@ -155,9 +156,9 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                         </span>
 
                                         <span className='text-center'>
-                                            <label htmlFor="" className='text-sm'>High</label>
+                                            <label htmlFor="" className='text-sm text-black'>High</label>
                                             {accumulatedValues[userObject._id] ? (
-                                                <p className='bg-rose-900 text-white rounded-md text-sm py-2 px-2 min-w-[50px]'>
+                                                <p className='bg-rose-900 text-white rounded text-base py-2 px-4 min-w-[50px] font-extrabold'>
                                                     {(accumulatedValues[userObject._id].high).toFixed(2)}
                                                 </p>
                                             ) : (
@@ -166,9 +167,9 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                         </span>
 
                                         <span className='text-center'>
-                                            <label htmlFor="" className='text-sm'>Median</label>
+                                            <label htmlFor="" className='text-sm text-black'>Median</label>
                                             {accumulatedValues[userObject._id] ? (
-                                                <p className='bg-rose-900 text-white rounded-md text-sm py-2 px-2 min-w-[50px]'>
+                                                <p className='bg-rose-900 text-white rounded text-base py-2 px-4 min-w-[50px] font-extrabold'>
                                                     {((accumulatedValues[userObject._id].low + accumulatedValues[userObject._id].high) / 2).toFixed(2)}
                                                 </p>
                                             ) : (
@@ -187,25 +188,25 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                             <div className='overflow-x-auto'>
                                 <Table className='relative min-w-full'>
                                     <Table.Head>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Task Name
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Customer
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Low
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             High
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Percent Allocation
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Time Registered
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-center'>
+                                        <Table.HeadCell className='text-center text-black'>
                                             Done
                                         </Table.HeadCell>
                                         {/* <Table.HeadCell className='text-left'>
@@ -218,7 +219,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                                 <Table.Cell className="flex items-center gap-2 whitespace-nowrap font-medium text-gray-900 ">
                                                     <p className='w-[250px] text-xs whitespace-nowrap overflow-hidden text-ellipsis'>{data.taskName}</p>
                                                     {data.taskType === "quickTask" ? (
-                                                        <BsFillLightningChargeFill className='text-amber-500' />
+                                                        <BsFillLightningChargeFill className='text-teal-500' />
                                                     ) : null}
                                                 </Table.Cell>
                                                 <Table.Cell>
@@ -239,7 +240,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                                     }
                                                 </Table.Cell>
                                                 <Table.Cell>
-                                                    <p className='text-xs font-extrabold underline'>{data.timeRegistrations.reduce((totalTime, registration) => totalTime + registration.timeRegistered, 0)}</p>
+                                                    <p className='text-xs font-extrabold underline text-black'>{data.timeRegistrations.reduce((totalTime, registration) => totalTime + registration.timeRegistered, 0)}</p>
                                                 </Table.Cell>
 
                                                 <Table.Cell>
@@ -259,10 +260,10 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                                 </Table.Cell> */}
                                                 <Table.Cell>
                                                     <a
-                                                        className="font-medium cursor-pointer text-slate-500 hover:underline "
+                                                        className="font-medium cursor-pointer text-slate-800 hover:underline "
                                                         onClick={() => handleTaskModal(data._id)}
                                                     >
-                                                        <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-xs'>
+                                                        <p className='border border-zinc-400 rounded text-center px-2 py-1 font-bold text-xs'>
                                                             Open
                                                         </p>
                                                     </a>

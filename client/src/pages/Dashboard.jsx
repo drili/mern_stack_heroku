@@ -30,25 +30,26 @@ const Dashboard = () => {
     const [timeRegisteredAll, setTimeRegisteredAll] = useState([])
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const fetchTimeRegistrationsBySprint = async (sprintId) => {
         try {
             if(sprintId) {
-                const response = await axios.get(`${baseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}/`)
-
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}`)
+                console.log({response})
                 if (response.status === 200) {
                     setTimeRegisteredAll(response.data)
                 }
             }
         } catch (error) {
-            
+            console.error(error)
         }
     }
 
     const fetchTimeRegistrations = async (sprintId) => {
         try {
             if (sprintId) {
-                const response = await axios.get(`${baseURL}/time-registrations/time-registered-user/${sprintId}/${user.id}`)
+                const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registered-user/${sprintId}/${user.id}/${user.tenant_id}`)
                 
                 if (response.status == 200) {
                     setTimeRegistered(response.data)
@@ -73,7 +74,7 @@ const Dashboard = () => {
     const fetchTasksByUserAndSprint = async (activeSprintArray) => {
         try {
             if (activeSprintArray && activeSprintArray.sprintMonth) {
-                const response = await axios.get(`${baseURL}/tasks/fetch-by-user-sprint/${user.id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}`)
+                const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user-sprint/${user.id}?month=${activeSprintArray.sprintMonth}&year=${activeSprintArray.sprintYear}&tenantId=${user.tenant_id}`)
 
                 const totalAllocatedTimeLow = response.data.reduce((accumulator, time) => {
                     const userTaskPerson = time.taskPersons.find(
@@ -139,7 +140,7 @@ const Dashboard = () => {
             <PageHeading 
                 heading="Dashboard"
                 subHeading={`Welcome to your user dashboard`}
-                suffix="A quick overview of your data"
+                suffix="A quick overview of your data."
             />
 
             <DashboardFilters
@@ -160,10 +161,10 @@ const Dashboard = () => {
 
             <section id="timeRegsWeekly" className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-2">
                 <span>
-                    <Card className="h-full bg-rose-50">
+                    <Card className="h-full border-gray-200 shadow-none bg-stone-100 border-none">
                         <div>
                             <span className="flex flex-col gap-2 mb-5">
-                                <h3 className="font-bold">Your time registrations this week</h3>
+                                <h3 className="text-black text-lg font-medium">Your time registrations this week</h3>
                             </span>
 
                             <span className="flex flex-col gap-2">
@@ -176,7 +177,7 @@ const Dashboard = () => {
                 </span>
 
                 <span>
-                    <Card className="h-full">
+                    <Card className="h-full shadow-none border-gray-200">
                         <DashboardActivityCard data={timeRegistered} />
                     </Card>
                 </span>

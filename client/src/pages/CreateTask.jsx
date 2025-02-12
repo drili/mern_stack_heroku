@@ -3,19 +3,36 @@ import PageHeading from '../components/PageHeading'
 import axios from "axios"
 import Select from "react-select"
 import toast, { Toaster } from 'react-hot-toast'
+import { Modal } from "flowbite-react";
 
 import { BiSolidTimeFive } from "react-icons/bi"
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { FaDivide } from "react-icons/fa";
+import { AiFillPlusCircle } from "react-icons/ai"
 
 import { UserContext } from '../context/UserContext'
 import TaskModal from '../components/task/TaskModal'
 import TaskCard from '../components/task/TaskCard'
 import getCurrentSprint from '../functions/getCurrentSprint'
 import { ConfigContext } from '../context/ConfigContext'
+import ModalCreateLabel from '../components/modals/ModalCreateLabel'
+import ModalCreateVertical from '../components/modals/ModalCreateVertical'
 
 const CreateTask = () => {
+    const [customers, setCustomers] = useState([])
+    const [sprints, setSprints] = useState([])
+    const [labels, setLabels] = useState([])
+    const [verticals, setVerticals] = useState([])
+    const [activeUsers, setActiveUsers] = useState([])
+    const { user } = useContext(UserContext)
+    const [tasks, setTasks] = useState([])
+    const [selectedSprints, setSelectedSprints] = useState([]);
+    const [displayCount, setDisplayCount] = useState(5)
+    const [toggleViewState, setToggleViewState] = useState("timedTask")
+    const [toggleShowAdjustPercentages, setToggleShowAdjustPercentages] = useState(false)
+    const [percentageAllocations, setPercentageAllocations] = useState([]);
+
     const [taskData, setTaskData] = useState({
         taskName: '',
         taskTimeLow: '',
@@ -30,27 +47,21 @@ const CreateTask = () => {
         taskDeadline: '',
         estimatedTime: 0,
         taskType: "timedTask",
+        tenantId: user.tenant_id,
     });
-    const [customers, setCustomers] = useState([])
-    const [sprints, setSprints] = useState([])
-    const [labels, setLabels] = useState([])
-    const [verticals, setVerticals] = useState([])
-    const [activeUsers, setActiveUsers] = useState([])
-    const { user } = useContext(UserContext)
-    const [tasks, setTasks] = useState([])
-    const [selectedSprints, setSelectedSprints] = useState([]);
-    const [displayCount, setDisplayCount] = useState(5)
-    const [toggleViewState, setToggleViewState] = useState("timedTask")
-    const [toggleShowAdjustPercentages, setToggleShowAdjustPercentages] = useState(false)
-    const [percentageAllocations, setPercentageAllocations] = useState([]);
 
     const activeSprint = getCurrentSprint()
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
-    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
+    const inputClasses2 = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-1"
+    const labelClasses = "text-sm font-medium mb-2 block "
     const imageSrc = baseURL + "/uploads/"
+
+    const [openFlowbiteModal_label, setOpenFlowbiteModal_label] = useState(false)
+    const [openFlowbiteModal_vertical, setOpenFlowbiteModal_vertical] = useState(false)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -91,7 +102,7 @@ const CreateTask = () => {
 
     const fetchTasks = async () => {
         try {
-            const response = await axios.get(`${baseURL}/tasks/fetch-by-user/${user.id}`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user/${user.id}?tenantId=${user.tenant_id}`)
             setTasks(response.data)
 
         } catch (error) {
@@ -101,7 +112,7 @@ const CreateTask = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(baseURL + "/customers/fetch")
+            const response = await axios.get(`${tenantBaseURL}/customers/fetch?tenantId=${user.tenant_id}`)
             setCustomers(response.data)
         } catch (error) {
             console.error('Failed to fetch customers', error);
@@ -110,7 +121,8 @@ const CreateTask = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(baseURL + "/users/fetch-active-users")
+            const response = await axios.get(`${tenantBaseURL}/users/fetch-active-users?tenantId=${user.tenant_id}`)
+
             setActiveUsers(response.data)
         } catch (error) {
             console.error('Failed to fetch active users', error);
@@ -128,7 +140,8 @@ const CreateTask = () => {
 
     const fetchLabels = async () => {
         try {
-            const response = await axios.get(baseURL + "/labels/fetch-labels")
+            const response = await axios.get(`${tenantBaseURL}/labels/fetch-labels?tenantId=${user.tenant_id}`);
+
             const labelsData = response.data;
             const defaultLabelId = labelsData.find(label => label.labelName === "Ingen label")?._id;
 
@@ -144,7 +157,8 @@ const CreateTask = () => {
 
     const fetchVerticals = async () => {
         try {
-            const response = await axios.get(baseURL + "/verticals/fetch-verticals")
+            const response = await axios.get(`${tenantBaseURL}/verticals/fetch-verticals?tenantId=${user.tenant_id}`);
+
             setVerticals(response.data)
 
             if (response.data.length > 0) {
@@ -223,9 +237,9 @@ const CreateTask = () => {
             }
         }
 
-
         try {
-            const response = await axios.post(baseURL + "/tasks/create", finalTaskData)
+            const response = await axios.post(`${baseURL}/${user.tenant_id}/tasks/create?tenantId=${user.tenant_id}`, finalTaskData)
+
             setTasks([])
 
             if (response.status === 200) {
@@ -290,7 +304,7 @@ const CreateTask = () => {
             )
         );
     }
-    
+
     const updateTaskDataWithNewPercentages = () => {
         return percentageAllocations
     }
@@ -307,34 +321,38 @@ const CreateTask = () => {
             <PageHeading
                 heading="Create Task"
                 subHeading={`Create a new task.`}
-                suffix="Complete the form and submit the data"
+                suffix="Complete the form and submit the data."
             />
 
             <section className='grid grid-cols-5 gap-10 mb-10'>
-                <span className='shadow-md p-10 rounded-lg mb-10 col-span-3'>
+                <span className='py-10 px-10 flex rounded-extra-large border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none col-span-3'>
                     <form onSubmit={handleSubmit}>
                         <span>
                             <section className='flex w-full justify-between'>
                                 <div>
-                                    <h2 className='font-bold mb-0'>Create new <span className={`${toggleViewState === "timedTask" ? "text-slate-500" : "text-amber-500"}`}>
+                                    <h2 className='text-lg md:text-2xl text-black font-bold'>Create new <span className={`${toggleViewState === "timedTask" ? "text-pink-700" : "text-teal-200"}`}>
                                         {toggleViewState === "timedTask" ? "timed" : "quick"}</span> task
                                     </h2>
                                 </div>
 
                                 <div className='flex items-start pb-0 rounded-t'>
                                     <button
-                                        className={`${toggleViewState === "timedTask" ? "bg-slate-500 text-white font-bold border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100 flex gap-2 items-center`}
+                                        className={`${toggleViewState === "timedTask" ?
+                                            "bg-pink-700 text-white" : ""} 
+                                            rounded-none flex gap-2 items-center focus:outline-none border-none`}
                                         onClick={() => handleViewState("timedTask")}
                                         type='button'
                                     >
-                                        Timed Task <AiOutlineClockCircle />
+                                        Timed task <AiOutlineClockCircle />
                                     </button>
                                     <button
-                                        className={`${toggleViewState === "quickTask" ? "bg-amber-500 text-white font-bold border-amber-200" : ""} rounded-none border-amber-100 focus:outline-none hover:border-amber-100 flex gap-2 items-center`}
+                                        className={`${toggleViewState === "quickTask" ?
+                                            "bg-teal-200 text-white border-none" : ""} 
+                                            rounded-none flex gap-2 items-center focus:outline-none border-none`}
                                         onClick={() => handleViewState("quickTask")}
                                         type='button'
                                     >
-                                        Quick Task <BsFillLightningChargeFill />
+                                        Quick task <BsFillLightningChargeFill />
                                     </button>
                                 </div>
                             </section>
@@ -343,7 +361,7 @@ const CreateTask = () => {
                         </span>
 
                         <div>
-                            <label htmlFor="taskName" className={labelClasses}>Task Name</label>
+                            <label htmlFor="taskName" className={labelClasses}>Task name</label>
                             <input type="text" name="taskName" value={taskData.taskName} onChange={handleFormChange} placeholder="Task Name" required
                                 className={inputClasses} />
                         </div>
@@ -351,12 +369,12 @@ const CreateTask = () => {
                         {toggleViewState === "timedTask" ? (
                             <span className='grid grid-cols-2 gap-4'>
                                 <div>
-                                    <label className={labelClasses} htmlFor="taskTimeLow">Task Time Low</label>
+                                    <label className={labelClasses} htmlFor="taskTimeLow">Task time low</label>
                                     <input type="number" name="taskTimeLow" value={taskData.taskTimeLow} onChange={handleFormChange} placeholder="Task Time Low" required
                                         className={inputClasses} />
                                 </div>
                                 <div>
-                                    <label className={labelClasses} htmlFor="taskTimeHigh">Task Time High</label>
+                                    <label className={labelClasses} htmlFor="taskTimeHigh">Task time high</label>
                                     <input type="number" name="taskTimeHigh" value={taskData.taskTimeHigh} onChange={handleFormChange} placeholder="Task Time High" required
                                         className={inputClasses} />
                                 </div>
@@ -378,7 +396,7 @@ const CreateTask = () => {
                                     />
                                 </span>
                                 <div>
-                                    <label className={labelClasses} htmlFor="estimatedTime">Estimated Time <span className='text-slate-300'>optional</span></label>
+                                    <label className={labelClasses} htmlFor="estimatedTime">Estimated time <span className='text-slate-300'>optional</span></label>
                                     <input type="number" name="estimatedTime" value={taskData.estimatedTime} onChange={handleFormChange} placeholder="Estimated Task Time"
                                         className={inputClasses} />
                                 </div>
@@ -390,12 +408,12 @@ const CreateTask = () => {
                         )}
 
                         <div>
-                            <label className={labelClasses} htmlFor="taskDescription">Task Description</label>
+                            <label className={labelClasses} htmlFor="taskDescription">Task description (optional)</label>
                             <textarea required={false} name="taskDescription" value={taskData.taskDescription} onChange={handleFormChange} placeholder="Task Description"
-                                className={inputClasses} />
+                                className={`${inputClasses} py-3 min-h-[100px]`} />
                         </div>
                         <div>
-                            <label className={labelClasses} htmlFor="taskCustomer">Task Customer</label>
+                            <label className={labelClasses} htmlFor="taskCustomer">Task customer</label>
                             <select
                                 name="taskCustomer"
                                 onChange={handleFormChange}
@@ -403,9 +421,9 @@ const CreateTask = () => {
                                 required
                                 className={inputClasses}
                             >
-                                <option>Select Customer</option>
+                                <option>Select customer</option>
                                 {customers
-                                    .filter((customer) => !customer.archived)
+                                    .filter((customer) => !customer.isArchived)
                                     .map((customer) => (
                                         <option value={customer._id} key={customer._id}>{customer.customerName}</option>
                                     ))
@@ -414,15 +432,15 @@ const CreateTask = () => {
                         </div>
                         <span className='grid grid-cols-2 gap-4'>
                             <div>
-                                <label className={labelClasses} htmlFor="taskLabel">Task Label</label>
+                                <label className={labelClasses} htmlFor="taskLabel">Task label</label>
                                 <select
                                     onChange={handleFormChange}
                                     name="taskLabel"
-                                    placeholder='Task Label'
+                                    placeholder='Task label'
                                     required
                                     value={taskData.taskLabel}
-                                    className={inputClasses}>
-                                    <option disabled>Select Label</option>
+                                    className={`${inputClasses2}`}>
+                                    <option disabled>Select label</option>
                                     {labels
                                         .map((label) => (
                                             <option
@@ -432,27 +450,37 @@ const CreateTask = () => {
                                         ))
                                     }
                                 </select>
+                                {user?.user_role == "1" ? (
+                                    <p className='text-sm flex items-center gap-1 mb-4 text-teal-500 cursor-pointer' onClick={() => setOpenFlowbiteModal_label(true)}>Create new label <AiFillPlusCircle size={15} /></p>
+                                ) : (
+                                    <span className='mb-4 block'></span>
+                                )}
                             </div>
                             <div>
-                                <label className={labelClasses} htmlFor="taskVertical">Task Vertical</label>
+                                <label className={labelClasses} htmlFor="taskVertical">Task vertical</label>
                                 <select
                                     onChange={handleFormChange}
                                     name="taskVertical"
-                                    placeholder='Task Vertical'
+                                    placeholder='Task vertical'
                                     required
-                                    className={inputClasses}>
-                                    <option disabled>Select Vertical</option>
+                                    className={inputClasses2}>
+                                    <option disabled>Select vertical</option>
                                     {verticals
                                         .map((vertical) => (
                                             <option value={vertical._id} key={vertical._id}>{vertical.verticalName}</option>
                                         ))
                                     }
                                 </select>
+                                {user?.user_role == "1" ? (
+                                    <p className='text-sm flex items-center gap-1 mb-4 text-teal-500 cursor-pointer' onClick={() => setOpenFlowbiteModal_vertical(true)}>Create new vertical <AiFillPlusCircle size={15} /></p>
+                                ) : (
+                                    <span className='mb-4 block'></span>
+                                )}
                             </div>
                         </span>
 
                         <div className='mt-0'>
-                            <label className={labelClasses} htmlFor="taskPersons">Task Persons</label>
+                            <label className={labelClasses} htmlFor="taskPersons">Task persons</label>
                             <Select
                                 name="taskPersons"
                                 onChange={handleFormChangeUsers}
@@ -497,7 +525,7 @@ const CreateTask = () => {
                         </div>
 
                         <div className='mt-4'>
-                            <label className={labelClasses} htmlFor="taskSprints">Task Month</label>
+                            <label className={labelClasses} htmlFor="taskSprints">Task month</label>
                             {activeSprint && selectedSprints && sprints && (
                                 <Select
                                     name="taskSprints"
@@ -515,18 +543,18 @@ const CreateTask = () => {
 
                         {/* <p>Current sprint: {activeSprint.sprintId}</p> */}
 
-                        <button type="submit" className='button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Create Task</button>
+                        <button type="submit" className='bg-black text-white py-3 rounded mt-10 w-full'>Create Task</button>
                     </form>
                 </span>
 
                 <span className='col-span-2'>
-                    <div className='shadow-md p-10 rounded-lg mb-10 bg-slate-50'>
+                    <div className='bg-stone-100 w-full p-[2rem] md:p-10 rounded-extra-large'>
                         <span>
-                            <h2 className='font-bold mb-5'>Your Recent Created Tasks</h2>
+                            <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Your Recent Created Tasks</h2>
                             <hr className='mb-5' />
                         </span>
 
-                        <span id='tasksList'>
+                        <span id='tasksList' className='flex flex-col gap-2'>
                             {tasks.slice(0, displayCount).map((task) => (
                                 <span
                                     key={task._id}
@@ -554,13 +582,28 @@ const CreateTask = () => {
                         <span>
                             {displayCount < tasks.length && (
                                 <button onClick={handleLoadMore}
-                                    className='bg-white text-slate-900 mt-5 h-fit whitespace-nowrap button border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>
-                                    Load More Tasks
+                                    className='rounded w-full mt-5 text-sm min-h-[45px] border border-zinc-400 cursor-pointer  bg-pink-700 border-none text-white'>
+                                    Load more tasks
                                 </button>
                             )}
                         </span>
                     </div>
                 </span>
+
+                <ModalCreateLabel 
+                    openFlowbiteModal={openFlowbiteModal_label}
+                    setOpenFlowbiteModal={setOpenFlowbiteModal_label}
+                    tenantBaseURL={tenantBaseURL}
+                    fetchVerticals={fetchVerticals}
+                    fetchLabels={fetchLabels}
+                />
+                <ModalCreateVertical 
+                    openFlowbiteModal={openFlowbiteModal_vertical}
+                    setOpenFlowbiteModal={setOpenFlowbiteModal_vertical}
+                    tenantBaseURL={tenantBaseURL}
+                    fetchVerticals={fetchVerticals}
+                    fetchLabels={fetchLabels}
+                />
             </section>
 
             {selectedTaskId && (
@@ -572,7 +615,6 @@ const CreateTask = () => {
                     fetchTasks={fetchTasks}
                 />
             )}
-
         </div>
     )
 }

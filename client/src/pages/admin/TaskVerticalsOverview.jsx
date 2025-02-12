@@ -7,6 +7,7 @@ import PageHeading from '../../components/PageHeading'
 import TimeRegVerticalsOverviewFilter from '../../components/admin/TimeRegVerticalsOverviewFilter'
 import getCurrentSprint from '../../functions/getCurrentSprint'
 import { ConfigContext } from '../../context/ConfigContext'
+import { UserContext } from '../../context/UserContext'
 
 const TaskVerticalsOverview = () => {
     const [selectedSprint, setSelectedSprint] = useState("")
@@ -14,7 +15,9 @@ const TaskVerticalsOverview = () => {
     const [timeRegistrations, setTimeRegistrations] = useState([])
     const activeSprint = getCurrentSprint()
 
+    const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const handleSprintChange = (selectedValue, selectedSprint) => {
         setSelectedSprint(selectedSprint)
@@ -29,8 +32,9 @@ const TaskVerticalsOverview = () => {
         }
 
         try {
-            const response = await axios.get(`${baseURL}/time-registrations/time-registrations-verticals-aggregated/${sprintId}`)
+            const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registrations-verticals-aggregated/${sprintId}`)
 
+            console.log(response.data)
             if (response.status == 200) {
                 setTimeout(() => {
                     setTimeRegistrations(response.data)
@@ -52,11 +56,8 @@ const TaskVerticalsOverview = () => {
 
     return (
         <div id='TaskVerticalsOverviewPage'>
-            <PageHeading
-                heading="Task Verticals Overview"
-                subHeading={`Overview of task time registration pr. vertical`}
-                suffix=""
-            />
+            <h2 className='text-black text-xl font-bold mb-2'>Tasks verticals overview</h2>
+            <p className='text-neutral-500 text-sm mb-10'>Overview of task time registration pr. vertical</p>
 
             <TimeRegVerticalsOverviewFilter
                 onSelectedSprint={handleSprintChange}

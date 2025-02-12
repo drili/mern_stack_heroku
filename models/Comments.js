@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const commentSchema = new mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     taskId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -26,4 +30,7 @@ const commentSchema = new mongoose.Schema({
 
 const Comment = mongoose.model("Comment", commentSchema)
 
-module.exports = Comment
+module.exports = {
+    Comment: Comment,
+    CommentSchema: commentSchema
+};

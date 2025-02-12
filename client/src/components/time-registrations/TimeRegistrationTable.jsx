@@ -3,14 +3,15 @@ import { Table } from 'flowbite-react'
 import axios from 'axios'
 import { ConfigContext } from '../../context/ConfigContext'
 
-const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId }) => {
+const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId, tenantId }) => {
     const [editedTimes, setEditedTimes] = useState({})
     const [eventObjState, setEventObjState] = useState(eventObj)
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${tenantId}`
 
-    const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
+    const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
     const handleTimeChange = (eventId, time) => {
         setEditedTimes(prevTimes => ({
@@ -24,9 +25,8 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
         const editedTime = editedTimes[eventId] || event.timeRegistered
         
         if (eventId && editedTime && editedTime > 0 && editedTime != "") {
-            console.log({eventId, editedTime});
             try {
-                const response = await axios.post(`${baseURL}/time-registrations/time-registration-update`, { eventId, editedTime })
+                const response = await axios.post(`${tenantBaseURL}/time-registrations/time-registration-update`, { eventId, editedTime })
 
                 if (response.status === 200) {
                     toast('Time registration updated successfully', {
@@ -49,7 +49,7 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
     const handleDeleteTime = async (eventId) => {
         if (eventId) {
             try {
-                const response = await axios.delete(`${baseURL}/time-registrations/time-registration-delete/${eventId}`)
+                const response = await axios.delete(`${tenantBaseURL}/time-registrations/time-registration-delete/${eventId}`)
 
                 if (response.status === 200) {
                     toast('Time registration has been deleted', {
@@ -81,22 +81,22 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
         <div>
             <Table className='relative'>
                 <Table.Head>
-                    <Table.HeadCell className='text-left'>
+                    <Table.HeadCell className='text-left text-black'>
                         Task Name
                     </Table.HeadCell>
-                    <Table.HeadCell className='text-left p-0'>
-                        Task Customer
+                    <Table.HeadCell className='text-left text-black p-0'>
+                        Customer
                     </Table.HeadCell>
-                    {/* <Table.HeadCell className='text-left'>
+                    {/* <Table.HeadCell className='text-left text-black'>
                         Client
                     </Table.HeadCell> */}
-                    <Table.HeadCell className='text-left'>
+                    <Table.HeadCell className='text-left text-black'>
                         Time
                     </Table.HeadCell>
-                    <Table.HeadCell className='text-left'>
+                    <Table.HeadCell className='text-left text-black'>
                         Edit
                     </Table.HeadCell>
-                    <Table.HeadCell className='text-left'>
+                    <Table.HeadCell className='text-left text-black'>
                         Delete
                     </Table.HeadCell>
                 </Table.Head>
@@ -105,19 +105,19 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
                     {eventObjState &&
                         eventObjState.map(event => (
                             <Table.Row className="bg-white  " key={event._id}>
-                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-[10px] leading-3">
+                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-sm leading-3">
                                     {event.taskId ? event.taskId.taskName : "Off- & Sicktime"}
                                     {/* {event.taskId ? event.taskId.taskName : (event.registrationType === "offtime" ? "offtime" : "sicktime")} */}
                                 </Table.Cell>
                                 
-                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-[10px] leading-3 p-0">
+                                <Table.Cell className="whitespace-break-spaces font-medium text-gray-900  text-s leading-3 p-0">
                                     {event.taskId?.taskCustomer?.customerName}
                                 </Table.Cell>
 
-                                <Table.Cell className='whitespace-break-spaces text-xs max-w-[120px]'>
+                                <Table.Cell className='whitespace-break-spaces text-xs'>
                                     <input
                                         step="0.25"
-                                        className={inputClasses}
+                                        className="h-[30px] border rounded focus:border-pink-700 px-3 py-0 max-w-[100px] text-sm"
                                         type="number"
                                         value={editedTimes[event._id] !== undefined ? editedTimes[event._id] : event.timeRegistered}
                                         onChange={(e) => handleTimeChange(event._id, e.target.value)}
@@ -126,20 +126,20 @@ const TimeRegistrationTable = ({ eventObj, toast, fetchUserRegistrations, userId
 
                                 <Table.Cell className='whitespace-break-spaces text-[10px]'>
                                     <a
-                                        className="font-medium text-cyan-600 hover:underline  text-[10px]"
+                                        className="rounded text-slate-800 text-sm border border-none cursor-pointer"
                                         onClick={() => handleSaveTime(event)}
                                     >
-                                    <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-[10px]'>
+                                    <p className='border border-zinc-400 rounded-lg text-center px-2 py-1 font-bold text-[10px]'>
                                         Save
                                     </p>
                                     </a>
                                 </Table.Cell>
                                 <Table.Cell className='whitespace-break-spaces text-[10px]'>
                                     <a
-                                        className="font-medium text-rose-950 hover:underline  text-[10px]"
+                                        className="rounded text-red-500 text-sm border border-none cursor-pointer flex"
                                         onClick={() => handleDeleteTime(event._id)}
                                     >
-                                    <p className='border border-gray-300 rounded-lg text-center px-2 py-1 font-bold text-[10px]'>
+                                    <p className='border border-zinc-400 rounded-lg text-center px-2 py-1 font-bold text-[10px]'>
                                         Delete
                                     </p>
                                     </a>

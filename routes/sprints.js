@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const Sprints = require("../models/Sprints")
-const SprintYear = require("../models/SprintYear")
+const {Sprints} = require("../models/Sprints")
+const {SprintYear} = require("../models/SprintYear")
 
 router.route("/fetch-sprint-years").get(async (req, res) => {
     try {

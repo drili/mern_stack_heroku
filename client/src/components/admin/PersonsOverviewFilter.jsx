@@ -5,12 +5,12 @@ import { AiFillPlusCircle } from "react-icons/ai"
 import { Link } from 'react-router-dom'
 
 
-const PersonsOverviewFilter = () => {
+const PersonsOverviewFilter = ({ userObject }) => {
     const [sprints, setSprints] = useState([])
     const [currentSprint, setCurrentSprint] = useState([])
 
-    const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
+    const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
 
     useEffect(() => {
 
@@ -21,9 +21,9 @@ const PersonsOverviewFilter = () => {
             <section className='flex gap-4'>
             <div id="CustomersFilter-links">
                     <span className='h-full flex flex-row items-center gap-2 justify-center text-xs font-medium'>
-                        <Link to="/admin/register">
-                            <button type="submit" className='border border-rose-500 h-fit whitespace-nowrap button text-black hover:bg-rose-800 focus:ring-4 focus:outline-none hover:text-white focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Add New User</button>
-                        </Link>
+                        <a href='#loginFormSection'>
+                            <button type="submit" className={`${inputClasses} bg-pink-700 text-white border-none`}>Add New User</button>
+                        </a>
 
                         <AiFillPlusCircle size={20} color='' />
                     </span>
