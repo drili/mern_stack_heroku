@@ -80,6 +80,7 @@ const UploadImageForm = () => {
                     <h3 className='text-black text-lg font-medium text-left mt-5'>User stats</h3>
                 </div>
 
+
                 <div className='grid grid-cols-12 gap-1 mt-5'>
                     <div className="col-span-6 bg-white rounded py-4 px-2">
                         <h3 className='mb-2 mt-0 text-lg text-slate-800 font-bold'>Hours registered</h3>
@@ -103,8 +104,9 @@ const UploadImageForm = () => {
             </section>
 
             <form onSubmit={handleFormSubmit} className='mt-10 opacity-0 hidden' disabled>
+
                 <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 ">Update Image</label>
-                <input type="file" accept="image/*" onChange={handleImageUpload} />
+                <input disabled type="file" accept="image/*" onChange={handleImageUpload} />
                 <input
                     required
                     className='my-button button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '

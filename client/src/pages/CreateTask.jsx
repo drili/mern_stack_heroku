@@ -131,7 +131,7 @@ const CreateTask = () => {
 
     const fetchSprints = async () => {
         try {
-            const response = await axios.get(baseURL + "/sprints/fetch")
+            const response = await axios.get(baseURL + "/sprints/fetch?activeYear=" + user.active_year)
             setSprints(response.data)
         } catch (error) {
             console.error('Failed to fetch sprints', error);
@@ -216,6 +216,14 @@ const CreateTask = () => {
         }))
     }
 
+    const createTaskNotification = async (data) => {  
+        try {
+            const response = await axios.post(baseURL + "/notifications/create-notification-task", { data })
+        } catch (error) {
+            console.error('Failed to create task notification', error)
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -245,9 +253,10 @@ const CreateTask = () => {
                 })
 
                 fetchTasks()
+                console.log(response.data)
+                createTaskNotification(response.data)
             }
 
-            console.log(response.data);
         } catch (error) {
             console.error('Failed to create task', error)
             toast('There was an error creating task', {

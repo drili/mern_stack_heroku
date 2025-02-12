@@ -45,6 +45,8 @@ router.route("/fetch-deadlines").get(async (req, res) => {
 
     const todayDate = new Date();
     const sevenDaysFromNow = new Date();
+
+    todayDate.setHours(0, 0, 0, 0);
     sevenDaysFromNow.setDate(todayDate.getDate() + 7);
 
     try {
@@ -146,11 +148,9 @@ router.route("/create").post(async (req, res) => {
                 taskType,
                 tenantId,
             })
+        )
 
-            const taskSaved = await task.save()
-        });
-
-        res.json({ message: "Tasks created successfully" });
+        res.json(tasksSaved);
     } catch (error) {
         console.error("Failed to create tasks", error);
         res.status(500).json({ error: "Failed to create tasks" });

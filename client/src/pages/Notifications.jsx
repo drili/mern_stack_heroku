@@ -179,8 +179,14 @@ const Notifications = () => {
                                             >{notification?.taskCustomer?.customerName}</Badge>
                                         </h3>
                                         <span className='flex justify-between gap-2 items-center'>
-                                            <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>Mentioned you in task "{notification?.taskId?.taskName}"</p>
-                                            <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatDate(notification?.createdAt)}</p>
+                                            {notification.notificationType == "task_create_tagging" ? (
+                                               <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>
+                                                Added you in task "{notification.taskId.taskName}"</p>
+                                            ) : (
+                                                <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>Mentioned you in task "{notification.taskId.taskName}"</p>
+                                            )}
+
+                                            <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatDate(notification.createdAt)}</p>
                                         </span>
                                         <p className='trunateCustom align'>{stripHtml(notification?.notificationMessage)}</p>
                                     </span>
@@ -240,7 +246,7 @@ const Notifications = () => {
             // sprintOverviewFetch={sprintOverviewFetch}
             // updateFunc={sprintOverviewFetch}
             />
-        </div>
+        </div >
     )
 }
 
