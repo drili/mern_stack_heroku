@@ -1,6 +1,10 @@
 const mongoose = require("mongoose")
 
 const taskSchema = new mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     taskName: {
         type: String,
         required: true
@@ -55,6 +59,7 @@ const taskSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+        ref: 'User',
     },
     isArchived: {
         type: Boolean,
@@ -83,4 +88,7 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model("Task", taskSchema)
 
-module.exports = Task
+module.exports = {
+    Task: Task,
+    TaskSchema: taskSchema
+};

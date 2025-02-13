@@ -1,6 +1,10 @@
 const mongoose = require("mongoose")
 
 const notificationChatTask = mongoose.Schema({
+    tenantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tenants",
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -45,4 +49,7 @@ const notificationChatTask = mongoose.Schema({
 
 const NotificationChatTask = mongoose.model("NotificationChatTask", notificationChatTask)
 
-module.exports = NotificationChatTask
+module.exports = {
+    NotificationChatTask: NotificationChatTask,
+    NotificationChatTaskSchema: notificationChatTask
+};

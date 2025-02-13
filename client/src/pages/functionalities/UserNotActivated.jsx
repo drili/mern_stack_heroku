@@ -12,12 +12,12 @@ const UserNotActivated = () => {
         <div id="UserNotActivated" className='grid grid-cols-2 min-h-[100vh]'>
             <section className="login-form p-40">
                 <div className='mb-10 text-center'>
-                    <h1 className='font-bold'>Access Restricted</h1>
+                    <h1 className='font-extrabold'>Access Restricted</h1>
                 </div>
 
                 <div className='flex gap-2 mt-10 text-center m-auto align-center justify-center'>
                     <h5>Your user has not been activated yet, please try again later.</h5>
-                    <Link to="/login">Try again</Link>
+                    <Link to="/login" className='text-pink-700'>Try again</Link>
                 </div>
             </section>
 

@@ -10,8 +10,12 @@ const GenericForm = ({
     inputClass = "",
     buttonClass = "",
     onSubmit,
+    buttonValue,
 }) => {
     const [formData, setFormData] = useState(fieldValues)
+
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
+    const labelClasses = "text-sm font-medium mb-2 block "
 
     const handleInputChange = (index, event) => {
         const newFormData = [...formData]
@@ -29,18 +33,27 @@ const GenericForm = ({
             <span key={index}>
                 <label
                     htmlFor={inputTypes[index] || 'text'} 
-                    className='block mb-2 text-sm font-medium text-gray-900 '>
+                    className={`${labelClasses}`}>
                         {fieldNames[index] || `Field ${index + 1}`}
                     </label>
-                <input
-                    required={required[index] || true}
-                    type={inputTypes[index] || 'text'}
-                    value={formData[index] || ''}
-                    onChange={(e) => handleInputChange(index, e)}
-                    placeholder={fieldNames[index] || `Field ${index + 1}`}
-                    name="password"
-                    className={`${inputClass} mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
-                />
+                
+                {inputTypes[index] === "textarea" ? (
+                    <textarea
+                        className='w-full rounded min-h-[200px]'
+                        required={required[index] || true}
+                        onChange={(e) => handleInputChange(index, e)}
+                    >{formData[index] || ''}</textarea>
+                ) : (
+                    <input
+                        required={required[index] || true}
+                        type={inputTypes[index] || 'text'}
+                        value={formData[index] || ''}
+                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder={fieldNames[index] || `Field ${index + 1}`}
+                        name="password"
+                        className={`${inputClasses} `}
+                    />
+                )}
             </span>
         ));
     };
@@ -50,9 +63,9 @@ const GenericForm = ({
             {renderInputFields()}
 
             <input 
-                className={`${buttonClass} button text-white mt-10 bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   `}
+                className={`${buttonClass} w-full bg-black text-white py-3 rounded mt-5`}
                 type="submit" 
-                value="Submit" 
+                value={`${buttonValue ? buttonValue : "Submit"}`}
             />
         </form>
     )

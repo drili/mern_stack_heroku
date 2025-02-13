@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 
+// TODO: Update to include "tenantId" with ref.
 const groupsSchema = mongoose.Schema({
     groupName: {
         type: String,
@@ -18,4 +19,7 @@ const groupsSchema = mongoose.Schema({
 
 const Groups = mongoose.model("Groups", groupsSchema)
 
-module.exports = Groups
+module.exports = {
+    Groups: Groups,
+    GroupsSchema: groupsSchema
+};

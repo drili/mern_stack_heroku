@@ -1,19 +1,25 @@
 const express = require("express")
 const router = express.Router()
 
-const NotificationChatTask = require("../models/NotificationChatTask")
-const User = require("../models/User")
-const Customer = require("../models/Customer")
-const Task = require("../models/Task")
+const { NotificationChatTask, NotificationChatTaskSchema } = require("../models/NotificationChatTask")
+const { User } = require("../models/User")
+const { Customer } = require("../models/Customer")
+const { Task } = require("../models/Task")
 
 const notificationType = "user_tagging_task"
 const sendSlackMessage = require("../functions/slackMessageUser")
 
 router.route("/fetch-unread-notifications").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
-        const notifications = await NotificationChatTask.find({ userId: userId, notificationIsRead: false })
+        const notifications = await NotificationChatTask.find({ userId: userId, notificationIsRead: false, tenantId: tenantId })
             .populate({
                 path: "mentionedBy",
                 model: User,
@@ -39,11 +45,20 @@ router.route("/fetch-unread-notifications").post(async (req, res) => {
 })
 
 router.route("/update-user-notification-read").put(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { notificationId } = req.body
 
+    if (!tenantId || !notificationId) {
+        return res.status(400).json({ error: "tenantId & notificationId is required" })
+    }
+    
     try {
-        const notification = await NotificationChatTask.findByIdAndUpdate(notificationId, { $set: { notificationIsRead: true } })
-
+        const notification = await NotificationChatTask.findOneAndUpdate(
+            { _id: notificationId, tenantId: tenantId }, 
+            { $set: { notificationIsRead: true } }
+        )
+        
         res.json({ message: "Customer archived & updated successfully" })
     } catch (error) {
         console.error("There was an error updating notifcation", error)
@@ -52,10 +67,16 @@ router.route("/update-user-notification-read").put(async (req, res) => {
 })
 
 router.route("/fetch-user-notifications").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
-        const notifications = await NotificationChatTask.find({ userId: userId })
+        const notifications = await NotificationChatTask.find({ userId: userId, tenantId: tenantId })
             .populate({
                 path: "mentionedBy",
                 model: User,
@@ -97,6 +118,7 @@ router.route("/create-notification-task").post(async (req, res) => {
                     const mentionedBy = task.createdBy
                     const taskName = task.taskName
                     const taskDeadline = task.taskDeadline
+                    const tenantId = task.tenantId
 
                     const newNotification = new NotificationChatTask({
                         userId: userId,
@@ -105,7 +127,8 @@ router.route("/create-notification-task").post(async (req, res) => {
                         notificationMessage: notificationMessage,
                         taskId: taskId,
                         taskCustomer: customerId,
-                        mentionedBy: mentionedBy
+                        mentionedBy: mentionedBy,
+                        tenantId: tenantId,
                     })
 
                     await newNotification.save()
@@ -129,6 +152,8 @@ router.route("/create-notification-task").post(async (req, res) => {
 })
 
 router.route("/create-notification").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const {
         mentionedUsers,
         taskId,
@@ -138,8 +163,12 @@ router.route("/create-notification").post(async (req, res) => {
 
     const notificationLinkModified = `/task?taskId=${taskId}`
 
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
+
     try {
-        mentionedUsers.forEach(async (user) => {
+        for (const user of mentionedUsers) {
             const newNotification = new NotificationChatTask({
                 userId: user.id,
                 notificationType: notificationType,
@@ -147,22 +176,27 @@ router.route("/create-notification").post(async (req, res) => {
                 notificationMessage: htmlContent,
                 taskId: taskId,
                 taskCustomer: taskCustomer,
-                mentionedBy: mentionedBy
-            })
+                mentionedBy: mentionedBy,
+                tenantId: tenantId,
+            });
 
-            await newNotification.save()
+            await newNotification.save();
 
-            // *** Emit a WebSocket event to the user
             req.app.get("io").to(user.id).emit("new-notification", {
                 message: "You have a new notification"
-            })
+            });
 
-            const notifiedUser = await User.findById(user.id)
-            const notifiedBy = await User.findById(mentionedBy)
-            if (notifiedUser.slackId) {
-                sendSlackMessage(`${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`, notifiedUser.slackId)
+            const notifiedUser = await User.findOne({ _id: user.id, tenantId: tenantId });
+            const notifiedBy = await User.findOne({ _id: mentionedBy, tenantId: tenantId });
+
+            if (notifiedUser && notifiedUser.slackId) {
+                sendSlackMessage(
+                    `${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/task-view?taskID=${taskId}`,
+                    notifiedUser.slackId
+                );
+
             }
-        })
+        }
 
         res.status(200).send("Notifications created successfully")
     } catch (error) {

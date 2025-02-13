@@ -36,7 +36,7 @@ const TaskView = () => {
                     <section className='flex'>
                         <button 
                             onClick={() => handleTaskModal(taskID)}
-                            className='my-button button text-white bg-rose-500 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center'>Re-open Task</button>
+                            className='rounded text-sm min-h-[45px] border border-zinc-400 cursor-pointer  bg-pink-700 border-none text-white'>Re-open Task</button>
                     </section>
 
                     <TaskModal 

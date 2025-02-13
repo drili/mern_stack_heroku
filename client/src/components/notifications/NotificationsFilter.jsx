@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { BsSearch, BsCalendarFill } from "react-icons/bs"
 
-const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
-
 const NotificationsFilter = ({ setSearchTerm, searchTerm }) => {
+    const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-text "
+    const labelClasses = "h-full flex flex-col justify-center bg-teal-200 border-none text-slate-800 border rounded px-4 py-1 text-sm border border-zinc-400 "
+
 
     const handleSearchTerm = async (e) => {
         const newSearchTerm = e.target.value
@@ -19,7 +19,7 @@ const NotificationsFilter = ({ setSearchTerm, searchTerm }) => {
                     <span className='flex gap-2 items-center'>
                         <input
                             type="text"
-                            className={`${inputClasses} min-w-[200px]`}
+                            className={`${inputClasses} min-w-[200px] hover:cursor-text`}
                             placeholder='Search notification(s)'
                             onChange={handleSearchTerm}
                         />

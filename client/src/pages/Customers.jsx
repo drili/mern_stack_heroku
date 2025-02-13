@@ -9,6 +9,7 @@ import monthWorkdays from '../functions/monthWorkdays';
 import CustomerAccordion from '../components/customers/CustomerAccordion';
 
 import { ConfigContext } from '../context/ConfigContext';
+import { UserContext } from '../context/UserContext';
 
 const Customers = () => {
     const [sprints, setSprints] = useState([])
@@ -16,11 +17,13 @@ const Customers = () => {
     const activeSprint  = getCurrentSprint()
     const [selectedSprint, setSelectedSprint] = useState("")
     const [workDays, setWorkDays] = useState("")
+    const { user } = useContext(UserContext)
 
     const [customers, setCustomers] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
     
     const handleSprintChange = (selectedValue, selectedSprint) => {
         setSelectedSprint(selectedSprint)
@@ -32,7 +35,7 @@ const Customers = () => {
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(`${baseURL}/customers/fetch`)
+            const response = await axios.get(`${tenantBaseURL}/customers/fetch`)
             setTimeout(() => {
                 setCustomers(response.data)
                 setIsLoading(false)

@@ -17,6 +17,7 @@ const getFormattedDate = () => {
 const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, customerId, verticalId }) => {
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const [timeRegistrations, setTimeRegistrations] = useState([])
     const [formRegisterTime, setFormRegisterTime] = useState({
@@ -32,7 +33,8 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
 
     const fetchTimeRegistrations = async (taskId) => {
         try {
-            const response = await axios.get(`${baseURL}/time-registrations/time-registered/${taskId}`)
+            const response = await axios.get(`${tenantBaseURL}/time-registrations/time-registered/${taskId}`)
+            
             setTimeRegistrations(response.data)
         } catch (error) {
             console.error('Failed to fetch registered time(s)', error)
@@ -51,7 +53,7 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
         
         if (formRegisterTime.timeRegistered > 0) {
             try {
-                const response = await axios.post(`${baseURL}/time-registrations/register-time`, formRegisterTime)
+                const response = await axios.post(`${tenantBaseURL}/time-registrations/register-time`, formRegisterTime)
                 if (response.status === 201) {
                     toast('Time registered successfully', {
                         duration: 4000,
@@ -93,7 +95,7 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
 
     return (
         <div id='TaskTimeRegistration' className=''>
-            <h2 className='font-semibold mb-5'>Register Time</h2>
+            <h2 className='font-bold mb-5 text-lg'>Task time registration</h2>
 
             <span className='timeRegistrationField flex flex-col gap-4'>
                 <div className='flex-1'>
@@ -126,20 +128,19 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                             </div>
                         </span>
 
-                        <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Register Time</button>
+                        <button type="submit" className='bg-black text-white py-2 rounded mt-5 mb-5 w-full text-sm hover:bg-pink-700'>Register Time</button>
                     </form>
                 </div>
 
                 <div className='flex-1'>
-                    <label className={labelClasses}>Total Time Registered</label>
-
+                    <label className={labelClasses}>Total time registered</label>
                     
                     {timeRegistrations && timeRegistrations.length > 0 ? (
-                        <p className='font-bold underline'>
+                        <p className='text-lg font-bold underline'>
                             {timeRegistrations.reduce((totalTime, registration) => totalTime + registration.timeRegistered, 0)}
                         </p>
                     ) : (
-                        <p className='font-bold underline'>
+                        <p className='text-lg font-bold underline'>
                             0
                         </p>
                     )}
