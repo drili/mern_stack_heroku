@@ -1,5 +1,69 @@
 [
     {
+        "releaseVersion": "2.1",
+        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
+        "releaseDate": "13-02-2025",
+        "releaseObject": [
+            {
+                "name": "New and updated UI",
+                "description": [
+                    "Revamped user interface with improved navigation, modernized layouts, and enhanced visual elements to create a more intuitive and user-friendly experience."
+                ]
+            },
+            {
+                "name": "New customer view with customer notes",
+                "description": [
+                    "Introduced a dedicated customer view that allows users to see detailed customer information along with the ability to add and manage customer notes directly within the platform."
+                ]
+            },
+            {
+                "name": "Notifications on quick task creations with Slack",
+                "description": [
+                    "Integrated Slack notifications for quick task creation, ensuring teams receive instant updates when new tasks are added to improve communication and efficiency."
+                ]
+            },
+            {
+                "name": "Multi tenant database update",
+                "description": [
+                    "Enhanced database structure to support multi-tenant architecture, improving data isolation, security, and scalability across multiple organizations or workspaces."
+                ]
+            },
+            {
+                "name": "New landing pages with signup & registration (WIP)",
+                "description": [
+                    "Developing new landing pages with a seamless signup and registration process, making onboarding for new users more efficient and accessible. (Work in progress)"
+                ]
+            },
+            {
+                "name": "Added holiday view for holiday applications",
+                "description": [
+                    "Introduced a dedicated holiday view where users can track and manage holiday applications, view approvals, and keep an overview of team availability."
+                ]
+            },
+            {
+                "name": "Create new labels and new verticals for tasks",
+                "description": [
+                    "Users can now create custom labels and assign tasks to different verticals, enabling better categorization and organization of work items."
+                ]
+            },
+            {
+                "name": "Updated modal view with time registration table",
+                "description": [
+                    "Redesigned modal views to include a time registration table, allowing users to quickly review and manage logged work hours directly from the task details window."
+                ]
+            },
+            {
+                "name": "Small bug fixes",
+                "description": [
+                    "UI bug fixes",
+                    "Fixed bug on fetching time registrations by sprint",
+                    "Fixed notifications errors with Slack & TaskAlloc8or",
+                    "Fixed archived customers showing on create a new task"
+                ]
+            }
+        ]
+    },    
+    {
         "releaseVersion": "2.0.2",
         "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/05/pexels-pixabay-40896.jpg",
         "releaseDate": "15-05-2024",
