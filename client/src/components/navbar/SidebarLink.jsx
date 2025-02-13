@@ -5,15 +5,16 @@ const SidebarLink = ({ menuLink, linkText, currentPath, iconComponent, wip }) =>
     return (
         <Link
             to={menuLink}
-            className={`gap-4 flex items-center py-3 px-4 rounded text-[14px] relative
+            className={`
+                gap-4 flex items-center py-3 px-4 rounded text-[14px] relative ease-in 
                 ${currentPath === menuLink ? 
-                    'bg-rose-500 font-bold text-white hover:text-white' : 
-                    'font-medoum text-zinc-600'}`}>
+                    'bg-pink-700 font-bold text-white hover:text-white' : 
+                    'font-medium text-zinc-600'}`}>
             {React.createElement(iconComponent, { style: { fontSize: "18px" } })}{linkText}
             
             {wip ? (
-                <div className='absolute right-0 flex  pt-1 pb-1 bg-amber-400 py-0 px-2 rounded-sm'>
-                    <label className='text-[8px] text-black'>TBU</label>
+                <div className='absolute right-0 flex  pt-1 pb-1 bg-teal-200 py-0 px-2 rounded-sm'>
+                    <label className='text-[8px] text-zinc-900'>TBU</label>
                 </div>
             ) : (
                 ""

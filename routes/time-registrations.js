@@ -1,22 +1,30 @@
 const express = require("express")
 const router = express.Router()
-const TimeRegistration = require("../models/TimeRegistration")
-const User = require("../models/User")
-const Sprints = require("../models/Sprints")
+const {TimeRegistration} = require("../models/TimeRegistration")
+const {User} = require("../models/User")
+const {Sprints} = require("../models/Sprints")
 const mongoose = require("mongoose")
 
 const formatDateToMonthYear = require("../functions/formatDateToMonthYear")
 
 router.route("/time-registrations-verticals-aggregated/:sprintId").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { sprintId } = req.params
+
+    if (!tenantId || !sprintId) {
+        return res.status(400).json({ error: "tenantId & sprintId is required" })
+    }
 
     try {
         const objectIdSprintId = new mongoose.Types.ObjectId(sprintId)
+        const objectTenantId = new mongoose.Types.ObjectId(tenantId)
 
         const aggregatedData = await TimeRegistration.aggregate([
             {
                 $match: {
-                    sprintId: objectIdSprintId
+                    sprintId: objectIdSprintId,
+                    tenantId: objectTenantId,
                 }
             },
             {
@@ -57,16 +65,21 @@ router.route("/time-registrations-verticals-aggregated/:sprintId").get(async (re
 })
 
 router.route("/fetch-users-time-regs-by-sprint/:sprintId").get(async (req, res) => {
+    const { sprintId } = req.params
+    // const { tenantId } = req.params
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+
     try {
-        const { sprintId } = req.params
-        const activeUsers = await User.find({ isActivated: true })
+        const activeUsers = await User.find({ isActivated: true, tenantId })
         const activeUsersData = []
 
-        if (sprintId && activeUsers) {
+        if (sprintId && tenantId && activeUsers) {
             for (const user of activeUsers) {
                 const timeRegistrations = await TimeRegistration.find({
                     userId: user._id,
-                    sprintId: sprintId
+                    sprintId: sprintId,
+                    tenantId,
                 })
 
                 let totalTime = 0
@@ -109,10 +122,16 @@ router.route("/fetch-users-time-regs-by-sprint/:sprintId").get(async (req, res) 
 })
 
 router.route("/time-registration-delete/:eventId").delete(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { eventId } = req.params
 
+    if (!tenantId || !eventId) {
+        return res.status(400).json({ error: "tenantId & eventId is required" })
+    }
+
     try {
-        const timeRegistrationDelete = await TimeRegistration.findByIdAndDelete(eventId)
+        const timeRegistrationDelete = await TimeRegistration.findOneAndDelete({ _id: eventId, tenantId: tenantId })
 
         return res.status(200).json(timeRegistrationDelete)
     } catch (error) {
@@ -122,10 +141,18 @@ router.route("/time-registration-delete/:eventId").delete(async (req, res) => {
 })
 
 router.route("/time-registration-update").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { eventId, editedTime } = req.body
 
+    if (!tenantId || !eventId) {
+        return res.status(400).json({ error: "tenantId & eventId is required" })
+    }
+
     try {
-        const timeRegistration = await TimeRegistration.findByIdAndUpdate(eventId, { $set: { timeRegistered: editedTime } })
+        const timeRegistration = await TimeRegistration.findOneAndUpdate(
+            { _id: eventId, tenantId: tenantId }, 
+            { $set: { timeRegistered: editedTime } })
 
         return res.status(200).json(timeRegistration)
     } catch (error) {
@@ -135,12 +162,19 @@ router.route("/time-registration-update").post(async (req, res) => {
 })
 
 router.route("/time-registrations-by-date/:date/:userId").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { date, userId } = req.params
+
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
 
     try {
         const timeRegistrations = await TimeRegistration.find({
             currentTime: date,
-            userId: userId
+            userId: userId,
+            tenantId: tenantId,
         }).populate({
             path: "taskId",
             populate: {
@@ -157,10 +191,16 @@ router.route("/time-registrations-by-date/:date/:userId").get(async (req, res) =
 })
 
 router.route("/time-registered-by-user").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId } = req.body
 
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
+
     try {
-        const timeRegistrations = await TimeRegistration.find({ userId });
+        const timeRegistrations = await TimeRegistration.find({ userId: userId, tenantId: tenantId });
 
         const aggregatedData = timeRegistrations.reduce((acc, item) => {
             const key = item.currentTime
@@ -185,7 +225,13 @@ router.route("/time-registered-by-user").post(async (req, res) => {
 })
 
 router.route("/register-time").post(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { userId, taskId, timeRegistered, description, sprintId, currentTime, registrationType, customerId, verticalId } = req.body
+
+    if (!tenantId || !userId) {
+        return res.status(400).json({ error: "tenantId & userId is required" })
+    }
 
     function formatDateForDisplay(inputDate) {
         const dateParts = inputDate.split('-')
@@ -237,7 +283,8 @@ router.route("/register-time").post(async (req, res) => {
             sprintId: newSprintId,
             currentTime: formattedDate,
             registrationType: registrationTypeValue,
-            verticalId
+            verticalId,
+            tenantId
         })
 
         return res.status(201).json(timeRegistration)
@@ -248,12 +295,21 @@ router.route("/register-time").post(async (req, res) => {
 })
 
 router.route("/time-registered/:taskId").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
+
+    if (!tenantId || !taskId) {
+        return res.status(400).json({ error: "tenantId & taskId is required" })
+    }
 
     try {
         const timeRegistrations = await TimeRegistration.find({
-            taskId
-        })
+            taskId: taskId,
+            tenantId: tenantId
+        }).populate(
+            "userId", ['_id', 'username', 'email', 'profileImage', 'userRole', 'userTitle']
+        )
 
         return res.status(200).json(timeRegistrations)
     } catch (error) {
@@ -262,15 +318,19 @@ router.route("/time-registered/:taskId").get(async (req, res) => {
     }
 })
 
-router.route("/time-registered-user/:sprintId/:userId").get(async (req, res) => {
+router.route("/time-registered-user/:sprintId/:userId/:tenantId").get(async (req, res) => {
     const { sprintId } = req.params
     const { userId } = req.params
+    // const { tenantId } = req.params
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
 
-    if (sprintId && userId) {
+    if (sprintId && userId && tenantId) {
         try {
             const timeRegistered = await TimeRegistration.find({
                 sprintId,
-                userId
+                userId,
+                tenantId,
             })
 
             return res.status(200).json(timeRegistered)

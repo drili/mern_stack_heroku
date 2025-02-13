@@ -11,7 +11,7 @@ const TaskCardSmall = ({ taskId, taskName, taskDeadline, toggleSmallCards }) => 
     return (
         <div
             id={taskId}
-            className={`task-card bg-rose-100  block p-3 mb-2 border border-rose-200 rounded-none shadow hover:bg-rose-200    cursor-pointer relative`}
+            className={`task-card bg-pink-100  block p-3 mb-2 border border-pink-200 rounded shadow hover:bg-pink-200    cursor-pointer relative`}
         >
             <span className='relative'>
                 <section className='flex gap-2'>

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { FaWindowClose } from "react-icons/fa"
-import { BsFillLightningChargeFill } from "react-icons/bs";
+import { BsFillLightningChargeFill, BsXLg } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { FaCalendar, FaClock, FaPaperclip } from "react-icons/fa";
 import axios from 'axios'
@@ -10,8 +9,12 @@ import TaskModalSettings from './TaskModalSettings'
 import TaskTimeRegistration from './TaskTimeRegistration'
 import TaskChat from './TaskChat'
 import { ConfigContext } from '../../context/ConfigContext';
+import { UserContext } from '../../context/UserContext';
+import LabelSmall from '../LabelSmall';
+import TaskTimeRegistrations from './TaskTimeRegistrations';
 
 const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
+    const { user } = useContext(UserContext)
     const [showModal, setShowModal] = useState(false)
     const [task, setTask] = useState([])
     const [taskSprint, setTaskSprint] = useState([])
@@ -25,10 +28,13 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
     })
     const [toggleViewState, setToggleViewState] = useState("task")
 
-    const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    // const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
+    // const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4"
+    const labelClasses = "text-sm font-medium mb-2 block "
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
     const modalContentRef = useRef(null)
 
     const copyToClipboard = () => {
@@ -61,7 +67,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
     const fetchTaskData = async (taskID) => {
         if (taskID) {
-            const response = await axios.get(`${baseURL}/tasks/fetch-by-id/${taskID}`)
+            const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-id/${taskID}`)
 
             setTask(response.data)
             setFormData((formData) => ({
@@ -85,7 +91,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
     // TODO: Finish function
     const handleClickOutside = (event) => {
-        
+
     }
 
     useEffect(() => {
@@ -113,7 +119,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
         event.preventDefault()
 
         try {
-            const response = await axios.put(`${baseURL}/tasks/update/${taskID}`, formData)
+            const response = await axios.put(`${tenantBaseURL}/tasks/update/${taskID}`, formData)
 
             if (response.status === 200) {
                 toast('Task updated successfully', {
@@ -125,11 +131,11 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                     }
                 })
             }
-            
+
             if (fetchTasks) {
                 fetchTasks()
             }
-            if(updateFunc) {
+            if (updateFunc) {
                 updateFunc()
             }
             if (fetchDeadlineTasks) {
@@ -155,69 +161,76 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
             <>
                 {showModal ? (
                     <>
-                        <div
-                            // className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                            className='absolute z-50 top-0 w-full translate-x-[-50%] left-[50%]'
-                        >
+                        <div className='absolute z-50 top-0 w-full translate-x-[-50%] left-[50%]'>
                             <div className="relative my-6 mx-auto max-w-screen-xl w-full taskModalComponent">
+                                <div className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
-                                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-
-                                    <div className='flex items-center gap-2 px-4 pt-5 pb-0 rounded-t md:px-10'>
-                                        <span 
-                                            className="taskLabel flex items-center gap-2 text-xs px-2 py-1 rounded font-bold"
-                                            style={{
-                                                color: `${task[0]?.taskCustomer?.customerColor}`,
-                                                border: `1px solid ${task[0]?.taskCustomer?.customerColor}`
-                                            }}>
+                                    <div className='flex items-center gap-2 px-4 pt-10 pb-0 rounded-t md:px-10'>
+                                        <LabelSmall
+                                            classes={``}
+                                            backgroundColor=""
+                                            borderColor={task[0]?.taskCustomer?.customerColor}
+                                        >
                                             {task[0]?.taskCustomer?.customerName}
-                                        </span>
-                                        <span className="taskLabel flex items-center gap-2 bg-rose-100 text-xs px-2 py-1 rounded text-rose-800 font-bold">
+                                        </LabelSmall>
+
+                                        <LabelSmall>
                                             {task[0]?.taskSprints[0]?.sprintName} <FaCalendar />
-                                        </span>
+                                        </LabelSmall>
+
+                                        <LabelSmall>
+                                            <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></span>
+                                        </LabelSmall>
 
                                         {task[0]?.taskType === "quickTask" && (
                                             <>
-                                                <span className="flex items-center gap-2 taskLabel bg-amber-100 text-xs px-2 py-1 rounded text-amber-500 font-bold">
-                                                    Quick Task <BsFillLightningChargeFill className='text-amber-500' />
-                                                </span>
+                                                <LabelSmall
+                                                    classes={`bg-teal-50 text-teal-500`}
+                                                >
+                                                    Quick Task <BsFillLightningChargeFill className='text-teal-500' />
+                                                </LabelSmall>
 
-                                                <span className="flex items-center gap-2 taskLabel bg-amber-100 text-xs px-2 py-1 rounded text-amber-500 font-bold">
-                                                    <p className='font-bold text-xs text-amber-500'>{task[0]?.taskDeadline}</p><FaClock />
-                                                </span>
+                                                <LabelSmall
+                                                    classes={`bg-teal-50 text-teal-500`}
+                                                >
+                                                    {task[0]?.taskDeadline}<FaClock />
+                                                </LabelSmall>
                                             </>
                                         )}
-
                                     </div>
-                                    <div className="flex items-start justify-between p-4 pb-5 rounded-t md:px-10">
+
+                                    <div className="flex items-start justify-between py-6 rounded-t md:px-10 gap-8">
                                         <span>
-                                            <h3 className="text-3xl font-semibold">
+                                            <h3 className="text-lg md:text-2xl text-black font-extrabold">
                                                 {formData["taskName"]}
                                             </h3>
-                                            <p className='flex gap-2 hover:cursor-pointer items-center text-slate-500 text-sm mt-2' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></p>
+
                                         </span>
                                         <button
-                                            className="text-white bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150"
+                                            className="absolute right-10 top-10 text-white rounded-full h-[50px] w-[50px] bg-black font-bold uppercase text-sm focus:outline-none ease-linear transition-all duration-150 flex justify-center items-center"
                                             type="button"
                                             onClick={closeModal}
                                         >
-                                            <h4><FaWindowClose></FaWindowClose></h4>
+                                            <h4 className='text-2xl'><BsXLg></BsXLg></h4>
                                         </button>
                                     </div>
 
-                                    <div className='flex items-start px-4 pt-5 pb-0 rounded-t md:px-10'>
-                                        <button className={`${toggleViewState === "task" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:outline-none hover:border-slate-100`} onClick={() => handleViewState("task")}>Task</button>
-                                        <button className={`${toggleViewState === "taskChat" ? "bg-slate-950 text-white font-bold underline border-slate-200" : ""} rounded-none border-slate-100 focus:outline-none hover:border-slate-100`} onClick={() => handleViewState("taskChat")}>Task Settings</button>
+                                    <div className='flex items-start px-4 pb-0 rounded-t md:px-10'>
+                                        <button className={`${toggleViewState === "task" ? "bg-pink-700 text-white " : "bg-pink-100"} rounded-none focus:outline-none focus:border-none border-none outline-none mr-1`} onClick={() => handleViewState("task")}>Task</button>
+                                        <button className={`${toggleViewState === "taskChat" ? "bg-pink-700 text-white " : " bg-pink-50"} rounded-none focus:outline-none focus:border-none border-none outline-none mr-1`} onClick={() => handleViewState("taskChat")}>Task settings</button>
+                                        {task[0]?.taskType !== "quickTask" && (
+                                            <button className={`${toggleViewState === "taskTimeRegistrations" ? "bg-pink-700 text-white " : " bg-pink-50"} rounded-none focus:outline-none focus:border-none border-none outline-none mr-1`} onClick={() => handleViewState("taskTimeRegistrations")}>Time registrations</button>
+                                        )}
                                     </div>
 
                                     {toggleViewState === "task" ? (
                                         <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
                                             <hr />
-                                            
+
                                             <div className={`${task[0]?.taskType !== "quickTask" ? "md:grid-cols-2 gap-5 md:gap-10" : "md:grid-cols-0"} grid`}>
                                                 <section className='mt-5'>
                                                     {task[0]?.taskType !== "quickTask" && (
-                                                        <div className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full'>
+                                                        <div className='mt-5 pt-6 px-6 border-0 bg-stone-100 rounded-lg relative flex flex-col w-full outline-none focus:outline-none h-full'>
                                                             {task && (
                                                                 <TaskTimeRegistration
                                                                     labelClasses={labelClasses}
@@ -231,14 +244,14 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         </div>
                                                     )}
                                                 </section>
-                                                
+
                                                 <section id='taskModalUpdate' className="mt-5">
-                                                    <form className='mt-5 pt-5 px-5 border-0 rounded-lg bg-slate-50 relative flex flex-col w-full outline-none focus:outline-none h-full' onSubmit={handleUpdateTask}>
+                                                    <form className='mt-5 pt-6 pb-4 px-6 bg-white rounded-lg relative flex flex-col w-full focus:outline-none h-full border border-gray-200' onSubmit={handleUpdateTask}>
                                                         <div>
-                                                            <h2 className='font-semibold mb-5'>Update Task</h2>
+                                                            <h2 className='font-bold mb-5 text-lg'>Update task</h2>
                                                         </div>
                                                         <div>
-                                                            <label htmlFor="taskName" className={labelClasses}>Task Name</label>
+                                                            <label htmlFor="taskName" className={labelClasses}>Task name</label>
                                                             <input type="text" name="taskName" placeholder="Task Name" required value={formData["taskName"]}
                                                                 className={inputClasses}
                                                                 onChange={(e) => handleInputChange(e)} />
@@ -247,13 +260,13 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                             {task[0]?.taskType !== "quickTask" && (
                                                                 <>
                                                                     <div>
-                                                                        <label className={labelClasses} htmlFor="taskTimeLow">Task Time Low</label>
+                                                                        <label className={labelClasses} htmlFor="taskTimeLow">Task time low</label>
                                                                         <input type="number" name="taskTimeLow" placeholder="Task Time Low" required value={formData["taskTimeLow"]}
                                                                             className={inputClasses}
                                                                             onChange={(e) => handleInputChange(e)} />
                                                                     </div>
                                                                     <div>
-                                                                        <label className={labelClasses} htmlFor="taskTimeHigh">Task Time High</label>
+                                                                        <label className={labelClasses} htmlFor="taskTimeHigh">Task hime high</label>
                                                                         <input type="number" name="taskTimeHigh" placeholder="Task Time High" required value={formData["taskTimeHigh"]}
                                                                             className={inputClasses}
                                                                             onChange={(e) => handleInputChange(e)} />
@@ -275,42 +288,42 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                                         />
                                                                     </span>
                                                                     <div>
-                                                                        <label className={labelClasses} htmlFor="estimatedTime">Estimated Time <span className='text-slate-300'>optional</span></label>
-                                                                        <input 
+                                                                        <label className={labelClasses} htmlFor="estimatedTime">Estimated time <span className='text-slate-300'>optional</span></label>
+                                                                        <input
                                                                             type="number" name="estimatedTime" value={formData["estimatedTime"]} placeholder="Estimated Task Time"
                                                                             onChange={(e) => handleInputChange(e)}
-                                                                            className={inputClasses} 
+                                                                            className={inputClasses}
                                                                         />
                                                                     </div>
                                                                 </>
                                                             )}
                                                         </span>
                                                         <div>
-                                                            <label className={labelClasses} htmlFor="taskDescription">Task Description</label>
+                                                            <label className={labelClasses} htmlFor="taskDescription">Task description</label>
 
                                                             <textarea name="taskDescription" placeholder="Task Description" value={formData["taskDescription"]}
-                                                                className={inputClasses}
+                                                                className="h-[auto] border rounded focus:border-pink-700 pt-2 pb-2 px-3 w-full block mb-4"
                                                                 onChange={(e) => handleInputChange(e)} />
                                                         </div>
 
-                                                        <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Update Task</button>
+                                                        <button type="submit" className='mt-5 rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer '>Update Task</button>
                                                     </form>
                                                 </section>
                                             </div>
 
                                             <div className="grid grid-cols-1 gap-5 md:grid-cols-1 md:gap-5 mt-10 pt-10">
                                                 <>
-                                                    <h2 className='font-semibold'>Task Chat</h2>
+                                                    <h2 className='text-lg md:text-2xl text-black font-extrabold'>Task chat</h2>
                                                     {taskID && (
-                                                        <TaskChat 
-                                                            taskID={taskID} 
+                                                        <TaskChat
+                                                            taskID={taskID}
                                                             taskCustomer={task[0]?.taskCustomer?._id}
                                                         />
                                                     )}
                                                 </>
                                             </div>
                                         </div>
-                                    ) : (
+                                    ) : toggleViewState === "taskChat" ? (
                                         <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
                                             <hr />
 
@@ -332,9 +345,15 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         newSprintArray={newSprintArray}
                                                     />
                                                 </section>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="relative p-4 pt-0 flex-auto md:p-10 md:pt-0">
+                                            <hr />
 
-                                                <section className='mt-5'>
-                                                    
+                                            <div className='grid grid-cols-1 gap-5 md:gap-10'>
+                                                <section id="taskTimeRegistrations" className='mt-5'>
+                                                    <TaskTimeRegistrations taskId={taskID} />
                                                 </section>
                                             </div>
                                         </div>

@@ -14,14 +14,14 @@ const RegisterOffTimes = () => {
         registrationType: "",
         timeRegistered: "",
         taskId: null,
-        sprintId: ""
-
+        sprintId: "",
+        tenantId: user.tenant_id,
     })
     const [sprintId, setSprintId] = useState("")
     const { baseURL } = useContext(ConfigContext);
 
-    const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
-    const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
+    const inputClasses = "h-[40px] border rounded focus:border-pink-700 px-3 py-0 "
+    const labelClasses = "text-sm font-medium mb-2 "
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -59,8 +59,10 @@ const RegisterOffTimes = () => {
 
     const registerTime = async (formValues) => {
         if (formValues && formValues.sprintId) {
+
             try {
-                const responseTime = await axios.post(`${baseURL}/time-registrations/register-time`, formValues)
+                const responseTime = await axios.post(`${baseURL}/${user.tenant_id}/time-registrations/register-time`, formValues)
+                
                 if (responseTime.status === 201) {
                     toast('Time registration was successful', {
                         duration: 4000,
@@ -81,17 +83,18 @@ const RegisterOffTimes = () => {
     return (
         <div id='RegisterOffTimes'>
             <PageHeading 
-                heading="Off- & Sicktime Time Registrations"
+                heading="Off- & Sicktime"
                 subHeading={`Register your off- & sicktime registrations here`}
                 suffix="Use date picker to select specific date(s)."
             />
 
             <section className='grid grid-cols-12'>
-                <Card className='col-span-6'>
-                    <h3 className="font-bold">Fill out the form to register your time.</h3>
+                <Card className='py-4 px-4 col-span-6 flex border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none rounded-[20px]'>
+                    <h3 className="text-black text-lg font-medium">Fill out the form to register your off- or sicktime.</h3>
+                    <hr />
 
                     <form action="" className='flex flex-col gap-4' onSubmit={handleSubmit}>
-                        <span>
+                        <span className='flex flex-col'>
                             <label className={labelClasses} htmlFor="timeRegistered">Time Amount</label>
                             <input 
                                 className={inputClasses} 
@@ -104,7 +107,7 @@ const RegisterOffTimes = () => {
                             />
                         </span>
 
-                        <span>
+                        <span className='flex flex-col'>
                             <label className={labelClasses} htmlFor="currentTime">Date</label>
                             <input
                                 className={inputClasses}
@@ -116,7 +119,7 @@ const RegisterOffTimes = () => {
                             />
                         </span>
 
-                        <span>
+                        <span className='flex flex-col'>
                             <label className={labelClasses} htmlFor="registrationType">Registration Type</label>
                             <select 
                                 className={inputClasses} 
@@ -131,7 +134,7 @@ const RegisterOffTimes = () => {
                             </select>
                         </span>
 
-                        <button type="submit" className='mb-4 button text-black mt-1 bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Register Time</button>
+                        <button type="submit" className='bg-black text-white py-3 rounded mt-5'>Register time</button>
                     </form>
                 </Card>
             </section>

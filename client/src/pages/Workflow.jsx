@@ -48,11 +48,12 @@ const Workflow = () => {
     )
 
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const fetchDeadlineTasks = async (userId) => {
         const activeUserId = userId ? userId : user.id
         try {
-            const response = await axios.get(baseURL + "/tasks/fetch-deadlines", {
+            const response = await axios.get(tenantBaseURL + "/tasks/fetch-deadlines", {
                 params: {
                     userId: activeUserId,
                     // sprintId: activeSprint,
@@ -71,7 +72,7 @@ const Workflow = () => {
             const activeUserId = userId ? userId : user.id
 
             if (activeSprintCheck && activeSprintCheck.sprintMonth && activeSprintCheck.sprintYear) {
-                const response = await axios.get(`${baseURL}/tasks/fetch-by-user-sprint/${activeUserId}?month=${activeSprintCheck.sprintMonth}&year=${activeSprintCheck.sprintYear}&time_reg=true`)
+                const response = await axios.get(`${tenantBaseURL}/tasks/fetch-by-user-sprint/${activeUserId}?month=${activeSprintCheck.sprintMonth}&year=${activeSprintCheck.sprintYear}&time_reg=true`)
 
                 if (response.data.length == 0) {
                     setTasks([])
@@ -89,7 +90,7 @@ const Workflow = () => {
 
     const updateTaskWorkflow = async (taskId, workflowStatus) => {
         try {
-            const response = await axios.put(`${baseURL}/tasks/update-taskworkflow/${taskId}`, { workflowStatus })
+            const response = await axios.put(`${tenantBaseURL}/tasks/update-taskworkflow/${taskId}`, { workflowStatus })
             // console.log(response)
 
             if (response.status === 200) {
@@ -221,7 +222,7 @@ const Workflow = () => {
                                     <span
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
-                                        className='flex flex-col gap-1 bg-slate-100 rounded-md py-2 px-2 h-full'
+                                        className='flex flex-col gap-1 bg-stone-100 rounded-md py-2 px-2 h-full'
                                     >
                                         {filteredTasksByColumn[value[0]?.col]?.map((task, index) => (
                                             <Draggable key={task._id} draggableId={task._id} index={index}>
@@ -267,7 +268,7 @@ const Workflow = () => {
 
                     <span className='flex-1 border-l pl-3' id='taskDeadlines'>
                         <h3 
-                            className={`flex items-center gap-1 font-bold mb-5 border-b pb-2 ${deadlineTasks.length > 0 ? "text-rose-500" : ""}`}>Deadlines next 7 days <FaInfoCircle className='text-xs' /></h3>
+                            className={`flex items-center gap-1 font-bold mb-5 border-b pb-2 ${deadlineTasks.length > 0 ? "text-pink-700" : ""}`}>Deadlines next 7 days <FaInfoCircle className='text-xs' /></h3>
 
                         {/* <span
                             className='flex flex-col gap-1 bg-white outline-dashed outline-1 outline-offset-0 outline-slate-300 rounded-md py-2 px-2'

@@ -22,6 +22,7 @@ import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import mentions from './Mentions';
 import "../../assets/css/draft.css"
 import { ConfigContext } from '../../context/ConfigContext';
+import { UserContext } from '../../context/UserContext';
 
 const DraftEditor = ({ editorState, setEditorState }) => {
     const ref = useRef(null);
@@ -29,16 +30,18 @@ const DraftEditor = ({ editorState, setEditorState }) => {
     const [open, setOpen] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
-
+    
+    const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(baseURL + "/users/fetch-active-users")
+            const response = await axios.get(tenantBaseURL + "/users/fetch-active-users")
             const transformedUsers = response.data.map((user) => ({
                 id: user._id,
                 name: user.username,
-                link: `${baseURL}/profile?${user._id}`,
+                link: `${tenantBaseURL}/profile?${user._id}`,
                 avatar: user.profileImage,
             }))
             setAllUsers(transformedUsers);

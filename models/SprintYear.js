@@ -10,4 +10,7 @@ const sprintYearSchema = mongoose.Schema({
 
 const SprintYear = mongoose.model("SprintYear", sprintYearSchema)
 
-module.exports = SprintYear
+module.exports = {
+    SprintYear: SprintYear,
+    SprintYearSchema: sprintYearSchema
+};

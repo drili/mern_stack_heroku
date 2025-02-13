@@ -6,17 +6,20 @@ import toast, { Toaster } from 'react-hot-toast';
 import { BsFillTrashFill } from "react-icons/bs"
 import { AiOutlineUndo } from "react-icons/ai"
 import { ConfigContext } from '../context/ConfigContext';
+import { UserContext } from '../context/UserContext';
 
 const CreateCustomer = () => {
     const [customers, setCustomers] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
     const [showArchived, setShowArchived] = useState(false)
 
+    const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const fetchCustomers = async () => {
         try {
-            const response = await axios.get(baseURL + "/customers/fetch")
+            const response = await axios.get(tenantBaseURL + "/customers/fetch")
             setCustomers(response.data)
         } catch (error) {
             console.error('Failed to fetch customers', error);
@@ -44,7 +47,7 @@ const CreateCustomer = () => {
         }
 
         try {
-            const response = await axios.post(baseURL + "/customers/create", customerData)
+            const response = await axios.post(tenantBaseURL + "/customers/create", customerData)
             fetchCustomers()
 
             if (response.status === 200) {
@@ -72,7 +75,7 @@ const CreateCustomer = () => {
 
     const handleArchiveCustomer = async (customerId) => {
         try {
-            await axios.put(`${baseURL}/customers/archive/${customerId}`)
+            await axios.put(`${tenantBaseURL}/customers/archive/${customerId}`)
             fetchCustomers()
             console.log("Customer archived successfully");
         } catch (error) {
@@ -82,7 +85,7 @@ const CreateCustomer = () => {
 
     const handleUnArchiveCustomer = async (customerId) => {
         try {
-            await axios.put(`${baseURL}/customers/unarchive/${customerId}`)
+            await axios.put(`${tenantBaseURL}/customers/unarchive/${customerId}`)
             fetchCustomers()
             console.log("Customer un-archived successfully");
         } catch (error) {
@@ -103,9 +106,9 @@ const CreateCustomer = () => {
 
             <section className='grid grid-cols-2 gap-10 mb-10'>
                 <span>
-                    <div className='shadow-md p-10 rounded-lg mb-10'>
+                    <div className='py-10 px-10 flex rounded-extra-large border bg-white dark:border-gray-700 dark:bg-gray-800 flex-col h-full border-gray-200 shadow-none col-span-3'>
                         <span>
-                            <h2 className='font-bold mb-5'>Create new customer</h2>
+                            <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Create new <span className='text-pink-700'>customer</span></h2>
                             <hr className='mb-5'/>
                         </span>
 
@@ -124,9 +127,9 @@ const CreateCustomer = () => {
                 </span>
 
                 <span>
-                    <div className='shadow-md p-10 rounded-lg mb-10 bg-slate-50'>
+                    <div className='bg-stone-100 w-full p-[2rem] md:p-10 rounded-extra-large'>
                         <span>
-                            <h2 className='font-bold mb-5'>Customer List ({archivedCustomersCount}/{customerCount})</h2>
+                            <h2 className='text-lg md:text-2xl text-black font-bold mb-3'>Customer List ({archivedCustomersCount}/{customerCount})</h2>
                             <hr className='mb-5'/>
                         </span>
 
@@ -136,11 +139,11 @@ const CreateCustomer = () => {
                                 placeholder='Search customers'
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className='mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  px-4     '
+                                className='h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full block mb-4 '
                             >
                             </input>
 
-                            <div className="flex items-center mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-4 w-full      ">
+                            <div className="h-[40px] border rounded focus:border-pink-700 p-0 px-3 w-full mb-4 flex items-center">
                                 <input 
                                     id="bordered-checkbox-1" 
                                     type="checkbox" 
@@ -160,10 +163,10 @@ const CreateCustomer = () => {
                                         <li 
                                             key={customer._id}
                                             // style={{ border : `1px solid ${customer.customerColor}` }}
-                                            style={{ border: `1px solid #eee` }}
-                                            className='mb-2 rounded-lg'
+                                            // style={{ border: `1px solid #eee` }}
+                                            className='mb-2 rounded bg-white'
                                             >
-                                            <div className='flex text-sm gap-4 justify-between'>
+                                            <div className='flex text-sm gap-4 justify-between items-center hover:bg-[#f2f3f4]'>
                                                 <span 
                                                     className={`block rounded-lg py-2 px-5 bg flex-1`}
                                                     // style={{ background : `${customer.customerColor}` }}
@@ -173,9 +176,9 @@ const CreateCustomer = () => {
                                                         className='text-sm text-inherit font-bold inline-block px-2 rounded-md'>{customer.customerName}</p>
                                                 </span>
                                                 {customer.isArchived ? (
-                                                        <button className='p-0 px-2 flex gap-2 items-center' onClick={() => handleUnArchiveCustomer(customer._id)}>Un-Acrhive <AiOutlineUndo/></button>
+                                                        <button className='flex items-center justify-center gap-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer bg-pink-500 max-w-[150px]' onClick={() => handleUnArchiveCustomer(customer._id)}>Un-Acrhive <AiOutlineUndo/></button>
                                                     ) : (
-                                                        <button className='p-0 px-2 flex gap-2 items-center' onClick={() => handleArchiveCustomer(customer._id)}>Archive <BsFillTrashFill/></button>
+                                                        <button className='flex items-center justify-center gap-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer bg-pink-900 max-w-[150px]' onClick={() => handleArchiveCustomer(customer._id)}>Archive <BsFillTrashFill/></button>
                                                     )
                                                 }
                                             </div>

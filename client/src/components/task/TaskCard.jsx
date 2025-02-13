@@ -32,7 +32,7 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
     return (
         <div
             id={taskId}
-            className={`task-card block p-3 mb-2 border border-gray-200 rounded-lg shadow hover:bg-gray-100    cursor-pointer ${taskType === "quickTask" ? "bg-amber-50 border-amber-500" : "bg-white"}`}>
+            className={`task-card block p-3 mb-2 border border-custom-bg-gray rounded hover:bg-gray-100    cursor-pointer ${taskType === "quickTask" ? "bg-teal-50 border-teal-200" : "bg-white"}`}>
             <span>
                 <section className='flex gap-2'>
                     <span
@@ -57,30 +57,30 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                     )}
 
                 </section>
-                <h3 className='font-bold mt-5 leading-5'>{truncatedTaskName}</h3>
+                <h3 className={`${toggleSmallCards ? "text-sm leading-4" : "leading-4"} font-bold mt-4`}>{truncatedTaskName}</h3>
             </span>
 
             {!toggleSmallCards && (
                 <span>
-                    <p className='text-sm mt-3 leading-4'>{truncatedTaskDescription}</p>
+                    <p className='text-sm mt-2 leading-4 text-neutral-500'>{truncatedTaskDescription}</p>
                 </span>
             )}
 
             {taskType !== "quickTask" && (
                 <span className='flex gap-1 mt-3 items-center'>
-                    <p className='text-xs font-bold text-slate-500'><FaClock className='font-bold' /></p>
+                    <p className='text-xs font-medium text-neutral-500'><FaClock className='font-medium' /></p>
                     {/* <p className='text-xs'>Low {taskLow}</p>
                     <p className='text-xs'>/</p>
                     <p className='text-xs'>High {taskHigh}</p> */}
-                    <p className='text-xs font-bold text-slate-500'>{((taskLow + taskHigh) / 2).toFixed(2)} hours</p>
+                    <p className='text-xs font-medium text-neutral-500'>{((taskLow + taskHigh) / 2).toFixed(2)} hours</p>
 
                 </span>
             )}
 
             {taskType === "quickTask" && estimatedTime > 0 && (
                 <span className='flex gap-1 mt-3 items-center'>
-                    <p className='text-xs font-bold text-slate-500'><FaClock /></p>
-                    <p className='text-xs font-bold text-slate-500'>{estimatedTime} est. hours</p>
+                    <p className='text-xs font-medium text-slate-500'><FaClock /></p>
+                    <p className='text-xs font-medium text-slate-500'>{estimatedTime} est. hours</p>
                 </span>
             )}
 
@@ -91,7 +91,7 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                         {taskType !== "quickTask" && (
                             <div className="parentPercentageLine">
                                 <span
-                                    className={totalTimePercentage < 100 ? `bg-emerald-600 h-[2px] block mb-3` : `bg-rose-800 h-[2px] block mb-3`}
+                                    className={totalTimePercentage < 100 ? `bg-emerald-600 h-[2px] block mb-3` : `bg-pink-700 h-[2px] block mb-3`}
                                     style={{ width: `${totalTimePercentage}%` }}
                                 ></span>
 
@@ -140,8 +140,8 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
                         {taskType === "quickTask" && (
                             <span className='absolute right-0 bottom-[10px]'>
                                 <span className='flex items-center gap-2'>
-                                    <p className='font-bold text-xs'>{taskDeadline}</p>
-                                    <BsFillLightningChargeFill className='text-amber-500' />
+                                    <p className='font-bold text-xs text-teal-500'>{taskDeadline}</p>
+                                    <BsFillLightningChargeFill className='text-teal-500' />
                                 </span>
                             </span>
                         )}

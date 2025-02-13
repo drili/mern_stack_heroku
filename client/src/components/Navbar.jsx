@@ -13,7 +13,7 @@ import notificationSoundFile from "../assets/sounds/short-success-sound-glockens
 const notificationSound = new Audio(notificationSoundFile);
 
 const Navbar = () => {
-    const inputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
+    const inputClasses = "rounded text-slate-800 text-sm min-h-[45px] border border-zinc-400 cursor-pointer "
     const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
 
     const [username, setUsername] = useState("")
@@ -28,6 +28,8 @@ const Navbar = () => {
 
     const { user, setUser, hasUnreadNotifications, setHasUnreadNotifications } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
+    const tenantId = user.tenant_id
 
     const socket = socketIoClient(baseURL)
 
@@ -39,7 +41,7 @@ const Navbar = () => {
         const newActiveYear = e
 
         try {
-            const response = await axios.put(`${baseURL}/users/update-sprint-year`, { activeYear: newActiveYear, userId: user.id })
+            const response = await axios.put(`${tenantBaseURL}/users/update-sprint-year`, { activeYear: newActiveYear, userId: user.id })
             setActiveYear(response.data.activeYear)
 
             if (user) {
@@ -134,25 +136,27 @@ const Navbar = () => {
                     </select>
                 </div>
 
-                <Link to="/register-offtime">
-                    <button type="submit" className='h-fit whitespace-nowrap button text-black bg-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Register Off- & Sicktime</button>
+                <Link to={`/${tenantId}/register-offtime`}>
+                    <button 
+                        type="submit" 
+                        className={`${inputClasses}`}>Register Off- & Sicktime</button>
                 </Link>
 
-                <Link to="/create-task">
-                    <button type="submit" className='bg-rose-500 h-fit whitespace-nowrap button text-white border-rose-500 hover:bg-rose-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center   '>Create Task</button>
+                <Link to={`/${tenantId}/create-task`}>
+                    <button type="submit" className={`${inputClasses} bg-pink-700 border-none text-white`}>Create Task</button>
                 </Link>
             </span>
 
-            <span className='flex flex-row align-center items-center justify-center py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 mt-5 md:mt-0'>
+            <Link to={`/${tenantId}/profile`} className='flex flex-row align-center items-center justify-center py-1 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 mt-5 md:mt-0'>
                 <p className='font-bold'>@{username}</p>
                 <img
-                    className='w-[40px] h-[40px] rounded-full object-cover ml-2'
+                    className='w-[45px] h-[45px] rounded object-cover ml-2'
                     src={`${imageSrc}${userImg}`} /
                 >
-            </span>
+            </Link>
 
             <span className='flex items-center'>
-                <Link to="/notifications">
+                <Link to={`/${tenantId}/notifications`}>
                     <div className='mr-5 ml-1 relative hover:cursor-pointer'>
                         <FaBell className='text-slate-900' size={18} />
 
@@ -167,7 +171,7 @@ const Navbar = () => {
                 <button
                     onClick={handleLogout}
                     type="button"
-                    className="h-fit text-black font-medium rounded-md text-sm px-4 mt-5 py-2 text-center mr-3 md:mr-0 md:mt-0">Logout</button>
+                    className={`${inputClasses}`}>Logout</button>
             </span>
         </>
     )

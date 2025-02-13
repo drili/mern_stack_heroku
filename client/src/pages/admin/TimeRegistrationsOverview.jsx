@@ -8,6 +8,7 @@ import TimeRegOverviewFilter from '../../components/admin/TimeRegOverviewFilter'
 import CustomCodeBlock from '../../components/CustomCodeBlock'
 import getCurrentSprint from '../../functions/getCurrentSprint'
 import { ConfigContext } from '../../context/ConfigContext'
+import { UserContext } from '../../context/UserContext'
 
 const TimeRegistrationsOverview = () => {
     const [selectedSprint, setSelectedSprint] = useState("")
@@ -15,7 +16,10 @@ const TimeRegistrationsOverview = () => {
     const [timeRegistrations, setTimeRegistrations] = useState([])
     const activeSprint = getCurrentSprint()
 
+    const { user } = useContext(UserContext)
+
     const { baseURL } = useContext(ConfigContext);
+    const tenantBaseURL = `${baseURL}/${user.tenant_id}`
 
     const handleSprintChange = (selectedValue, selectedSprint) => {
         setSelectedSprint(selectedSprint)
@@ -30,7 +34,7 @@ const TimeRegistrationsOverview = () => {
         }
 
         try {
-            const response = await axios.get(`${baseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}`)
+            const response = await axios.get(`${tenantBaseURL}/time-registrations/fetch-users-time-regs-by-sprint/${sprintId}`)
 
             if (response.status == 200) {
                 setTimeout(() => {
@@ -52,11 +56,8 @@ const TimeRegistrationsOverview = () => {
 
     return (
         <div id='TimeRegistrationsOverview'>
-            <PageHeading
-                heading="Time Registrations Overview"
-                subHeading={`An overview of time registrations pr. user`}
-                suffix="Select the different filter options to filter the table."
-            />
+            <h2 className='text-black text-xl font-bold mb-2'>Time registrations overview</h2>
+            <p className='text-neutral-500 text-sm mb-10'>An overview of time registrations pr. user`</p>
 
             <TimeRegOverviewFilter
                 onSelectedSprint={handleSprintChange}
@@ -67,7 +68,7 @@ const TimeRegistrationsOverview = () => {
                     <Accordion.Panel>
                         <Accordion.Title>
                             <span className='flex gap-5 items-center'>
-                                <h2 className="text-lg font-bold text-gray-900">
+                                <h2 className="text-lg font-bold text-black">
                                     Time Registrations in {selectedSprint ? selectedSprint?.sprintName : `${activeSprint.sprintMonth} ${activeSprint.sprintYear}`}
                                 </h2>
                             </span>
@@ -77,22 +78,22 @@ const TimeRegistrationsOverview = () => {
                             <section>
                                 <Table className='relative'>
                                     <Table.Head>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Name
                                         </Table.HeadCell>
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Total Time Registered
                                         </Table.HeadCell>
 
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Intern Time
                                         </Table.HeadCell>
 
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Client Time
                                         </Table.HeadCell>
 
-                                        <Table.HeadCell className='text-left'>
+                                        <Table.HeadCell className='text-left text-black'>
                                             Off- & Sicktime
                                         </Table.HeadCell>
                                     </Table.Head>
@@ -110,7 +111,7 @@ const TimeRegistrationsOverview = () => {
                                             timeRegistrations &&
                                             timeRegistrations.map((regs) => (
                                                 <Table.Row className="bg-white  " key={regs._id}>
-                                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
+                                                    <Table.Cell className="whitespace-nowrap text-black font-bold ">
                                                         {regs.username}
                                                     </Table.Cell>
 

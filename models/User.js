@@ -3,6 +3,10 @@ const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema(
     {
+        tenantId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Tenants",
+        },
         username: {
             type: String,
             required: true,
@@ -44,6 +48,10 @@ const userSchema = new mongoose.Schema(
         slackId: {
             type: String,
             default: "0",
+        },
+        isPasswordHashed: {
+            type: Boolean,
+            default: false,
         }
     },
     {
@@ -52,14 +60,16 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-    if (this.isModified("password")) {
+    if (this.isModified("password") && !this.isPasswordHashed) {
         const salt = await bcrypt.genSalt(10)
         this.password = await bcrypt.hash(this.password, salt)
+        this.isPasswordHashed = true
     }
 
     next()
 })
 
-const User = mongoose.model("User", userSchema)
-
-module.exports = User
+module.exports = {
+    User: mongoose.model("User", userSchema),
+    UserSchema: userSchema
+};
