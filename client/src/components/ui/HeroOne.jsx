@@ -5,7 +5,7 @@ import { Parallax } from 'react-scroll-parallax';
 import BackgroundImage from "../../assets/images/65c5ecddff8cba0a5346c654_hero-bg-image.png"
 import OverlappingImage from "../../assets/images/screenshot_dashboard1.png"
 
-import HeadingBig from './elements/headingBig'
+import HeadingBig from './elements/HeadingBig'
 import ButtonSmall from './elements/ButtonSmall'
 import HeroDescription from './elements/HeroDescription';
 import ButtonBig from './elements/ButtonBig';
