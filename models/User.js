@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
         },
         activeYear: {
             type: Number,
-            default: 2024
+            default: 2025
         },
         slackId: {
             type: String,
