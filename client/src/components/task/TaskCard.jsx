@@ -32,7 +32,7 @@ const TaskCard = ({ taskId, taskName, taskDescription, taskPersons, customerName
     return (
         <div
             id={taskId}
-            className={`task-card block p-3 mb-2 border border-custom-bg-gray rounded hover:bg-gray-100    cursor-pointer ${taskType === "quickTask" ? "bg-teal-50 border-teal-200" : "bg-white"}`}>
+            className={`overflow-hidden task-card block p-3 mb-2 border border-custom-bg-gray rounded hover:bg-gray-100    cursor-pointer ${taskType === "quickTask" ? "bg-teal-50 border-teal-200" : "bg-white"}`}>
             <span>
                 <section className='flex gap-2'>
                     <span
