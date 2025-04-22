@@ -90,7 +90,7 @@ router.route("/fetch-user-notifications").post(async (req, res) => {
             .populate({
                 path: "taskId",
                 model: Task,
-                select: "taskName",
+                select: "taskName isArchived",
             })
             .sort({ _id: -1 })
 
