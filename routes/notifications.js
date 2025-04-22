@@ -141,7 +141,7 @@ router.route("/create-notification-task").post(async (req, res) => {
                     const notifiedUser = await User.findById(userId)
                     const notifiedBy = await User.findById(mentionedBy)
                     if (notifiedUser.slackId) {
-                        sendSlackMessage(`${notifiedBy.username} added you to a new quick task: <https://taskalloc8or-heroku-frontend.vercel.app/${tentantId}/task-view?taskID=${taskId}|${taskName}> \nDeadline: ${taskDeadline}`, notifiedUser.slackId)
+                        sendSlackMessage(`${notifiedBy.username} added you to a new quick task: <https://taskalloc8or-heroku-frontend.vercel.app/${tenantId}/task-view?taskID=${taskId}|${taskName}> \nDeadline: ${taskDeadline}`, notifiedUser.slackId)
                     }
                 })
             }
@@ -191,7 +191,7 @@ router.route("/create-notification").post(async (req, res) => {
 
             if (notifiedUser && notifiedUser.slackId) {
                 sendSlackMessage(
-                    `${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/${tentantId}/task-view?taskID=${taskId}`,
+                    `${notifiedBy.username} mentioned you in task: https://taskalloc8or-heroku-frontend.vercel.app/${tenantId}/task-view?taskID=${taskId}`,
                     notifiedUser.slackId
                 );
 
