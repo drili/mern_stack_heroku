@@ -161,7 +161,7 @@ router.route("/create-notification").post(async (req, res) => {
         mentionedBy,
         htmlContent } = req.body
 
-    const notificationLinkModified = `${tentantId}/task?taskId=${taskId}`
+    const notificationLinkModified = `${tenantId}/task?taskId=${taskId}`
 
     if (!tenantId || !taskId) {
         return res.status(400).json({ error: "tenantId & taskId is required" })
