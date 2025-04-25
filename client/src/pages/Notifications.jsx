@@ -181,7 +181,7 @@ const Notifications = () => {
                                         <span className='flex justify-between gap-2 items-center'>
                                             {notification.notificationType == "task_create_tagging" ? (
                                                 <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>
-                                                    Added you in task "{notification.taskId.taskName}"</p>
+                                                    Added you in task "{notification.taskId?.taskName}"</p>
                                             ) : (
                                                 <p className='text-sm text-slate-500 mb-2 max-w-[75%] whitespace-nowrap overflow-hidden text-ellipsis'>Mentioned you in task "{notification.taskId.taskName}"</p>
                                             )}
