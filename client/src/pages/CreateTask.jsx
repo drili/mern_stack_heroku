@@ -227,7 +227,11 @@ const CreateTask = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        let finalTaskData = { ...taskData }
+        let finalTaskData = { 
+            ...taskData,
+            upcomingDeadlineNotificationSent: false,
+            deadlineNotificationSent: false,
+        }
 
         if (toggleShowAdjustPercentages) {
             const updatedTaskPersons = updateTaskDataWithNewPercentages()

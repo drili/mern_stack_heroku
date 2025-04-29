@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
+const startCrons = require("./cron");
 
 require('dotenv').config()
 
@@ -85,6 +86,8 @@ mongoose.connect(staticDbUrl, {}).then(() => {
 // connection.once('open', () => {
 //     console.log("::: MongoDB database connection established successfully")
 // })
+
+startCrons(); 
 
 server.listen(process.env.PORT, () => {
     console.log("::: Server is running on port 8000");
