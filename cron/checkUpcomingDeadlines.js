@@ -47,7 +47,7 @@ module.exports = async function checkUpcomingDeadlines(app) {
 
         if (user.slackId) {
           await sendSlackMessage(
-            `📆 Reminder: The deadline for *${task.taskName}* is tomorrow. Check it here: <https://taskalloc8or-heroku-frontend.vercel.app/${task.tenantId}/task-view?taskID=${task._id}|Open Task>`,
+            `🗓️ Reminder: The deadline for *${task.taskName}* is tomorrow. Check it here: <https://taskalloc8or-heroku-frontend.vercel.app/${task.tenantId}/task-view?taskID=${task._id}|Open Task>`,
             user.slackId
           );
         }
