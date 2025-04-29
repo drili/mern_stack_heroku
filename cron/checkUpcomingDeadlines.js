@@ -32,7 +32,7 @@ module.exports = async function checkUpcomingDeadlines(app) {
           userId: userId,
           notificationType: "deadline_upcoming",
           notificationLink: `/task?taskId=${task._id}`,
-          notificationMessage: `📆 Reminder: The deadline for task "${task.taskName}" is tomorrow.`,
+          notificationMessage: `🗓️ Reminder: The deadline for task "${task.taskName}" is tomorrow.`,
           taskId: task._id,
           taskCustomer: task.taskCustomer,
           mentionedBy: task.createdBy,
