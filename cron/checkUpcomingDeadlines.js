@@ -1,64 +1,68 @@
-const cron = require("node-cron");
 const { Task } = require("../models/Task");
 const { User } = require("../models/User");
 const { NotificationChatTask } = require("../models/NotificationChatTask");
 const sendSlackMessage = require("../functions/slackMessageUser");
 
-const checkUpcomingDeadlines = () => {
-  cron.schedule("0 7 * * *", async () => {
-    console.log("🕖 Running cron: checkUpcomingDeadlines");
+module.exports = async function checkUpcomingDeadlines(app) {
+  const io = app.get("io");
 
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const isoDate = tomorrow.toISOString().split("T")[0];
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 1);
+  targetDate.setHours(0, 0, 0, 0);
+  const isoString = targetDate.toISOString().split("T")[0];
 
-    try {
-      const tasks = await Task.find({
-        taskType: "quickTask",
-        isArchived: false,
-        taskDeadline: isoDate,
-        workflowStatus: { $ne: 3 },
-        upcomingDeadlineNotificationSent: { $ne: true },
-      });
+  try {
+    const tasks = await Task.find({
+      taskType: "quickTask",
+      isArchived: false,
+      taskDeadline: isoString,
+      workflowStatus: { $ne: 3 },
+      upcomingDeadlineNotificationSent: { $ne: true },
+    });
 
-      let reminded = 0;
+    let reminded = 0;
 
-      for (const task of tasks) {
-        for (const person of task.taskPersons) {
-          const user = await User.findById(person.user);
-          if (!user) continue;
+    for (const task of tasks) {
+      for (const taskPerson of task.taskPersons) {
+        const userId = taskPerson.user;
+        const user = await User.findById(userId);
+        if (!user) continue;
 
-          const newNotification = new NotificationChatTask({
-            userId: user._id,
-            notificationType: "deadline_upcoming",
-            notificationLink: `/task?taskId=${task._id}`,
-            notificationMessage: `📆 Reminder: The deadline for task "${task.taskName}" is tomorrow.`,
-            taskId: task._id,
-            taskCustomer: task.taskCustomer,
-            mentionedBy: task.createdBy,
-            tenantId: task.tenantId,
-          });
+        const newNotification = new NotificationChatTask({
+          userId: userId,
+          notificationType: "deadline_upcoming",
+          notificationLink: `/task?taskId=${task._id}`,
+          notificationMessage: `📆 Reminder: The deadline for task "${task.taskName}" is tomorrow.`,
+          taskId: task._id,
+          taskCustomer: task.taskCustomer,
+          mentionedBy: task.createdBy,
+          tenantId: task.tenantId,
+        });
 
-          await newNotification.save();
-          if (user.slackId) {
-            await sendSlackMessage(
-              `📆 Reminder: The deadline for *${task.taskName}* is tomorrow. Check it here: <https://taskalloc8or-heroku-frontend.vercel.app/${task.tenantId}/task-view?taskID=${task._id}|Open Task>`,
-              user.slackId
-            );
-          }
+        await newNotification.save();
 
-          reminded++;
+        io?.to(userId.toString()).emit("new-notification", {
+          message: "You have a new reminder",
+        });
+
+        if (user.slackId) {
+          await sendSlackMessage(
+            `📆 Reminder: The deadline for *${task.taskName}* is tomorrow. Check it here: <https://taskalloc8or-heroku-frontend.vercel.app/${task.tenantId}/task-view?taskID=${task._id}|Open Task>`,
+            user.slackId
+          );
         }
 
-        task.upcomingDeadlineNotificationSent = true;
-        await task.save();
+        reminded++;
       }
 
-      console.log(`✅ [UpcomingDeadline] ${reminded} users reminded about ${tasks.length} tasks`);
-    } catch (err) {
-      console.error("❌ Cron error in checkUpcomingDeadlines:", err);
+      task.upcomingDeadlineNotificationSent = true;
+      await task.save();
     }
-  });
-};
 
-module.exports = checkUpcomingDeadlines;
+    console.log(
+      `✅ Upcoming check done: ${tasks.length} tasks checked, ${reminded} reminders sent.`
+    );
+  } catch (err) {
+    console.error("Error in upcoming deadline check", err);
+  }
+};
