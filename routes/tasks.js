@@ -4,6 +4,9 @@ const {Task} = require("../models/Task")
 const {Sprints} = require("../models/Sprints")
 const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
+const { User } = require("../models/User");
+const { NotificationChatTask } = require("../models/NotificationChatTask");
+const sendSlackMessage = require("../functions/slackMessageUser");
 
 router.route("/recent-tasks/:userId").get(async (req, res) => {
     const baseUrl = req.baseUrl
@@ -62,19 +65,6 @@ router.route("/fetch-deadlines").get(async (req, res) => {
             tenantId: tenantId,
         })
 
-        console.log("🔍 Antal tasks fundet:", deadlineTasks.length)
-        /*
-        const arrayTasks = [];
-
-        Object.values(deadlineTasks).flat().forEach(task => {
-            if (task.taskType === "quickTask") {
-                const taskDeadline = new Date(task.taskDeadline);
-                if (task.workflowStatus !== 3 && taskDeadline >= todayDate && taskDeadline <= sevenDaysFromNow) {
-                    arrayTasks.push(task);
-                }
-            }
-        });*/
-
         const overdueTasks = []
         const upcomingTasks = []
 
@@ -87,11 +77,9 @@ router.route("/fetch-deadlines").get(async (req, res) => {
     
                     if (taskDeadline < todayDate) {
                         overdueTasks.push(task)
-                        console.log("🔴 overdue:", task.taskName, task.taskDeadline);
                         
                     } else if (taskDeadline >= todayDate && taskDeadline <= sevenDaysFromNow) {
                         upcomingTasks.push(task)
-                        console.log("🟢 upcoming:", task.taskName, task.taskDeadline);
                     }
                 }
             } catch (innerErr) {
@@ -593,5 +581,133 @@ router.route("/update-taskworkflow/:taskId").put(async (req, res) => {
         res.status(500).json({ error: "Failed to updated task workflowStatus" })
     }
 })
+
+router.route("/check-upcoming-deadlines").get(async (req, res) => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    try {
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 1); // tomorrow
+        targetDate.setHours(0, 0, 0, 0);
+        const isoString = targetDate.toISOString().split("T")[0]; // e.g., "2025-04-30"
+
+        const tasks = await Task.find({
+            taskType: "quickTask",
+            isArchived: false,
+            taskDeadline: isoString,
+            workflowStatus: { $ne: 3 },
+            upcomingDeadlineNotificationSent: { $ne: true },
+        });
+
+        let reminded = 0;
+
+        for (const task of tasks) {
+            for (const taskPerson of task.taskPersons) {
+                const userId = taskPerson.user;
+                const user = await User.findById(userId);
+                if (!user) continue;
+
+                // Save internal reminder
+                const newNotification = new NotificationChatTask({
+                    userId: userId,
+                    notificationType: "deadline_upcoming",
+                    notificationLink: `/task?taskId=${task._id}`,
+                    notificationMessage: `📆 Reminder: The deadline for task "${task.taskName}" is tomorrow.`,
+                    taskId: task._id,
+                    taskCustomer: task.taskCustomer,
+                    mentionedBy: task.createdBy,
+                    tenantId: task.tenantId,
+                });
+
+                await newNotification.save();
+
+                req.app.get("io")?.to(userId.toString()).emit("new-notification", {
+                    message: "You have a new reminder",
+                });
+
+                if (user.slackId) {
+                    await sendSlackMessage(
+                        `🗓️ Reminder: The deadline for *${task.taskName}* is tomorrow. Check it here: <https://taskalloc8or-heroku-frontend.vercel.app/${task.tenantId}/task-view?taskID=${task._id}|Open Task>`,
+                        user.slackId
+                    );
+                }
+
+                reminded++;
+            }
+
+            task.upcomingDeadlineNotificationSent = true;
+            await task.save();
+        }
+
+        res.status(200).json({ message: `Checked ${tasks.length} tasks. Reminders sent to ${reminded} users.` });
+    } catch (error) {
+        console.error("Error while checking upcoming deadlines", error);
+        res.status(500).json({ error: "Error while checking upcoming deadlines" });
+    }
+});
+
+router.route("/check-missed-deadlines").get(async (req, res) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    try {
+        const tasks = await Task.find({
+            taskType: "quickTask",
+            isArchived: false,
+            taskDeadline: { $lt: today },
+            workflowStatus: { $ne: 3 },
+            deadlineNotificationSent: { $ne: true },
+        });
+
+        let notified = 0;
+
+        for (const task of tasks) {
+            for (const taskPerson of task.taskPersons) {
+                const userId = taskPerson.user;
+                const user = await User.findById(userId);
+                if (!user) continue;
+
+                // Save internal notification
+                const newNotification = new NotificationChatTask({
+                    userId: userId,
+                    notificationType: "deadline_missed",
+                    notificationLink: `/task?taskId=${task._id}`,
+                    notificationMessage: `⚠️ The deadline for task "${task.taskName}" has been missed.`,
+                    taskId: task._id,
+                    taskCustomer: task.taskCustomer,
+                    mentionedBy: task.createdBy,
+                    tenantId: task.tenantId,
+                });
+
+                await newNotification.save();
+
+                // WebSocket event
+                req.app.get("io")?.to(userId.toString()).emit("new-notification", {
+                    message: "You have a new notification",
+                });
+
+                // Slack message
+                if (user.slackId) {
+                    await sendSlackMessage(
+                        `⚠️ You missed the deadline for *${task.taskName}*. Check it here: <https://taskalloc8or-heroku-frontend.vercel.app/${task.tenantId}/task-view?taskID=${task._id}|Open Task>`,
+                        user.slackId
+                    );
+                }
+
+                notified++;
+            }
+
+            task.deadlineNotificationSent = true;
+            await task.save();
+        }
+
+        res.status(200).json({ message: `Checked ${tasks.length} tasks. Notifications sent to ${notified} users.` });
+    } catch (error) {
+        console.error("Error while checking missed deadlines", error);
+        res.status(500).json({ error: "Error while checking missed deadlines" });
+    }
+});
 
 module.exports = router
