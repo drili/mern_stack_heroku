@@ -48,6 +48,8 @@ const CreateTask = () => {
         estimatedTime: 0,
         taskType: "timedTask",
         tenantId: user.tenant_id,
+        upcomingDeadlineNotificationSent: false,
+        deadlineNotificationSent: false,
     });
 
     const activeSprint = getCurrentSprint()
@@ -229,8 +231,6 @@ const CreateTask = () => {
 
         let finalTaskData = { 
             ...taskData,
-            upcomingDeadlineNotificationSent: false,
-            deadlineNotificationSent: false,
         }
 
         if (toggleShowAdjustPercentages) {
