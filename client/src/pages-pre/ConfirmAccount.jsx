@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const ConfirmAccount = ({ inputClass, labelClass, email, handleShowLoginForm, setLoginForm }) => {
-    const serverURL = "http://localhost:8000"
+    const serverURL = "http://localhost:5000"
 
     const [confirmationCode, setConfirmationCode] = useState("")
     const [accountVerified, setAccountVerified] = useState(false)
