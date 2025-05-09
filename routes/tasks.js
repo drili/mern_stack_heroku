@@ -32,9 +32,14 @@ router.route("/recent-tasks/:userId").get(async (req, res) => {
 })
 
 router.route("/fetch-deadlines").get(async (req, res) => {
+    console.log("🔵 Route /fetch-deadlines rammes");
+    
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
     const { userId } = req.query
+
+    console.log("tenantId:", tenantId)
+    console.log("userId:", userId)
 
     if (!tenantId || !userId) {
         return res.status(400).json({ error: "tenantId & userId is required" })
@@ -57,18 +62,29 @@ router.route("/fetch-deadlines").get(async (req, res) => {
             tenantId: tenantId,
         })
 
-        const arrayTasks = [];
+        const overdueTasks = []
+        const upcomingTasks = []
 
-        Object.values(deadlineTasks).flat().forEach(task => {
-            if (task.taskType === "quickTask") {
-                const taskDeadline = new Date(task.taskDeadline);
-                if (task.workflowStatus !== 3 && taskDeadline >= todayDate && taskDeadline <= sevenDaysFromNow) {
-                    arrayTasks.push(task);
+        for (const task of deadlineTasks) {
+            try {
+                if (task.taskType === "quickTask" && task.workflowStatus !== 3 && task.taskDeadline) {
+                    const taskDeadline = new Date(task.taskDeadline)
+    
+                    taskDeadline.setHours(0, 0, 0, 0)
+    
+                    if (taskDeadline < todayDate) {
+                        overdueTasks.push(task)
+                        
+                    } else if (taskDeadline >= todayDate && taskDeadline <= sevenDaysFromNow) {
+                        upcomingTasks.push(task)
+                    }
                 }
+            } catch (innerErr) {
+                console.error("Fejl i deadline-parsing:", task._id, innerErr)
             }
-        });
+        }
 
-        res.json(arrayTasks)
+        res.json({ overdueTasks, upcomingTasks })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

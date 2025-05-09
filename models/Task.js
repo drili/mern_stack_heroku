@@ -79,6 +79,14 @@ const taskSchema = new mongoose.Schema({
     taskType: {
         type: String,
         default: null,
+    },
+    upcomingDeadlineNotificationSent: {
+        type: Boolean,
+        default: false
+    },
+    deadlineNotificationSent: {
+        type: Boolean,
+        default: false
     }
 },
 {
