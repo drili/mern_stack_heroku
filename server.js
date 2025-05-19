@@ -2,6 +2,10 @@ const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
 
+const startCrons = require("./cron");
+
+startCrons(); 
+
 require('dotenv').config()
 
 // *** Routes
@@ -32,6 +36,8 @@ const io = socketIo(server, {
         methods: ["GET", "POST"]
     }
 });
+
+app.set("io", io)
 
 const corsOptions = {
     origin: process.env.SOCKET_IO_BASE_URL,
@@ -85,6 +91,14 @@ mongoose.connect(staticDbUrl, {}).then(() => {
 // connection.once('open', () => {
 //     console.log("::: MongoDB database connection established successfully")
 // })
+
+/* This is for testing cron jobs on server start
+const checkUpcomingDeadlines = require("./cron/checkUpcomingDeadlines");
+const checkMissedDeadlines = require("./cron/checkMissedDeadlines");
+
+// 🔁 RUN THESE ON SERVER START FOR TESTING
+checkUpcomingDeadlines(app);
+checkMissedDeadlines(app); */
 
 server.listen(process.env.PORT, () => {
     console.log("::: Server is running on port 5000");
