@@ -176,7 +176,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
             <ul className="flex flex-col overflow-y-auto max-h-[55vh] relative" ref={chatContainerRef}>
                 {timeline.map((item, index) => (
                     <li key={index} className="flex items-start gap-4 px-4 py-3 hover:bg-stone-100 group relative">
-                        <div className="flex-1 pl-2">
+                        <div className="flex-1 pl-8">
                             <div class="absolute z-10 w-3 h-3 bg-pink-700 rounded-full mt-1.5 ml-1.5 -start-1.5 left-4 border border-white"></div>
                             <div class="absolute w-[1px] h-full ml-[11px] -start-1.5 left-4 border border-gray-200"></div>
 
