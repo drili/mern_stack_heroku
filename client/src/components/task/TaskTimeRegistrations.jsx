@@ -42,29 +42,38 @@ const TaskTimeRegistrations = ({ taskId }) => {
 						<>
 							<Table className='relative'>
 								<Table.Head>
-									<Table.HeadCell className='text-left text-black bg-white py-3 px-5'>
+									<Table.HeadCell className='w-fit text-left text-black bg-white py-3 px-5'>
 										Time registered
 									</Table.HeadCell>
 									<Table.HeadCell className='text-left text-black bg-white py-3 px-5'>
-										Date
+										Comments
 									</Table.HeadCell>
 									<Table.HeadCell className='text-left text-black bg-white py-3 px-5'>
 										User
 									</Table.HeadCell>
+									<Table.HeadCell className='text-left text-black bg-white py-3 px-5'>
+										Date
+									</Table.HeadCell>
 								</Table.Head>
 
 								<Table.Body>
-									{timeRegistrations.slice(0, displayCount).map((time) => (
+									{[...timeRegistrations]
+										.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+										.slice(0, displayCount)
+										.map((time) => (
 										<Table.Row key={time._id}>
 											<Table.Cell className='py-3 px-5'>
 												<p className='text-xs font-bold text-black'>{time.timeRegistered}</p>
 											</Table.Cell>
 											<Table.Cell className='py-3 px-5'>
-												<p className='text-xs'>{time.currentTime}</p>
+												<p className='text-xs font-bold text-black'>{time.description}</p>
 											</Table.Cell>
 											<Table.Cell className='py-3 px-5 flex items-center gap-2'>
 												<img className='w-[25px] h-[25px] object-cover object-center rounded' src={`${imageSrc}${time.userId.profileImage}`} />
 												<p className='text-xs'>{time.userId.username}</p>
+											</Table.Cell>
+											<Table.Cell className='py-3 px-5'>
+												<p className='text-xs'>{time.currentTime}</p>
 											</Table.Cell>
 										</Table.Row>
 									))}
