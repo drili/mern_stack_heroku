@@ -26,59 +26,61 @@ const CustomerExportTasksToExcel = ({ customerId, tenantBaseURL, customerName })
         }
     }
 
-    console.log(selectedSprintId);
-    
-
     const handleExport = async () => {
         if (!selectedSprintId) {
-            toast.error("Please select a sprint first")
-            return
+            toast.error("Please select a sprint first");
+            return;
         }
     
-        setLoading(true)
+        setLoading(true);
     
         try {
             const response = await axios.get(`${tenantBaseURL}/tasks/export-customer-sprints-to-excel`, {
                 params: {
                     customerId,
-                    sprintId: selectedSprintId
-                }
-            })
+                    sprintId: selectedSprintId,
+                },
+            });
     
-            const { timedTasks, quickTasks } = response.data
-            
-            const currentDate = new Date().toISOString().split("T")[0]
+            const { groupedTasks } = response.data;
+            const currentDate = new Date().toISOString().split("T")[0];
     
-            if ((timedTasks?.length || 0) === 0 && (quickTasks?.length || 0) === 0) {
+            const sheetRows = [];
+    
+            for (const [vertical, tasks] of Object.entries(groupedTasks)) {
+                sheetRows.push({ "Vertical": vertical }); // Group header
+    
+                tasks.forEach(task => {
+                    sheetRows.push(task);
+                });
+    
+                sheetRows.push({});
+            }
+    
+            if (sheetRows.length === 0) {
                 toast("No tasks found in selected sprint", {
                     duration: 4000,
                     position: 'top-center',
                     style: { background: '#fbbf24', color: '#000' }
-                })
-                setLoading(false)
-                return
+                });
+                setLoading(false);
+                return;
             }
     
-            // 👇 Tilføj en ny kolonne til at adskille opgavetyperne
-            const combined = [
-                ...(timedTasks.map(task => ({ ...task })) ?? []),
-                ...(quickTasks.map(task => ({ ...task })) ?? [])
-            ]
+            const worksheet = XLSX.utils.json_to_sheet(sheetRows, { skipHeader: false });
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Customer Tasks");
     
-            const worksheet = XLSX.utils.json_to_sheet(combined)
-            const workbook = XLSX.utils.book_new()
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Customer Tasks")
-    
-            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
-            const blob = new Blob([excelBuffer], { type: 'application/octet-stream' })
-            saveAs(blob, `${customerName}_tasks_oversigt_${currentDate}.xlsx`)
+            const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+            const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+            saveAs(blob, `${customerName}_tasks_oversigt_${currentDate}.xlsx`);
         } catch (error) {
-            console.error("Export failed", error)
-            toast.error("Failed to export data")
+            console.error("Export failed", error);
+            toast.error("Failed to export data");
         }
     
-        setLoading(false)
-    }    
+        setLoading(false);
+    };        
 
     useEffect(() => {
         fetchSprints()

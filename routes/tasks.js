@@ -574,7 +574,6 @@ router.get('/export-customer-sprints-to-excel', async (req, res) => {
         const customerObjectId = new mongoose.Types.ObjectId(customerId)
         const sprintObjectId = new mongoose.Types.ObjectId(sprintId)
 
-        // Fetch all time registrations related to the sprint & customer
         const timeRegs = await TimeRegistration.find({
             sprintId: sprintObjectId,
             tenantId: req.originalUrl.split("/")[1]
@@ -585,22 +584,25 @@ router.get('/export-customer-sprints-to-excel', async (req, res) => {
             taskSprints: { $in: [sprintObjectId] }
         }
 
-        // Hent timed tasks
-        const timedTasks = await Task.find({ ...query, taskType: 'timedTask' })
+        const timedTasks = await Task.find(query)
             .populate("createdBy", "username")
+            .populate("taskVertical", "verticalName")
             .lean()
 
-        // Hent quick tasks
-        const quickTasks = await Task.find({ ...query, taskType: 'quickTask' })
-            .populate("createdBy", "username")
-            .lean()
+        const groupedTasks = {}
 
-        // Formatér opgaverne med total registreret tid
-        const formatTasks = (tasks) => tasks.map(task => {
-            const taskTimeRegs = timeRegs.filter(reg => reg.taskId && reg.taskId.toString() === task._id.toString())
+        const sortedTasks = [...timedTasks].sort((a, b) => {
+            const aName = a.taskVertical?.verticalName?.toLowerCase() || "";
+            const bName = b.taskVertical?.verticalName?.toLowerCase() || "";
+            return aName.localeCompare(bName);
+        })
+
+        sortedTasks.forEach(task => {
+            const verticalName = task.taskVertical?.verticalName || "Ukendt"
+            const taskTimeRegs = timeRegs.filter(reg => reg.taskId?.toString() === task._id.toString())
             const totalTime = taskTimeRegs.reduce((sum, reg) => sum + reg.timeRegistered, 0)
 
-            return {
+            const formatted = {
                 "Task Name": task.taskName,
                 "Task Type": task.taskType,
                 "Description": task.taskDescription || "",
@@ -609,15 +611,15 @@ router.get('/export-customer-sprints-to-excel', async (req, res) => {
                 "Created By": task.createdBy?.username || "",
                 "Time Registered": totalTime
             }
-        })
 
-        console.log("Export query:", query)
-        console.log("Timed:", timedTasks.length, "Quick:", quickTasks.length, "TimeRegs:", timeRegs.length)
+            if (!groupedTasks[verticalName]) {
+                groupedTasks[verticalName] = []
+            }
 
-        res.json({
-            timedTasks: formatTasks(timedTasks),
-            quickTasks: formatTasks(quickTasks)
+            groupedTasks[verticalName].push(formatted)
         })
+        
+        res.json({ groupedTasks })
     } catch (error) {
         console.error("Failed to export tasks:", error)
         res.status(500).json({ error: "Internal server error" })
