@@ -313,7 +313,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
 
                                             <div className="grid grid-cols-1 gap-5 md:grid-cols-1 md:gap-5 mt-10 pt-10">
                                                 <>
-                                                    <h2 className='text-lg md:text-2xl text-black font-extrabold'>Task chat</h2>
+                                                    <h2 className='text-lg md:text-2xl text-black font-extrabold'>Timeline</h2>
                                                     {taskID && (
                                                         <TaskChat
                                                             taskID={taskID}
