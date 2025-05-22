@@ -65,6 +65,13 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                     })
 
                     fetchTimeRegistrations(taskId)
+
+                    setFormRegisterTime((formData) => ({
+                        ...formData,
+                        timeRegistered: '',
+                        description: '',
+                        currentTime: getFormattedDate()
+                    }))
                 }
             } catch (error) {
                 console.error('Failed to register time', error)
@@ -100,7 +107,7 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
             <span className='timeRegistrationField flex flex-col gap-4'>
                 <div className='flex-1'>
                     <form onSubmit={handleRegisterTime} className=''>
-                        <span className='grid grid-cols-4 gap-4'>
+                        <div className='grid grid-cols-4 gap-x-4'>
                             <div className='col-span-2'>
                                 <label className={labelClasses} htmlFor="currentTime">Date</label>
                                 <input
@@ -126,7 +133,17 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                                     >
                                 </input>
                             </div>
-                        </span>
+                            <div className='col-span-4'>
+                                <label htmlFor="description" className={labelClasses}>Registration comment</label>
+                                <input
+                                    type="text"
+                                    name="description"
+                                    onChange={handleInputChange}
+                                    placeholder="Registration comment (optional)"
+                                    className={inputClasses}
+                                />
+                            </div>
+                        </div>
 
                         <button type="submit" className='bg-black text-white py-2 rounded mt-5 mb-5 w-full text-sm hover:bg-pink-700'>Register Time</button>
                     </form>

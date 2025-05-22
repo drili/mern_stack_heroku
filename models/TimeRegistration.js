@@ -29,7 +29,7 @@ const timeRegistrationSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: Number,
+        type: String,
         required: false
     },
     currentTime: {
