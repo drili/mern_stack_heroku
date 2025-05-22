@@ -5,9 +5,9 @@
         "releaseDate": "13-02-2025",
         "releaseObject": [
             {
-                "name": "Tasks notificaitons",
+                "name": "Tasks with deadlines",
                 "description": [
-                    "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed."
+                    "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed. In the workflow you will see missed deadline tasks in the 'Deadline next 7 days'"
                 ]
             },
             {
