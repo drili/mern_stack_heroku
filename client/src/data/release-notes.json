@@ -1,5 +1,24 @@
 [
     {
+        "releaseVersion": "2.0.3",
+        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
+        "releaseDate": "13-02-2025",
+        "releaseObject": [
+            {
+                "name": "Tasks notificaitons",
+                "description": [
+                    "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed."
+                ]
+            },
+            {
+                "name": "Customer task eksport to .csv",
+                "description": [
+                    "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
+                ]
+            }
+        ]
+    },    
+    {
         "releaseVersion": "2.1",
         "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
         "releaseDate": "13-02-2025",
