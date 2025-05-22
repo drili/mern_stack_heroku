@@ -1,68 +1,23 @@
 [
     {
-        "releaseVersion": "2.1",
+        "releaseVersion": "2.0.3",
         "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
-        "releaseDate": "13-02-2025",
+        "releaseDate": "XXXX",
         "releaseObject": [
             {
-                "name": "New and updated UI",
+                "name": "Tasks with deadlines",
                 "description": [
-                    "Revamped user interface with improved navigation, modernized layouts, and enhanced visual elements to create a more intuitive and user-friendly experience."
+                    "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed. In the workflow you will see missed deadline tasks in the 'Deadline next 7 days'."
                 ]
             },
             {
-                "name": "New customer view with customer notes",
+                "name": "Customer task eksport to .csv",
                 "description": [
-                    "Introduced a dedicated customer view that allows users to see detailed customer information along with the ability to add and manage customer notes directly within the platform."
-                ]
-            },
-            {
-                "name": "Notifications on quick task creations with Slack",
-                "description": [
-                    "Integrated Slack notifications for quick task creation, ensuring teams receive instant updates when new tasks are added to improve communication and efficiency."
-                ]
-            },
-            {
-                "name": "Multi tenant database update",
-                "description": [
-                    "Enhanced database structure to support multi-tenant architecture, improving data isolation, security, and scalability across multiple organizations or workspaces."
-                ]
-            },
-            {
-                "name": "New landing pages with signup & registration (WIP)",
-                "description": [
-                    "Developing new landing pages with a seamless signup and registration process, making onboarding for new users more efficient and accessible. (Work in progress)"
-                ]
-            },
-            {
-                "name": "Added holiday view for holiday applications",
-                "description": [
-                    "Introduced a dedicated holiday view where users can track and manage holiday applications, view approvals, and keep an overview of team availability."
-                ]
-            },
-            {
-                "name": "Create new labels and new verticals for tasks",
-                "description": [
-                    "Users can now create custom labels and assign tasks to different verticals, enabling better categorization and organization of work items."
-                ]
-            },
-            {
-                "name": "Updated modal view with time registration table",
-                "description": [
-                    "Redesigned modal views to include a time registration table, allowing users to quickly review and manage logged work hours directly from the task details window."
-                ]
-            },
-            {
-                "name": "Small bug fixes",
-                "description": [
-                    "UI bug fixes",
-                    "Fixed bug on fetching time registrations by sprint",
-                    "Fixed notifications errors with Slack & TaskAlloc8or",
-                    "Fixed archived customers showing on create a new task"
+                    "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
                 ]
             }
         ]
-    },    
+    },  
     {
         "releaseVersion": "2.0.2",
         "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/05/pexels-pixabay-40896.jpg",
@@ -232,6 +187,70 @@
                 "description": [
                     "With the latest update, we've undertaken a significant overhaul of TaskAlloc8or's technical foundation, transitioning our platform from a PHP-based architecture to the modern, efficient MERN stack (MongoDB, Express.js, React, and Node.js). This move not only enhances the application's performance and scalability but also aligns our development process with current industry standards for more agile and responsive updates in the future.",
                     "Hosting on Heroku's cloud platform further improves our server reliability and enables seamless scaling options as our user base grows. The updated database architecture optimizes data retrieval and storage, ensuring a smoother user experience across all features, from task creation and time registration to user management and reporting. These improvements lay the groundwork for a robust, scalable web application that meets the evolving needs of project teams and managers."
+                ]
+            }
+        ]
+    },    
+    {
+        "releaseVersion": "2",
+        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
+        "releaseDate": "13-02-2025",
+        "releaseObject": [
+            {
+                "name": "New and updated UI",
+                "description": [
+                    "Revamped user interface with improved navigation, modernized layouts, and enhanced visual elements to create a more intuitive and user-friendly experience."
+                ]
+            },
+            {
+                "name": "New customer view with customer notes",
+                "description": [
+                    "Introduced a dedicated customer view that allows users to see detailed customer information along with the ability to add and manage customer notes directly within the platform."
+                ]
+            },
+            {
+                "name": "Notifications on quick task creations with Slack",
+                "description": [
+                    "Integrated Slack notifications for quick task creation, ensuring teams receive instant updates when new tasks are added to improve communication and efficiency."
+                ]
+            },
+            {
+                "name": "Multi tenant database update",
+                "description": [
+                    "Enhanced database structure to support multi-tenant architecture, improving data isolation, security, and scalability across multiple organizations or workspaces."
+                ]
+            },
+            {
+                "name": "New landing pages with signup & registration (WIP)",
+                "description": [
+                    "Developing new landing pages with a seamless signup and registration process, making onboarding for new users more efficient and accessible. (Work in progress)"
+                ]
+            },
+            {
+                "name": "Added holiday view for holiday applications",
+                "description": [
+                    "Introduced a dedicated holiday view where users can track and manage holiday applications, view approvals, and keep an overview of team availability."
+                ]
+            },
+            {
+                "name": "Create new labels and new verticals for tasks",
+                "description": [
+                    "Users can now create custom labels and assign tasks to different verticals, enabling better categorization and organization of work items."
+                ]
+            },
+            {
+                "name": "Updated modal view with time registration table",
+                "description": [
+                    "Redesigned modal views to include a time registration table, allowing users to quickly review and manage logged work hours directly from the task details window."
+                ]
+            },
+            {
+                "name": "Small bug fixes",
+                "description": [
+                    "UI bug fixes",
+                    "Fixed bug on fetching time registrations by sprint",
+                    "Fixed notifications errors with Slack & TaskAlloc8or",
+                    "Fixed archived customers showing on create a new task"
                 ]
             }
         ]

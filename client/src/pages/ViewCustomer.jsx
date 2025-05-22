@@ -11,7 +11,8 @@ import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext'
 import GenericForm from '../components/GenericForm'
 import WorkInProgressLabel from '../components/WorkInProgressLabel'
-import CustomerNotes from '../components/customers/CustomerNotes';
+import CustomerNotes from '../components/customers/CustomerNotes'
+import CustomerExportTasksToExcel from '../components/customers/CustomerExportTasksToExcel'
 
 const ViewCustomer = () => {
     const location = useLocation()
@@ -112,7 +113,7 @@ const ViewCustomer = () => {
             try {
                 const response = await axios.get(`${tenantBaseURL}/customer-targets/fetch-customer-targets-by-id?customerId=${urlCustomerId}`)
 
-                console.log(response.data.length)
+                //console.log(response.data.length)
 
                 if (response.data.length === 0) {
                     setCustomerTargets({
@@ -123,9 +124,9 @@ const ViewCustomer = () => {
                         percentageIncrease: '0',
                     })
 
-                    console.log({ customerTargets })
+                    //console.log({ customerTargets })
                 } else {
-                    console.log(response.data)
+                    //console.log(response.data)
                     setCustomerTargets(response.data[0])
                 }
             } catch (error) {
@@ -169,9 +170,9 @@ const ViewCustomer = () => {
 
             <section className='grid grid-cols-12 gap-10 mb-10'>
                 <span className='flex flex-col gap-10 col-span-6'>
-                    <div className='bg-white'>
+                    <div className='bg-white space-y-4'>
                         <div>
-                            <Accordion alwaysOpen={true} className='col-span-10 mb-5'>
+                            <Accordion alwaysOpen={true} className='col-span-10'>
                                 <Accordion.Panel>
                                     <Accordion.Title className='relative'>
                                         <span className='flex flex-col gap-5'>
@@ -230,6 +231,28 @@ const ViewCustomer = () => {
                                                 buttonValue="Update targets & adspends"
                                             />
                                         )}
+                                    </Accordion.Content>
+
+                                </Accordion.Panel>
+                            </Accordion>
+                        </div>
+
+                        <div>
+                            <Accordion collapseAll className='col-span-10'>
+                                <Accordion.Panel>
+                                    <Accordion.Title className='relative'>
+                                        <span className='flex flex-col gap-5'>
+                                            <h3 className="text-black text-lg font-medium">Report</h3>
+                                        </span>
+                                    </Accordion.Title>
+
+                                    <Accordion.Content>
+                                        <CustomerExportTasksToExcel 
+                                            customerId={urlCustomerId} 
+                                            tenantBaseURL={tenantBaseURL}
+                                            customerName={customer[0]?.customerName}
+                                        />
+
                                     </Accordion.Content>
 
                                 </Accordion.Panel>

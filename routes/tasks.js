@@ -579,4 +579,67 @@ router.route("/update-taskworkflow/:taskId").put(async (req, res) => {
     }
 })
 
+router.get('/export-customer-sprints-to-excel', async (req, res) => {
+    const { customerId, sprintId } = req.query
+
+    if (!customerId || !sprintId) {
+        return res.status(400).json({ error: "Missing customerId or sprintId" })
+    }
+
+    try {
+        const customerObjectId = new mongoose.Types.ObjectId(customerId)
+        const sprintObjectId = new mongoose.Types.ObjectId(sprintId)
+
+        const timeRegs = await TimeRegistration.find({
+            sprintId: sprintObjectId,
+            tenantId: req.originalUrl.split("/")[1]
+        }).lean()
+
+        const query = {
+            taskCustomer: customerObjectId,
+            taskSprints: { $in: [sprintObjectId] }
+        }
+
+        const timedTasks = await Task.find(query)
+            .populate("createdBy", "username")
+            .populate("taskVertical", "verticalName")
+            .lean()
+
+        const groupedTasks = {}
+
+        const sortedTasks = [...timedTasks].sort((a, b) => {
+            const aName = a.taskVertical?.verticalName?.toLowerCase() || "";
+            const bName = b.taskVertical?.verticalName?.toLowerCase() || "";
+            return aName.localeCompare(bName);
+        })
+
+        sortedTasks.forEach(task => {
+            const verticalName = task.taskVertical?.verticalName || "Ukendt"
+            const taskTimeRegs = timeRegs.filter(reg => reg.taskId?.toString() === task._id.toString())
+            const totalTime = taskTimeRegs.reduce((sum, reg) => sum + reg.timeRegistered, 0)
+
+            const formatted = {
+                "Task Name": task.taskName,
+                "Task Type": task.taskType,
+                "Description": task.taskDescription || "",
+                "Deadline": task.taskDeadline || "",
+                "Created At": task.createdAt?.toISOString().split("T")[0] || "",
+                "Created By": task.createdBy?.username || "",
+                "Time Registered": totalTime
+            }
+
+            if (!groupedTasks[verticalName]) {
+                groupedTasks[verticalName] = []
+            }
+
+            groupedTasks[verticalName].push(formatted)
+        })
+        
+        res.json({ groupedTasks })
+    } catch (error) {
+        console.error("Failed to export tasks:", error)
+        res.status(500).json({ error: "Internal server error" })
+    }
+})
+
 module.exports = router
