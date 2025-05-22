@@ -15,6 +15,18 @@
                 "description": [
                     "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
                 ]
+            },
+            {
+                "name": "Task chat overgoes to Timeline",
+                "description": [
+                    "From now on, all task chat messages will be shown in the timeline. This is to make it easier to see all messages in one place. The task chat will still be available in the task modal."
+                ]
+            },
+            {
+                "name": "Possibility to add comment on time registration",
+                "description": [
+                    "Added a comment field on time registration. The comment and time registration is shown in the timeline. The comment is also shown in the time registration overview."
+                ]
             }
         ]
     },  
