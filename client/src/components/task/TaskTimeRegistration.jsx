@@ -14,7 +14,7 @@ const getFormattedDate = () => {
     return `${year}-${month}-${day}`;
 }
 
-const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, customerId, verticalId }) => {
+const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, customerId, verticalId, onTimeRegistered }) => {
     const { user } = useContext(UserContext)
     const { baseURL } = useContext(ConfigContext);
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
@@ -72,6 +72,10 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                         description: '',
                         currentTime: getFormattedDate()
                     }))
+
+                    if (typeof onTimeRegistered === 'function') {
+                        onTimeRegistered();
+                    }
                 }
             } catch (error) {
                 console.error('Failed to register time', error)
@@ -128,6 +132,7 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                                     type='number'
                                     step="0.25"
                                     name="timeRegistered"
+                                    value={formRegisterTime.timeRegistered}
                                     onChange={(e) => handleInputChange(e)}
                                     required
                                     >
@@ -138,6 +143,7 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
                                 <input
                                     type="text"
                                     name="description"
+                                    value={formRegisterTime.description}
                                     onChange={handleInputChange}
                                     placeholder="Registration comment (optional)"
                                     className={inputClasses}

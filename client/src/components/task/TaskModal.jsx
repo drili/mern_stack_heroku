@@ -27,6 +27,8 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
         estimatedTime: 0,
     })
     const [toggleViewState, setToggleViewState] = useState("task")
+    const [timelineRefreshKey, setTimelineRefreshKey] = useState(0);
+
 
     // const inputClasses = "mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5      "
     // const labelClasses = "block mb-2 text-sm font-medium text-gray-900 "
@@ -239,6 +241,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                                     sprintId={task[0]?.taskSprints[0]?._id}
                                                                     customerId={task[0]?.taskCustomer?._id}
                                                                     verticalId={task[0]?.taskVertical}
+                                                                    onTimeRegistered={() => setTimelineRefreshKey(prev => prev + 1)}
                                                                 ></TaskTimeRegistration>
                                                             )}
                                                         </div>
@@ -318,6 +321,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                         <TaskChat
                                                             taskID={taskID}
                                                             taskCustomer={task[0]?.taskCustomer?._id}
+                                                            updateSignal={timelineRefreshKey}
                                                         />
                                                     )}
                                                 </>

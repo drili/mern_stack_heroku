@@ -34,7 +34,7 @@ const formatDate = (dateString) => {
     return date.toLocaleTimeString('en-US', options).replace(',', ' •');
 };
 
-const TaskChat = ({ taskID, taskCustomer }) => {
+const TaskChat = ({ taskID, taskCustomer, updateSignal }) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [isInputEmpty, setIsInputEmpty] = useState(true);
     const [editingId, setEditingId] = useState(null);
@@ -165,7 +165,7 @@ const TaskChat = ({ taskID, taskCustomer }) => {
 
     useEffect(() => {
         fetchTimelineData();
-    }, [taskID]);
+    }, [taskID, updateSignal]);
 
     useLayoutEffect(() => {
         scrollToBottom();
