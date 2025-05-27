@@ -29,7 +29,7 @@ const ReleaseNotes = () => {
             />
 
 
-            <div className="mb-6 py-4 px-5 rounded-lg bg-[#f2f3f4] relative flex flex-row gap-4 items-center justify-end w-full outline-none focus:outline-none w-2/3">
+            <div className="mb-6 py-4 px-5 rounded-lg bg-[#f2f3f4] relative flex flex-row gap-4 items-center justify-end outline-none focus:outline-none w-2/3">
                 <h3>Click to toggle filters</h3>
                 <button
                     onClick={() => toggleFilter("new")}
