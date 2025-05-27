@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Customer = require('../models/Customer')
 
-// *** Run in Postman to activate (PUT: http://localhost:8030/updates/update-customer-schema)
+// *** Run in Postman to activate (PUT: http://localhost:5000/updates/update-customer-schema)
 
 router.route("/update-customer-schema").put(async (req, res) => {
     try {
