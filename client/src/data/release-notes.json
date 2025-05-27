@@ -1,270 +1,232 @@
 [
-    {
-        "releaseVersion": "2.0.3",
-        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
-        "releaseDate": "XXXX",
-        "releaseObject": [
-            {
-                "name": "Tasks with deadlines",
-                "description": [
-                    "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed. In the workflow you will see missed deadline tasks in the 'Deadline next 7 days'."
-                ]
-            },
-            {
-                "name": "Customer task eksport to .csv",
-                "description": [
-                    "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
-                ]
-            },
-            {
-                "name": "Task chat overgoes to Timeline",
-                "description": [
-                    "From now on, all task chat messages will be shown in the timeline. This is to make it easier to see all messages in one place. The task chat will still be available in the task modal."
-                ]
-            },
-            {
-                "name": "Possibility to add comment on time registration",
-                "description": [
-                    "Added a comment field on time registration. The comment and time registration is shown in the timeline. The comment is also shown in the time registration overview."
-                ]
-            }
-        ]
-    },  
-    {
-        "releaseVersion": "2.0.2",
-        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/05/pexels-pixabay-40896.jpg",
-        "releaseDate": "15-05-2024",
-        "releaseObject": [
-            {
-                "name": "Workflow task card percentage time registration",
-                "description": [
-                    "Added UX improvement to task cards by adding a time percentage line that indicates the time registrations in percentage based on the task time high value. Calculacation: (timeRegisteredTotal * 100) / taskHigh."
-                ]
-            },
-            {
-                "name": "Possibility to change task vertical",
-                "description": [
-                    "Implemented the functionality to modify a task's vertical assignment, enabling enhanced flexibility and adaptability during project organization and planning."
-                ]
-            },
-            {
-                "name": "On task modal, time date should be set by default to today",
-                "description": [
-                    "Updated the task modal to auto-populate the time registration date field with the current date, streamlining the time entry process for users and reducing manual input."
-                ]
-            },
-            {
-                "name": "Possibility to change customer on task",
-                "description": [
-                    "Enhanced task management by incorporating the ability to modify customer associations, allowing users to efficiently reorganize and reassign tasks based on evolving client needs."
-                ]
-            },
-            {
-                "name": "Update task cards inside workflow to have a 'small cards' toggle",
-                "description": [
-                    "Optimized the task card layout within workflows by introducing a 'small cards' toggle, providing a condensed, more manageable overview for enhanced administrative efficiency and reduced scrolling"
-                ]
-            },
-            {
-                "name": "Possibility to edit/add user slackID",
-                "description": [
-                    "Incorporated a new option for editing and adding user Slack IDs, empowering team members to customize their notification preferences and improve cross-platform communication."
-                ]
-            },
-            {
-                "name": "Add 'Edit' option on task chat message:",
-                "description": [
-                    "Added a new 'Edit' feature for task chat messages, allowing users to quickly update or clarify comments, streamlining communication and reducing the potential for misunderstandings"
-                ]
-            },
-            {
-                "name": "Task View",
-                "description": [
-                    "A page where a task is shown without the modal. Task ID is required as a parameter inside the URL to display the task data.",
-                    "Introduced a dedicated Task View page, offering users an alternative method to access and display task information without utilizing the modal interface"
-                ]
-            },
-            {
-                "name": "Slack Integration",
-                "description": [
-                    "Integrated Slack notifications, allowing users to receive real-time updates and mentions from task chats within the Slack platform, enhancing cross-platform collaboration and communication.",
-                    "Users will also receive a notification on Slack when they are mentioned on a task chat. Users must enable this setting and add their Slack user ID."
-                ]
-            },
-            {
-                "name": "Changed 'sprint' to 'month' wording",
-                "description": [
-                    "Updated the application's terminology from 'sprint' to 'month' for improved clarity and consistency throughout the user interface."
-                ]
-            },
-            {
-                "name": "Update task modal components & UI",
-                "description": [
-                    "Redesigned the task modal user interface, repositioning the task chat beneath the task information for easier access, and consolidating task settings within a dedicated tab to streamline workflow and improve usability."
-                ]
-            },
-            {
-                "name": "Workflow drag&drop extend drop-box",
-                "description": [
-                    "Enhanced the workflow drag-and-drop functionality by extending the drop-box height, enabling users to effortlessly relocate task cards without the need for scrolling, further optimizing the administrative experience."
-                ]
-            },
-            {
-                "name": "BUG: Time registration times cannot be deleted inside the input to write a new value",
-                "description": [
-                    "Addressed a bug preventing users from deleting time registration values within the input field, restoring the ability to easily update and manage time entries."
-                ]
-            },
-            {
-                "name": "BUG: When opening 'release notes' page, page is already scrolled down by default",
-                "description": [
-                    "Fixed an issue causing the release notes page to automatically scroll down upon opening, ensuring immediate visibility of the latest updates and improvements"
-                ]
-            },
-            {
-                "name": "BUG: When dropping task into the same column, it duplicates the task in the frontend",
-                "description": [
-                    "Resolved a frontend bug that led to the duplication of tasks within the same column when utilizing drag-and-drop functionality, ensuring accurate task representation and organization."
-                ]
-            },
-            {
-                "name": "BUG: Sprintover quick-tasks icon is wrongly shown",
-                "description": [
-                    "Corrected the display issue of the Sprintover quick-tasks icon, restoring visual consistency and user experience within the application."
-                ]
-            }
-        ]
-    },
-    {
-        "releaseVersion": "2.0.1",
-        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-jan-van-der-wolf-20207148.jpg",
-        "releaseDate": "18-03-2024",
-        "releaseObject": [
-            {
-                "name": "Manual Percent Allocation",
-                "description": [
-                    "Introduced a dynamic percent allocation feature for task assignments, allowing for the precise distribution of task responsibilities among team members. Upon selecting users for a task, the system automatically calculates and assigns an equal percentage of task involvement to each individual. Additionally, a new adjustment option enables manual reallocation of these percentages, providing the flexibility to specify exact involvement levels per user.",
-                    "Manual percentage allocation is only available when more than 1 user has been selected to a task",
-                    "Example: https://gyazo.com/3c402e2cf2ac024d4052a88dbbffcdf1"
-                ]
-            },
-            {
-                "name": "Enhanced Customer Visibility on Time Registrations",
-                "description": [
-                    "Enhanced the time registration overview by integrating customer details, allowing for immediate identification and access to customer-specific tasks upon selection."
-                ]
-            },
-            {
-                "name": "Customer Information in Task Modals",
-                "description": [
-                    "Improved task modals with the inclusion of customer names, providing users with a quick reference to the associated customer for each task, streamlining task management."
-                ]
-            },
-            {
-                "name": "Interactive Sound Alerts for Notifications",
-                "description": [
-                    "Introduced sound notifications to alert users of new tags in task chats, ensuring timely responses and maintaining engagement, even when the application is not in the foreground."
-                ]
-            },
-            {
-                "name": "Release Notes Page",
-                "description": [
-                    "Launched a dedicated page for release notes, showcasing the latest updates, features, and improvements in an easily accessible format, keeping users informed about the application's evolution."
-                ]
-            },
-            {
-                "name": "UI Enhancements and Optimizations",
-                "description": [
-                    "Implemented a series of UI refinements, including the addition of a comprehensive footer, optimization of layout width for improved readability, and adjustments to the time registrations overview for enhanced usability."
-                ]
-            }
-        ]
-    },
-    {
-        "releaseVersion": "2.0.0",
-        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-fabrizio-miyashiro-17046473-1.jpg",
-        "releaseDate": "28-02-2024",
-        "releaseObject": [
-            {
-                "name": "Official 2.0.0 Release of TaskAlloc8or",
-                "description": [
-                    "We are thrilled to announce the official release of TaskAlloc8or version 2.0.0, marking a significant milestone in the evolution of our project management platform. This update introduces a suite of new features designed to enhance user productivity and streamline task management processes.",
-                    "Highlights include an intuitive drag-and-drop interface for task assignments, real-time collaboration tools, and customizable dashboards for a more personalized user experience.",
-                    "Additionally, we've implemented a comprehensive redesign of the UI, incorporating modern design principles for improved usability and aesthetics.",
-                    "TaskAlloc8or 2.0.0 also brings improved notification systems, ensuring users stay informed of task updates and deadlines. This release represents our commitment to providing a powerful, user-friendly platform for managing tasks, projects, and teams more effectively."
-                ]
-            },
-            {
-                "name": "Updated Codebase, Server & Database Architecture",
-                "description": [
-                    "With the latest update, we've undertaken a significant overhaul of TaskAlloc8or's technical foundation, transitioning our platform from a PHP-based architecture to the modern, efficient MERN stack (MongoDB, Express.js, React, and Node.js). This move not only enhances the application's performance and scalability but also aligns our development process with current industry standards for more agile and responsive updates in the future.",
-                    "Hosting on Heroku's cloud platform further improves our server reliability and enables seamless scaling options as our user base grows. The updated database architecture optimizes data retrieval and storage, ensuring a smoother user experience across all features, from task creation and time registration to user management and reporting. These improvements lay the groundwork for a robust, scalable web application that meets the evolving needs of project teams and managers."
-                ]
-            }
-        ]
-    },    
-    {
-        "releaseVersion": "2",
-        "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
-        "releaseDate": "13-02-2025",
-        "releaseObject": [
-            {
-                "name": "New and updated UI",
-                "description": [
-                    "Revamped user interface with improved navigation, modernized layouts, and enhanced visual elements to create a more intuitive and user-friendly experience."
-                ]
-            },
-            {
-                "name": "New customer view with customer notes",
-                "description": [
-                    "Introduced a dedicated customer view that allows users to see detailed customer information along with the ability to add and manage customer notes directly within the platform."
-                ]
-            },
-            {
-                "name": "Notifications on quick task creations with Slack",
-                "description": [
-                    "Integrated Slack notifications for quick task creation, ensuring teams receive instant updates when new tasks are added to improve communication and efficiency."
-                ]
-            },
-            {
-                "name": "Multi tenant database update",
-                "description": [
-                    "Enhanced database structure to support multi-tenant architecture, improving data isolation, security, and scalability across multiple organizations or workspaces."
-                ]
-            },
-            {
-                "name": "New landing pages with signup & registration (WIP)",
-                "description": [
-                    "Developing new landing pages with a seamless signup and registration process, making onboarding for new users more efficient and accessible. (Work in progress)"
-                ]
-            },
-            {
-                "name": "Added holiday view for holiday applications",
-                "description": [
-                    "Introduced a dedicated holiday view where users can track and manage holiday applications, view approvals, and keep an overview of team availability."
-                ]
-            },
-            {
-                "name": "Create new labels and new verticals for tasks",
-                "description": [
-                    "Users can now create custom labels and assign tasks to different verticals, enabling better categorization and organization of work items."
-                ]
-            },
-            {
-                "name": "Updated modal view with time registration table",
-                "description": [
-                    "Redesigned modal views to include a time registration table, allowing users to quickly review and manage logged work hours directly from the task details window."
-                ]
-            },
-            {
-                "name": "Small bug fixes",
-                "description": [
-                    "UI bug fixes",
-                    "Fixed bug on fetching time registrations by sprint",
-                    "Fixed notifications errors with Slack & TaskAlloc8or",
-                    "Fixed archived customers showing on create a new task"
-                ]
-            }
-        ]
-    }
+  {
+    "releaseVersion": "2.0.3",
+    "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
+    "releaseDate": "2025-05-27",
+    "major": false,
+    "releaseNotes": [
+      {
+        "title": "Tasks with deadlines",
+        "type": "new",
+        "description": "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed. In the workflow you will see missed deadline tasks in the 'Deadline next 7 days'."
+      },
+      {
+        "title": "Customer task eksport to .csv",
+        "type": "new",
+        "description": "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
+      },
+      {
+        "title": "Possibility to add comment on time registration",
+        "type": "new",
+        "description": "Added a comment field on time registration. The comment and time registration is shown in the timeline. The comment is also shown in the time registration overview."
+      },
+      {
+        "title": "Task chat overgoes to Timeline",
+        "type": "improvement",
+        "description": "From now on, all task chat messages will be shown in the timeline. This is to make it easier to see all messages in one place. The task chat will still be available in the task modal."
+      },
+      {
+        "title": "Release note page",
+        "type": "improvement",
+        "description": "Refactor of the release note page. The page is now more user-friendly and easier to navigate. The release notes are now grouped by version, and each version has its own section. Every release note now has a type (new, improvement, bug) and a description."
+      }
+    ]
+  },
+  {
+    "releaseVersion": "2.0.2",
+    "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/05/pexels-pixabay-40896.jpg",
+    "releaseDate": "15-05-2024",
+    "major": false,
+    "releaseNotes": [
+      {
+        "title": "Possibility to change task vertical",
+        "type": "new",
+        "description": "Implemented the functionality to modify a task's vertical assignment, enabling enhanced flexibility and adaptability during project organization and planning."
+      },
+      {
+        "title": "Possibility to edit/add user slackID",
+        "type": "new",
+        "description": "Incorporated a new option for editing and adding user Slack IDs, empowering team members to customize their notification preferences and improve cross-platform communication."
+      },
+      {
+        "title": "Add 'Edit' option on task chat message:",
+        "type": "new",
+        "description": "Added a new 'Edit' feature for task chat messages, allowing users to quickly update or clarify comments, streamlining communication and reducing the potential for misunderstandings"
+      },
+      {
+        "title": "Task View",
+        "type": "new",
+        "description": "A page where a task is shown without the modal. Task ID is required as a parameter inside the URL to display the task data.\n\nIntroduced a dedicated Task View page, offering users an alternative method to access and display task information without utilizing the modal interface"
+      },
+      {
+        "title": "Slack Integration",
+        "type": "new",
+        "description": "Integrated Slack notifications, allowing users to receive real-time updates and mentions from task chats within the Slack platform, enhancing cross-platform collaboration and communication.\n\nUsers will also receive a notification on Slack when they are mentioned on a task chat. Users must enable this setting and add their Slack user ID."
+      },
+      {
+        "title": "On task modal, time date should be set by default to today",
+        "type": "improvement",
+        "description": "Updated the task modal to auto-populate the time registration date field with the current date, streamlining the time entry process for users and reducing manual input."
+      },
+      {
+        "title": "Workflow task card percentage time registration",
+        "type": "improvement",
+        "description": "Added UX improvement to task cards by adding a time percentage line that indicates the time registrations in percentage based on the task time high value. Calculacation: (timeRegisteredTotal * 100) / taskHigh."
+      },
+      {
+        "title": "Possibility to change customer on task",
+        "type": "improvement",
+        "description": "Enhanced task management by incorporating the ability to modify customer associations, allowing users to efficiently reorganize and reassign tasks based on evolving client needs."
+      },
+      {
+        "title": "Update task cards inside workflow to have a 'small cards' toggle",
+        "type": "improvement",
+        "description": "Optimized the task card layout within workflows by introducing a 'small cards' toggle, providing a condensed, more manageable overview for enhanced administrative efficiency and reduced scrolling"
+      },
+      {
+        "title": "Changed 'sprint' to 'month' wording",
+        "type": "improvement",
+        "description": "Updated the application's terminology from 'sprint' to 'month' for improved clarity and consistency throughout the user interface."
+      },
+      {
+        "title": "Update task modal components & UI",
+        "type": "improvement",
+        "description": "Redesigned the task modal user interface, repositioning the task chat beneath the task information for easier access, and consolidating task settings within a dedicated tab to streamline workflow and improve usability."
+      },
+      {
+        "title": "Workflow drag&drop extend drop-box",
+        "type": "improvement",
+        "description": "Enhanced the workflow drag-and-drop functionality by extending the drop-box height, enabling users to effortlessly relocate task cards without the need for scrolling, further optimizing the administrative experience."
+      },
+      {
+        "title": "Time registration times cannot be deleted inside the input to write a new value",
+        "type": "bug",
+        "description": "Addressed a bug preventing users from deleting time registration values within the input field, restoring the ability to easily update and manage time entries."
+      },
+      {
+        "title": "When opening 'release notes' page, page is already scrolled down by default",
+        "type": "bug",
+        "description": "Fixed an issue causing the release notes page to automatically scroll down upon opening, ensuring immediate visibility of the latest updates and improvements"
+      },
+      {
+        "title": "When dropping task into the same column, it duplicates the task in the frontend",
+        "type": "bug",
+        "description": "Resolved a frontend bug that led to the duplication of tasks within the same column when utilizing drag-and-drop functionality, ensuring accurate task representation and organization."
+      },
+      {
+        "title": "Sprintover quick-tasks icon is wrongly shown",
+        "type": "bug",
+        "description": "Corrected the display issue of the Sprintover quick-tasks icon, restoring visual consistency and user experience within the application."
+      }
+    ]
+  },
+  {
+    "releaseVersion": "2.0.1",
+    "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-jan-van-der-wolf-20207148.jpg",
+    "releaseDate": "18-03-2024",
+    "major": false,
+    "releaseNotes": [
+      {
+        "title": "Manual Percent Allocation",
+        "type": "new",
+        "description": "Introduced a dynamic percent allocation feature for task assignments, allowing for the precise distribution of task responsibilities among team members. Upon selecting users for a task, the system automatically calculates and assigns an equal percentage of task involvement to each individual. Additionally, a new adjustment option enables manual reallocation of these percentages, providing the flexibility to specify exact involvement levels per user.\n\nManual percentage allocation is only available when more than 1 user has been selected to a task\n\nExample: https://gyazo.com/3c402e2cf2ac024d4052a88dbbffcdf1"
+      },
+      {
+        "title": "Enhanced Customer Visibility on Time Registrations",
+        "type": "new",
+        "description": "Enhanced the time registration overview by integrating customer details, allowing for immediate identification and access to customer-specific tasks upon selection."
+      },
+      {
+        "title": "Customer Information in Task Modals",
+        "type": "new",
+        "description": "Improved task modals with the inclusion of customer names, providing users with a quick reference to the associated customer for each task, streamlining task management."
+      },
+      {
+        "title": "Interactive Sound Alerts for Notifications",
+        "type": "new",
+        "description": "Introduced sound notifications to alert users of new tags in task chats, ensuring timely responses and maintaining engagement, even when the application is not in the foreground."
+      },
+      {
+        "title": "Release Notes Page",
+        "type": "new",
+        "description": "Launched a dedicated page for release notes, showcasing the latest updates, features, and improvements in an easily accessible format, keeping users informed about the application's evolution."
+      },
+      {
+        "title": "UI Enhancements and Optimizations",
+        "type": "improvement",
+        "description": "Implemented a series of UI refinements, including the addition of a comprehensive footer, optimization of layout width for improved readability, and adjustments to the time registrations overview for enhanced usability."
+      }
+    ]
+  },
+  {
+    "releaseVersion": "2.0.0",
+    "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2024/03/pexels-fabrizio-miyashiro-17046473-1.jpg",
+    "releaseDate": "28-02-2024",
+    "major": true,
+    "releaseNotes": [
+      {
+        "title": "Official 2.0.0 Release of TaskAlloc8or",
+        "type": "new",
+        "description": "We are thrilled to announce the official release of TaskAlloc8or version 2.0.0, marking a significant milestone in the evolution of our project management platform. This update introduces a suite of new features designed to enhance user productivity and streamline task management processes.\n\nHighlights include an intuitive drag-and-drop interface for task assignments, real-time collaboration tools, and customizable dashboards for a more personalized user experience.\n\nAdditionally, we've implemented a comprehensive redesign of the UI, incorporating modern design principles for improved usability and aesthetics.\n\nTaskAlloc8or 2.0.0 also brings improved notification systems, ensuring users stay informed of task updates and deadlines. This release represents our commitment to providing a powerful, user-friendly platform for managing tasks, projects, and teams more effectively."
+      },
+      {
+        "title": "Updated Codebase, Server & Database Architecture",
+        "type": "improvement",
+        "description": "With the latest update, we've undertaken a significant overhaul of TaskAlloc8or's technical foundation, transitioning our platform from a PHP-based architecture to the modern, efficient MERN stack (MongoDB, Express.js, React, and Node.js). This move not only enhances the application's performance and scalability but also aligns our development process with current industry standards for more agile and responsive updates in the future.\n\nHosting on Heroku's cloud platform further improves our server reliability and enables seamless scaling options as our user base grows. The updated database architecture optimizes data retrieval and storage, ensuring a smoother user experience across all features, from task creation and time registration to user management and reporting. These improvements lay the groundwork for a robust, scalable web application that meets the evolving needs of project teams and managers."
+      }
+    ]
+  },
+  {
+    "releaseVersion": "2",
+    "releaseImageLink": "https://www.kynetic.dk/wp-content/uploads/2025/02/pexels-mastercowley-1192672.jpg",
+    "releaseDate": "13-02-2025",
+    "major": false,
+    "releaseNotes": [
+      {
+        "title": "New landing pages with signup & registration (WIP)",
+        "type": "new",
+        "description": "Developing new landing pages with a seamless signup and registration process, making onboarding for new users more efficient and accessible. (Work in progress)"
+      },
+      {
+        "title": "Added holiday view for holiday applications",
+        "type": "new",
+        "description": "Introduced a dedicated holiday view where users can track and manage holiday applications, view approvals, and keep an overview of team availability."
+      },
+      {
+        "title": "Create new labels and new verticals for tasks",
+        "type": "new",
+        "description": "Users can now create custom labels and assign tasks to different verticals, enabling better categorization and organization of work items."
+      },
+      {
+        "title": "New customer view with customer notes",
+        "type": "new",
+        "description": "Introduced a dedicated customer view that allows users to see detailed customer information along with the ability to add and manage customer notes directly within the platform."
+      },
+      {
+        "title": "Notifications on quick task creations with Slack",
+        "type": "new",
+        "description": "Integrated Slack notifications for quick task creation, ensuring teams receive instant updates when new tasks are added to improve communication and efficiency."
+      },
+      {
+        "title": "New and updated UI",
+        "type": "improvement",
+        "description": "Revamped user interface with improved navigation, modernized layouts, and enhanced visual elements to create a more intuitive and user-friendly experience."
+      },
+      {
+        "title": "Multi tenant database update",
+        "type": "improvement",
+        "description": "Enhanced database structure to support multi-tenant architecture, improving data isolation, security, and scalability across multiple organizations or workspaces."
+      },
+      {
+        "title": "Updated modal view with time registration table",
+        "type": "improvement",
+        "description": "Redesigned modal views to include a time registration table, allowing users to quickly review and manage logged work hours directly from the task details window."
+      },
+      {
+        "title": "Small bug fixes",
+        "type": "bug",
+        "description": "UI bug fixes\nFixed bug on fetching time registrations by sprint\nFixed notifications errors with Slack & TaskAlloc8or\nFixed archived customers showing on create a new task"
+      }
+    ]
+  }
 ]
