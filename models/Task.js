@@ -9,6 +9,11 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    taskHandle: { 
+        type: String, 
+        required: true, 
+        unique: true 
+    },
     taskTimeLow: {
         type: Number,
         required: true
