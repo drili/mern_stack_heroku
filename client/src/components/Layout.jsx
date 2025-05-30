@@ -40,13 +40,7 @@ const Layout = ({ children }) => {
 
         const checkScreenWidth = () => {
             const screenWidth = window.innerWidth
-            if (screenWidth <= 990) {
-                setShowSidebar(false)
-            } else {
-                setShowSidebar(true)
-            }
-
-            setIsMobile(screenWidth <= 990)
+            setIsMobile(screenWidth <= 1023)
         }
 
         checkScreenWidth()
@@ -56,89 +50,90 @@ const Layout = ({ children }) => {
     }, [user])
 
     return (
-        <div className='layout grid h-screen grid-cols-[300px_1fr] grid-rows-[85px_1fr] overflow-hidden'>
-            <aside className="hidden lg:block bg-custom-bg-gray p-6 transition-transform duration-300 ease-in-out relative w-full min-h-screen col-[1/2] row-[2/3]">
-                <div className='sidebar-content'>
-                    <div className='sidebarLinks flex flex-col h-full gap-2'>
-                        <h3 className='font-thin text-zinc-400'>Main Menu</h3>
-                        <SidebarLink
-                            menuLink={`/${tenantId}/dashboard`}
-                            linkText="Dashboard"
-                            currentPath={currentPath}
-                            iconComponent={BsHouseDoor}
-                        />
+        <div className='layout grid relative h-screen grid-cols-[300px_1fr] grid-rows-[85px_1fr] overflow-hidden'>
+            <aside className={`bg-gray-100 p-6 flex-col justify-between transition-transform duration-300 ease-in-out ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0 w-full sm:w-1/3 pb-14 pt-28' : 'fixed inset-0 z-10 -translate-x-full w-full sm:w-1/3 pb-14 pt-28') : 'relative w-full min-h-screen col-[1/2] row-[2/3] pb-24'}`}>
+                <div className='sidebar-content flex flex-col h-full justify-between'>
+                    <div className='flex flex-col justify-between gap-8'>
+                        <div className='sidebarLinks'>
+                            <h3 className='font-thin text-zinc-400'>Main Menu</h3>
+                            <SidebarLink
+                                menuLink={`/${tenantId}/dashboard`}
+                                linkText="Dashboard"
+                                currentPath={currentPath}
+                                iconComponent={BsHouseDoor}
+                            />
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/workflow`}
-                            linkText="Workflow"
-                            currentPath={currentPath}
-                            iconComponent={BsList}
-                        />
+                            <SidebarLink
+                                menuLink={`/${tenantId}/workflow`}
+                                linkText="Workflow"
+                                currentPath={currentPath}
+                                iconComponent={BsList}
+                            />
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/sprint-overview`}
-                            linkText="Month Overview"
-                            currentPath={currentPath}
-                            iconComponent={BsCalendar}
-                        />
+                            <SidebarLink
+                                menuLink={`/${tenantId}/sprint-overview`}
+                                linkText="Month Overview"
+                                currentPath={currentPath}
+                                iconComponent={BsCalendar}
+                            />
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/time-registrations`}
-                            linkText="Time Registrations"
-                            currentPath={currentPath}
-                            iconComponent={BsClock}
-                        />
+                            <SidebarLink
+                                menuLink={`/${tenantId}/time-registrations`}
+                                linkText="Time Registrations"
+                                currentPath={currentPath}
+                                iconComponent={BsClock}
+                            />
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/customers`}
-                            linkText="Customers"
-                            currentPath={currentPath}
-                            iconComponent={BsPeople}
-                        />
+                            <SidebarLink
+                                menuLink={`/${tenantId}/customers`}
+                                linkText="Customers"
+                                currentPath={currentPath}
+                                iconComponent={BsPeople}
+                            />
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/profile`}
-                            linkText="User Profile"
-                            currentPath={currentPath}
-                            iconComponent={BsPerson}
-                        />
+                            <SidebarLink
+                                menuLink={`/${tenantId}/profile`}
+                                linkText="User Profile"
+                                currentPath={currentPath}
+                                iconComponent={BsPerson}
+                            />
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/holidays`}
-                            linkText="Holidays"
-                            currentPath={currentPath}
-                            iconComponent={BsCalendar2Week}
-                        />
+                            <SidebarLink
+                                menuLink={`/${tenantId}/holidays`}
+                                linkText="Holidays"
+                                currentPath={currentPath}
+                                iconComponent={BsCalendar2Week}
+                            />
+                        </div>
+                        <div className='sidebarLinks'>
+                            <h3 className='font-thin text-zinc-400'>Misc</h3>
+
+                            <SidebarLink
+                                menuLink={`/${tenantId}/admin`}
+                                linkText="Admin"
+                                currentPath={currentPath}
+                                iconComponent={BsGear}
+                            />
+
+                            <SidebarLink
+                                menuLink="#"
+                                linkText="More Bizz"
+                                currentPath={currentPath}
+                                iconComponent={BsCurrencyDollar}
+                                wip={true}
+                            />
+
+                            <SidebarLink
+                                menuLink="#"
+                                linkText="Client Health"
+                                currentPath={currentPath}
+                                iconComponent={BsFillHeartPulseFill}
+                                wip={true}
+                            />
+                        </div>
                     </div>
-                    <div className='mt-[20px]'>
-                        <h3 className='font-thin text-zinc-400'>Misc</h3>
 
-                        <SidebarLink
-                            menuLink={`/${tenantId}/admin`}
-                            linkText="Admin"
-                            currentPath={currentPath}
-                            iconComponent={BsGear}
-                        />
-
-                        <SidebarLink
-                            menuLink="#"
-                            linkText="More Bizz"
-                            currentPath={currentPath}
-                            iconComponent={BsCurrencyDollar}
-                            wip={true}
-                        />
-
-                        <SidebarLink
-                            menuLink="#"
-                            linkText="Client Health"
-                            currentPath={currentPath}
-                            iconComponent={BsFillHeartPulseFill}
-                            wip={true}
-                        />
-                    </div>
-
-                    {/* 
-                    <Link to={`/${tenantId}/profile`} id='sidebarUser' className='flex items-center justify-start p-4 pl-0 space-x-2 mt-[40px]'>
+                    <Link to={`/${tenantId}/profile`} id='sidebarUser' className='flex items-center justify-start p-4 pl-0 space-x-2'>
                         <img
                             src={`${imageSrc}${userImg}`}
                             className='h-12 w-12 rounded object-cover'
@@ -147,23 +142,20 @@ const Layout = ({ children }) => {
                             <p className='font-bold text-gray-900'>@{username}</p>
                             <p className='font-light text-gray-600 text-sm'>{email}</p>
                         </div>
-                    </Link>*/}
+                    </Link>
                 </div>
             </aside>
 
             <Navbar />
 
-            <main className='w-full h-full p-4 col-[1/3] lg:col-[2/3] row-[2/3] overflow-scroll'>
-                
-                {/*
-                {isMobile && (
+            <main className='w-full h-full p-4 pb-24 col-[1/3] lg:col-[2/3] row-[2/3] overflow-scroll'>
+
                     <button
-                        className='fixed bottom-4 left-4 bg-slate-800 text-white p-2 rounded-full flex items-center justify-center z-40'
+                        className='fixed bottom-4 left-4 bg-pink-700 drop-shadow text-white p-2 rounded-full flex lg:hidden items-center justify-center z-40'
                         onClick={toggleSidebar}
                     >
                         {showSidebar && isMobile ? <BsThreeDots /> : <BsThreeDots />}
                     </button>
-                )}*/}
 
                 <section id="mainSection" className='max-w-[1400px] flex mx-auto p-4'>
                     <div className='w-full'>
@@ -175,6 +167,65 @@ const Layout = ({ children }) => {
                     <Footer />
                 </section>
             </main>
+
+            {/* Mobile Sidebar 
+            <div className="flex absolute lg:hidden bottom-4 left-4 bg-gray-100 drop-shadow-xl overflow-hidden rounded-full">
+                <SidebarLink
+                    menuLink={`/${tenantId}/dashboard`}
+                    linkText="Dashboard"
+                    currentPath={currentPath}
+                    iconComponent={BsHouseDoor}
+                    iconOnly="true"
+                />
+
+                <SidebarLink
+                    menuLink={`/${tenantId}/workflow`}
+                    linkText="Workflow"
+                    currentPath={currentPath}
+                    iconComponent={BsList}
+                    iconOnly="true"
+                />
+
+                <SidebarLink
+                    menuLink={`/${tenantId}/sprint-overview`}
+                    linkText="Month Overview"
+                    currentPath={currentPath}
+                    iconComponent={BsCalendar}
+                    iconOnly="true"
+                />
+
+                <SidebarLink
+                    menuLink={`/${tenantId}/time-registrations`}
+                    linkText="Time Registrations"
+                    currentPath={currentPath}
+                    iconComponent={BsClock}
+                    iconOnly="true"
+                />
+
+                <SidebarLink
+                    menuLink={`/${tenantId}/customers`}
+                    linkText="Customers"
+                    currentPath={currentPath}
+                    iconComponent={BsPeople}
+                    iconOnly="true"
+                />
+
+                <SidebarLink
+                    menuLink={`/${tenantId}/profile`}
+                    linkText="User Profile"
+                    currentPath={currentPath}
+                    iconComponent={BsPerson}
+                    iconOnly="true"
+                />
+
+                <SidebarLink
+                    menuLink={`/${tenantId}/holidays`}
+                    linkText="Holidays"
+                    currentPath={currentPath}
+                    iconComponent={BsCalendar2Week}
+                    iconOnly="true"
+                />
+            </div>*/}
         </div>
     )
 }
