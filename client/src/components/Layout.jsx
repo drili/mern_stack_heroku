@@ -65,7 +65,7 @@ const Layout = ({ children }) => {
     }, [user])
 
     return (
-        <div className='layout grid relative h-screen grid-cols-[300px_1fr] grid-rows-[85px_1fr] overflow-hidden'>
+        <div className='layout grid relative h-[100dvh] grid-cols-[300px_1fr] grid-rows-[85px_1fr] overflow-hidden'>
             <aside className={`bg-gray-100 p-6 flex-col justify-between transition-transform duration-300 ease-in-out overflow-y-auto ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0 w-full sm:w-1/3 pb-14 pt-28 drop-shadow-lg' : 'fixed inset-0 z-10 -translate-x-full w-full sm:w-1/3 pb-14 pt-28 drop-shadow-lg') : 'relative w-full min-h-screen col-[1/2] row-[2/3] pb-24'}`}>
                 <div className='sidebar-content flex flex-col h-full justify-between'>
                     <div className='flex flex-col justify-between gap-8'>
