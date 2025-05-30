@@ -34,6 +34,16 @@
         "title": "Release note page",
         "type": "improvement",
         "description": "Refactor of the release note page. The page is now more user-friendly and easier to navigate. The release notes are now grouped by version, and each version has its own section. Every release note now has a type (new, improvement, bug) and a description."
+      },
+      {
+        "title": "Layout of pages optimization",
+        "type": "bug",
+        "description": "Fixed a bug where the layout of some pages was not optimized for smaller screens. The layout is now responsive and adapts to the screen size."
+      },
+      {
+        "title": "Click outside of modal closes it",
+        "type": "bug",
+        "description": "Fixed a bug where clicking outside of a modal did not close it. Now, clicking outside of a modal or press ESC will close it, making it easier to navigate the application without having to manually close each modal."
       }
     ]
   },

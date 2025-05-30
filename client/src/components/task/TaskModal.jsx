@@ -119,25 +119,43 @@ const TaskModal = ({ taskID, taskHandle, showModalState, onCloseModal, fetchTask
     }
 
     useEffect(() => {
+        const offset = 0;
+
+        const handleClickOutside = (event) => {
+            if (modalContentRef.current && !modalContentRef.current.contains(event.target)) {
+                closeModal();
+            }
+        };
+
+        const handleEscKey = (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        };
+
         if (showModalState) {
+            setShowModal(showModalState)
+            fetchTaskData(taskID)
+
             setTimeout(() => {
                 const taskElement = document.querySelector(`.taskModalComponent`)
                 if (taskElement) {
-                    const offset = -0
                     window.scroll({
                         top: taskElement.getBoundingClientRect().top + window.scrollY + offset,
                         behavior: 'smooth',
                     })
                 }
             }, 250)
+
+            document.addEventListener('mousedown', handleClickOutside);
+            document.addEventListener('keydown', handleEscKey);
         }
 
-        setShowModal(showModalState)
-        fetchTaskData(taskID)
-
-        // FIXME: Use state to check whether handleClickOutside function is active or not
-        // document.addEventListener("mousedown", handleClickOutside)
-    }, [showModalState])
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscKey);
+        };
+    }, [showModalState, taskID])
 
     const handleUpdateTask = async (event) => {
         event.preventDefault()
@@ -185,9 +203,9 @@ const TaskModal = ({ taskID, taskHandle, showModalState, onCloseModal, fetchTask
             <>
                 {showModal ? (
                     <>
-                        <div className='absolute z-50 top-0 w-full translate-x-[-50%] left-[50%]'>
+                        <div className="fixed inset-0 z-50 flex justify-center items-start overflow-auto bg-black/50">
                             <div className="relative my-6 mx-auto max-w-screen-xl w-full taskModalComponent">
-                                <div className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                <div ref={modalContentRef} className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                                     <div className='flex items-center gap-2 px-4 pt-10 pb-0 rounded-t md:px-10'>
                                         <LabelSmall>
