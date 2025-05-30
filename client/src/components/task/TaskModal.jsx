@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { BsFillLightningChargeFill, BsXLg } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { FaCalendar, FaClock, FaPaperclip } from "react-icons/fa";
-import axios from 'axios'
-import toast, { Toaster } from 'react-hot-toast'
+import { HiOutlineLink } from "react-icons/hi";
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate, useParams } from "react-router-dom";
 
 import TaskModalSettings from './TaskModalSettings'
 import TaskTimeRegistration from './TaskTimeRegistration'
@@ -13,7 +15,7 @@ import { UserContext } from '../../context/UserContext';
 import LabelSmall from '../LabelSmall';
 import TaskTimeRegistrations from './TaskTimeRegistrations';
 
-const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
+const TaskModal = ({ taskID, taskHandle, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
     const { user } = useContext(UserContext)
     const [showModal, setShowModal] = useState(false)
     const [task, setTask] = useState([])
@@ -55,6 +57,26 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                 console.error("Failed to copy task ID:", err);
             })
     }
+
+    const copyShareLink = () => {
+        if (!taskID || !task[0]?.taskHandle || !user?.tenant_id) return;
+      
+        const shareURL = `${window.location.origin}/${user.tenant_id}/workflow/task/${task[0].taskHandle}-${taskID}`;
+        navigator.clipboard.writeText(shareURL)
+            .then(() => {
+                toast(`Link copied: ${task[0].taskHandle}`, {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#f8fafc',
+                        color: "#000"
+                    }
+                });
+            })
+            .catch((err) => {
+                console.error("Failed to copy task link:", err);
+            });
+    };
 
     const handleViewState = (value) => {
         setToggleViewState(value)
@@ -168,20 +190,28 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                 <div className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                                     <div className='flex items-center gap-2 px-4 pt-10 pb-0 rounded-t md:px-10'>
+                                        <LabelSmall>
+                                            <span
+                                                className="flex gap-2 hover:cursor-pointer items-center" onClick={copyShareLink} title="Click to copy shareable link">
+                                                Share task <HiOutlineLink />
+                                            </span>
+                                        </LabelSmall>
                                         <LabelSmall
                                             classes={``}
                                             backgroundColor=""
                                             borderColor={task[0]?.taskCustomer?.customerColor}
+                                            title="Task for customer"
                                         >
                                             {task[0]?.taskCustomer?.customerName}
                                         </LabelSmall>
 
-                                        <LabelSmall>
+                                        <LabelSmall title="Task sprint">
                                             {task[0]?.taskSprints[0]?.sprintName} <FaCalendar />
                                         </LabelSmall>
 
                                         <LabelSmall>
-                                            <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></span>
+                                            <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard} title="Click to copy task id link">
+                                                ID: {taskID} <FaPaperclip /></span>
                                         </LabelSmall>
 
                                         {task[0]?.taskType === "quickTask" && (

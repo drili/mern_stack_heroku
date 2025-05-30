@@ -7,11 +7,21 @@ import SidebarLink from './navbar/SidebarLink'
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext'
 import Footer from './Footer'
+import { useNavigate } from "react-router-dom";
 
 const Layout = ({ children }) => {
     const [showSidebar, setShowSidebar] = useState(true)
     const [isMobile, setIsMobile] = useState(false)
+    const navigate = useNavigate();
     const { user } = useContext(UserContext)
+
+    useEffect(() => {
+        if (!user) {
+          navigate(`/login`);
+        }
+    }, [user, navigate]);
+
+    if (!user) return null;
 
     const tenantId = user.tenant_id
 

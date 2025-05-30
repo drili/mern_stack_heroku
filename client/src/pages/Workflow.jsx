@@ -42,7 +42,7 @@ const Workflow = () => {
 
   const { taskHandle } = useParams();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     if (taskHandle) {
       const id = taskHandle.split("-").pop();
@@ -238,7 +238,10 @@ const Workflow = () => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            onClick={() => handleTaskModal(task._id)}
+                            onClick={() => {
+                              navigate(`/${user.tenant_id}/workflow/task/${task.taskHandle}`);
+                              handleTaskModal(task._id);
+                            }}
                           >
                             <TaskCard
                               key={task._id}
@@ -284,7 +287,10 @@ const Workflow = () => {
             {deadlineTasks.upcoming.length > 0 && (
               <>
                 {deadlineTasks.upcoming.map((task) => (
-                  <span onClick={() => handleTaskModal(task._id)} key={task._id}>
+                  <span onClick={() => {
+                      navigate(`/${user.tenant_id}/workflow/task/${task.taskHandle}`);
+                      handleTaskModal(task._id);
+                    }} key={task._id}>
                     <TaskCardSmall
                       taskId={task._id}
                       taskName={task.taskName}
@@ -300,7 +306,11 @@ const Workflow = () => {
               <>
                 <p className="text-red-700 font-semibold mb-1">Missed deadlines.</p>
                 {deadlineTasks.overdue.map((task) => (
-                  <span onClick={() => handleTaskModal(task._id)} key={task._id}>
+                  <span onClick={() => {
+                      const handle = slugify(task.taskName) + "-" + task._id;
+                      navigate(`/yourTenantId/workflow/task/${task.taskHandle}`);
+                      handleTaskModal(task._id);
+                  }} key={task._id}>
                     <TaskCardSmall
                       taskId={task._id}
                       taskName={task.taskName}
