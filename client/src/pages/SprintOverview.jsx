@@ -56,7 +56,7 @@ const SprintOverview = () => {
                 onSelectedSprint={handleSprintChange}
             ></SprintOverviewFilters>
 
-            <section id="sprintOverviewFields" className='flex flex-col gap-4 relative'>
+            <section id="sprintOverviewFields" className='flex flex-col gap-4'>
                 {isLoading ? (
                     <div className="absolute top-5 left-0 w-full h-full flex items-center justify-center">
                         <FaSpinner className="animate-spin text-rose-500 text-4xl" />
