@@ -178,22 +178,22 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="bg-white  fixed w-full z-20 top-0 left-0 border-b border-gray-200 ">
-                <div className="w-full px-6 flex flex-wrap items-center justify-between mx-auto py-4">
+            <nav className="bg-white w-full h-full z-20 top-0 left-0 border-b border-gray-200 col-[1/3] row-[1/2]">
+                <div className="w-full h-full px-6 flex flex-wrap items-center justify-between mx-auto py-4">
                     <a href="#" className="flex items-left">
                         <Logo />
                     </a>
 
                     <button
                         onClick={toggleMobileMenu}
-                        data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200   " aria-controls="navbar-sticky" aria-expanded={isMobileMenuOpen}>
+                        data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200   " aria-controls="navbar-sticky" aria-expanded={isMobileMenuOpen}>
                         <span className="sr-only">Open main menu</span>
                         <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
                         </svg>
                     </button>
 
-                    <div className="hidden md:flex md:order-2">
+                    <div className="hidden lg:flex md:order-2">
                         {menuItems}
                     </div>
 
@@ -203,9 +203,6 @@ const Navbar = () => {
 
                 </div>
             </nav>
-
-            <div id='navDivider' className='h-[100px]'>
-            </div>
         </>
     )
 }
