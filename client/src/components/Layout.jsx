@@ -37,13 +37,13 @@ const Layout = ({ children }) => {
         { to: `/${tenantId}/customers`, text: "Customers", icon: BsPeople },
         { to: `/${tenantId}/profile`, text: "User Profile", icon: BsPerson },
         { to: `/${tenantId}/holidays`, text: "Holidays", icon: BsCalendar2Week },
-      ]
+    ]
       
-      const miscLinks = [
+    const miscLinks = [
         { to: `/${tenantId}/admin`, text: "Admin", icon: BsGear },
-        { to: "#", text: "More Bizz", icon: BsCurrencyDollar, wip: true },
-        { to: "#", text: "Client Health", icon: BsFillHeartPulseFill, wip: true },
-      ]
+        /*{ to: "#", text: "More Bizz", icon: BsCurrencyDollar, wip: true },
+        { to: "#", text: "Client Health", icon: BsFillHeartPulseFill, wip: true }, */
+    ]
 
     useEffect(() => {
         if (user) {
@@ -69,7 +69,7 @@ const Layout = ({ children }) => {
             <aside className={`bg-gray-100 p-6 flex-col justify-between transition-transform duration-300 ease-in-out overflow-y-auto ${isMobile ? (showSidebar ? 'fixed inset-0 z-10 translate-x-0 w-full sm:w-1/3 pb-14 pt-28' : 'fixed inset-0 z-10 -translate-x-full w-full sm:w-1/3 pb-14 pt-28') : 'relative w-full min-h-screen col-[1/2] row-[2/3] pb-24'}`}>
                 <div className='sidebar-content flex flex-col h-full justify-between'>
                     <div className='flex flex-col justify-between gap-8'>
-                        <div className='sidebarLinks'>
+                        <div className='sidebarLinks flex flex-col gap-2'>
                             <h3 className='font-thin text-zinc-400'>Main Menu</h3>
                             {mainLinks.map(link => (
                                 <SidebarLink
@@ -82,8 +82,8 @@ const Layout = ({ children }) => {
                                 />
                             ))}
                         </div>
-                        <div className='sidebarLinks'>
-                            <h3 className='font-thin text-zinc-400'>Misc</h3>
+                        <div className='sidebarLinks flex flex-col'>
+                            <h3 className='font-thin text-zinc-400 mb-2'>Misc</h3>
                             {miscLinks.map(link => (
                                 <SidebarLink
                                     key={link.text}
