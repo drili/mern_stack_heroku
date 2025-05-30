@@ -87,6 +87,7 @@ function AppRoutes() {
                                 </Route>
                                 {/* <Route path="create-customer" element={<ProtectedRoute><CreateCustomer /></ProtectedRoute>} /> */}
                                 <Route path="workflow" element={<ProtectedRoute><Workflow /></ProtectedRoute>} />
+                                <Route path="workflow/task/:taskHandle" element={<ProtectedRoute><Workflow /></ProtectedRoute>}/>
                                 <Route path="register-offtime" element={<ProtectedRoute><RegisterOffTimes /></ProtectedRoute>} />
                                 <Route path="notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
                                 <Route

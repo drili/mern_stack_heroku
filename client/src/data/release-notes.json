@@ -8,12 +8,17 @@
       {
         "title": "Tasks with deadlines",
         "type": "new",
-        "description": "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed. In the workflow you will see missed deadline tasks in the 'Deadline next 7 days'."
+        "description": "In the workflow you will see missed deadline tasks in the 'Deadline next 7 days' column."
+      },
+      {
+        "title": "Tasks is now sharable",
+        "type": "new",
+        "description": "Task slug added to workflow task cards. This allows users to share a task with others by copying the slug and pasting it into a message. In task modal a share button is added which copies the task slug to the clipboard, when you want to share a task from other modals."
       },
       {
         "title": "Customer task eksport to .csv",
         "type": "new",
-        "description": "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
+        "description": "Introduced a export interval function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
       },
       {
         "title": "Possibility to add comment on time registration",

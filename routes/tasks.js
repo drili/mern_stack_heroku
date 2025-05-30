@@ -5,6 +5,15 @@ const {Sprints} = require("../models/Sprints")
 const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
 
+const slugify = (str) =>
+    str
+      .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "oe")
+      .replace(/å/g, "aa")
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+
 router.route("/recent-tasks/:userId").get(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
@@ -151,22 +160,24 @@ router.route("/create").post(async (req, res) => {
             taskSprints.map(async (sprintId) => {
                 const task = new Task({
                     taskName,
-                taskTimeLow,
-                taskTimeHigh,
-                taskDescription,
-                taskCustomer,
-                taskLabel,
-                taskVertical,
-                taskPersons,
-                taskSprints: [sprintId],
-                createdBy,
-                taskDeadline,
-                estimatedTime,
-                taskType,
-                tenantId,
+                    taskTimeLow,
+                    taskTimeHigh,
+                    taskDescription,
+                    taskCustomer,
+                    taskLabel,
+                    taskVertical,
+                    taskPersons,
+                    taskSprints: [sprintId],
+                    createdBy,
+                    taskDeadline,
+                    estimatedTime,
+                    taskType,
+                    tenantId,
                 })
 
-                return await task.save()
+                task.taskHandle = `${slugify(taskName)}-${task._id}`;
+                
+                return await task.save();
             })
         )
 
