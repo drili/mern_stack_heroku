@@ -33,7 +33,7 @@
       {
         "title": "Layout of pages optimization",
         "type": "bug",
-        "description": "Fixed a bug where the layout of some pages was not optimized for smaller screens. The layout is now responsive and adapts to the screen size."
+        "description": "Fixed a bug where the layout of some pages was not optimized for smaller screens. The layout is now responsive and adapts to the screen size. This does not include pagecontent that is not yet responsive. But it's the first step towards a fully responsive design."
       }
     ]
   },
