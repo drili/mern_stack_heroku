@@ -61,7 +61,7 @@ const TaskModal = ({ taskID, taskHandle, showModalState, onCloseModal, fetchTask
     const copyShareLink = () => {
         if (!taskID || !task[0]?.taskHandle || !user?.tenant_id) return;
       
-        const shareURL = `${window.location.origin}/${user.tenant_id}/workflow/task/${task[0].taskHandle}-${taskID}`;
+        const shareURL = `${window.location.origin}/${user.tenant_id}/workflow/task/${task[0].taskHandle}`;
         navigator.clipboard.writeText(shareURL)
             .then(() => {
                 toast(`Link copied: ${task[0].taskHandle}`, {
