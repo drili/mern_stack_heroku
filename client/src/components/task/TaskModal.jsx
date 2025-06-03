@@ -368,6 +368,7 @@ const TaskModal = ({ taskID, taskHandle, showModalState, onCloseModal, fetchTask
                                                     {taskID && (
                                                         <TaskChat
                                                             taskID={taskID}
+                                                            task={task}
                                                             taskCustomer={task[0]?.taskCustomer?._id}
                                                             updateSignal={timelineRefreshKey}
                                                         />

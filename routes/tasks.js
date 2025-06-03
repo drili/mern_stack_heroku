@@ -553,11 +553,14 @@ router.route("/archive-task/:taskId").put(async (req, res) => {
     }
 
     try {
-        const task = await Task.findOneAndUpdate(
-            { _id: taskId, tenantId: tenantId }, 
-            { isArchived: true },
-            { new: true }
-        )
+        const task = await Task.findOne({ _id: taskId, tenantId: tenantId })
+
+        if (!task) {
+            return res.status(404).json({ error: "Task not found" })
+        }
+
+        task.isArchived = !task.isArchived // toggle!
+        await task.save()
 
         res.json(task)
     } catch (error) {
@@ -652,5 +655,45 @@ router.get('/export-customer-sprints-to-excel', async (req, res) => {
         res.status(500).json({ error: "Internal server error" })
     }
 })
+
+router.route("/fetch-task").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { userId, archived } = req.query
+
+    if (!tenantId) {
+        return res.status(400).json({ error: "tenantId is required" })
+    }
+
+    try {
+        const filter = {
+            tenantId: tenantId
+        }
+
+        if (archived !== undefined) {
+            filter.isArchived = archived === "true"
+        }
+
+        if (userId) {
+            filter["taskPersons.user"] = new mongoose.Types.ObjectId(userId)
+        }
+
+        const tasks = await Task.find(filter)
+            .populate("createdBy", ["username", "email", "profileImage", "userRole", "userTitle"])
+            .populate({
+                path: "taskPersons.user",
+                select: ["_id", "username", "email", "profileImage", "userRole", "userTitle"]
+            })
+            .populate("taskCustomer", ["customerName", "customerColor"])
+            .populate("taskSprints", ["_id", "sprintName", "sprintMonth", "sprintYear"])
+            .sort({ _id: -1 })
+            .populate("taskVertical", ["_id", "verticalName"]);
+
+        res.json(tasks)
+    } catch (error) {
+        console.error("Failed to fetch tasks", error);
+        res.status(500).json({ error: "Failed to fetch tasks" });
+    }
+});
 
 module.exports = router

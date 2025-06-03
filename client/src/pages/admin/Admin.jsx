@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Card } from "flowbite-react"
 import { AiOutlineClockCircle, AiOutlineUsergroupAdd } from "react-icons/ai"
-import { FiUsers } from "react-icons/fi"
-import { BsListTask } from "react-icons/bs"
+import { FiUsers, FiArchive } from "react-icons/fi"
+import { BsListTask, BsArchive } from "react-icons/bs"
 import { Link } from 'react-router-dom'
 import { HiOutlineArrowSmRight, HiOutlineCog } from "react-icons/hi"
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -15,6 +15,7 @@ import PersonsOverview from './PersonsOverview'
 import Register from './Register'
 import TaskVerticalsOverview from './TaskVerticalsOverview'
 import TimeRegistrationsOverview from './TimeRegistrationsOverview'
+import ArchivedTasksOverview from './ArchivedTasksOverview'
 
 const Admin = () => {
     const [activeComponent, setActiveComponent] = useState("GeneralFeatures")
@@ -25,7 +26,7 @@ const Admin = () => {
         { name: 'Users', label: 'Users', icon: FiUsers },
         { name: 'TaskVerticalsOverview', label: 'Task Vertical', icon: BsListTask },
         { name: 'Groups', label: 'Groups', icon: AiOutlineUsergroupAdd },
-        { name: 'ArchivedTasks', label: 'Archived Tasks', icon: FaRegTrashAlt },
+        { name: 'ArchivedTasks', label: 'Archived Tasks', icon: BsArchive },
         { name: 'Holidays', label: 'Holidays', icon: FaRegTrashAlt }
     ]
 
@@ -42,7 +43,7 @@ const Admin = () => {
             case 'Groups':
                 return <Groups />
             case 'ArchivedTasks':
-                return <div>Archived Tasks Component</div>
+                return <ArchivedTasksOverview />
             case 'Holidays':
                 return <div>Holidays Component</div>;
 
@@ -59,13 +60,13 @@ const Admin = () => {
                 suffix="Select which feature you would like to use."
             />
 
-            <div className='grid grid-cols-12 gap-10'>
-                <section id='AdminCards' className='flex flex-col gap-4 col-span-2'>
+            <div className='grid grid-cols-4 lg:grid-cols-12 gap-0 lg:gap-10'>
+                <section id='AdminCards' className='flex flex-row xl:flex-col gap-4 col-span-12 xl:col-span-2 overflow-auto'>
                     {sections.map((section) => (
                         <div
                             key={section.name}
                             className={`
-                                rounded text-slate-800 text-sm cursor-pointer py-2 px-4 
+                                rounded text-slate-800 text-sm cursor-pointer py-2 px-4 flex
                                 ${activeComponent === section.name ? 'bg-stone-100' : ''}`
                             }
                             onClick={() => setActiveComponent(section.name)}
@@ -82,7 +83,7 @@ const Admin = () => {
                     ))}
                 </section>
 
-                <section className='flex flex-col col-span-10 w-full'>
+                <section className='flex flex-col col-span-12 xl:col-span-10 w-full'>
                     {renderComponent()}
                 </section>
             </div>

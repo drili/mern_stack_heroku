@@ -34,7 +34,7 @@ const formatDate = (dateString) => {
     return date.toLocaleTimeString('en-US', options).replace(',', ' •');
 };
 
-const TaskChat = ({ taskID, taskCustomer, updateSignal }) => {
+const TaskChat = ({ taskID, task, taskCustomer, updateSignal }) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [isInputEmpty, setIsInputEmpty] = useState(true);
     const [editingId, setEditingId] = useState(null);
@@ -174,6 +174,16 @@ const TaskChat = ({ taskID, taskCustomer, updateSignal }) => {
     return (
         <div className="flex flex-col h-full bg-white border pt-5 border-t-slate-100 border-x-0 border-b-0">
             <ul className="flex flex-col overflow-y-auto max-h-[55vh] relative" ref={chatContainerRef}>
+                <li className="flex items-start gap-4 px-4 py-3 hover:bg-stone-100 group relative">
+                    <div className="flex-1 pl-8">
+                        <div class="absolute z-10 w-3 h-3 bg-pink-700 rounded-full mt-1.5 ml-1.5 -start-1.5 left-4 border border-white"></div>
+                        <div class="absolute w-[1px] h-[60px] mt-[10px] ml-[11px] -start-1.5 left-4 border border-gray-200"></div>
+
+                        <time class="mb-1 text-sm font-normal leading-none text-gray-500">{formatDate(task[0]?.createdAt)}</time>
+
+                        <p className="text-sm text-black"><strong>Task created</strong> - <span class="text-gray-500 text-sm">by {task[0]?.createdBy.username}</span></p>
+                    </div>
+                </li>
                 {timeline.map((item, index) => (
                     <li key={index} className="flex items-start gap-4 px-4 py-3 hover:bg-stone-100 group relative">
                         <div className="flex-1 pl-8">
