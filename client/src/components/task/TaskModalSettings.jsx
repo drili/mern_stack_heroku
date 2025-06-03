@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
-import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs"
+import { BsArchive } from "react-icons/bs"
+
 
 import { ConfigContext } from '../../context/ConfigContext'
 import { UserContext } from '../../context/UserContext'
@@ -286,16 +287,18 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const handleArchiveTask = async (e) => {
         e.preventDefault()
 
-        if (!confirm("Are you sure you want to archive this task?")) {
+        const isCurrentlyArchived = task.isArchived
+
+        if (!confirm(`Are you sure you want to ${isCurrentlyArchived ? "unarchive" : "archive"} this task?`)) {
             return
         }
 
-        const archiveTaskId = e.target.elements.archiveTaskId.value
+        const archiveTaskId = taskID
 
         try {
             const response = await axios.put(`${tenantBaseURL}/tasks/archive-task/${archiveTaskId}`)
             if (response.status === 200) {
-                toast('Task archived successfully', {
+                toast(`Task ${isCurrentlyArchived ? "unarchived" : "archived"} successfully`, {
                     duration: 4000,
                     position: 'top-center',
                     style: {
@@ -303,11 +306,10 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                         color: "#fff"
                     }
                 })
-
+    
                 if (fetchTasks) {
                     fetchTasks(sprintToUse, activeFilterUser)
                 }
-                // updateFunc()
                 closeModal()
             }
         } catch (error) {
@@ -424,7 +426,7 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
                     <span>
                         <h2 className='font-bold text-lg'>Task created by</h2>
-                        <p>{task[0].createdBy.username}</p>
+                        <p>{task[0]?.createdBy?.username || "Uden ejer"}</p>
                     </span>
                 </span>
 
@@ -519,9 +521,16 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                         <span id='archiveTask'>
                             <hr className='mb-5' />
                             <form onSubmit={handleArchiveTask}>
-                                <label className={labelClasses} htmlFor="archiveTaskId">Archive task</label>
-                                <input type="hidden" name='archiveTaskId' value={taskID} />
-                                <button type="submit" className='flex items-center justify-center gap-2 mt-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer bg-pink-900'>Archive task <BsFillTrashFill className='text-xs text-white' /></button>
+                                <label className={labelClasses} htmlFor="archiveTaskId">
+                                    {task[0]?.isArchived ? "Unarchive task" : "Archive task"}
+                                </label>
+                                <button
+                                    type="submit"
+                                    className={`flex items-center justify-center gap-2 mt-2 h-[40px] w-full rounded text-white text-sm py-2 border-none cursor-pointer ${task[0].isArchived ? 'bg-green-700' : 'bg-pink-900'}`}
+                                >
+                                    {task[0].isArchived ? "Unarchive task" : "Archive task"}
+                                    <BsArchive className='text-xs text-white' />
+                                </button>
                             </form>
                         </span>
                     </span>

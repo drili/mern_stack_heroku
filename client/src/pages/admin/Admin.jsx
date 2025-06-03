@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Card } from "flowbite-react"
 import { AiOutlineClockCircle, AiOutlineUsergroupAdd } from "react-icons/ai"
-import { FiUsers } from "react-icons/fi"
-import { BsListTask } from "react-icons/bs"
+import { FiUsers, FiArchive } from "react-icons/fi"
+import { BsListTask, BsArchive } from "react-icons/bs"
 import { Link } from 'react-router-dom'
 import { HiOutlineArrowSmRight, HiOutlineCog } from "react-icons/hi"
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -15,6 +15,7 @@ import PersonsOverview from './PersonsOverview'
 import Register from './Register'
 import TaskVerticalsOverview from './TaskVerticalsOverview'
 import TimeRegistrationsOverview from './TimeRegistrationsOverview'
+import ArchivedTasks from './ArchivedTasks'
 
 const Admin = () => {
     const [activeComponent, setActiveComponent] = useState("GeneralFeatures")
@@ -25,7 +26,7 @@ const Admin = () => {
         { name: 'Users', label: 'Users', icon: FiUsers },
         { name: 'TaskVerticalsOverview', label: 'Task Vertical', icon: BsListTask },
         { name: 'Groups', label: 'Groups', icon: AiOutlineUsergroupAdd },
-        { name: 'ArchivedTasks', label: 'Archived Tasks', icon: FaRegTrashAlt },
+        { name: 'ArchivedTasks', label: 'Archived Tasks', icon: BsArchive },
         { name: 'Holidays', label: 'Holidays', icon: FaRegTrashAlt }
     ]
 
@@ -42,7 +43,7 @@ const Admin = () => {
             case 'Groups':
                 return <Groups />
             case 'ArchivedTasks':
-                return <div>Archived Tasks Component</div>
+                return <ArchivedTasks />
             case 'Holidays':
                 return <div>Holidays Component</div>;
 
