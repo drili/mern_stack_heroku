@@ -123,7 +123,7 @@ const ArchivedTasksOverview = () => {
                     </select>
 
                     <select className={`${inputClasses} min-w-[200px]`} value={selectedCustomer} onChange={(e) => setSelectedCustomer(e.target.value)}>
-                        <option value="all">All kunder ({uniqueCustomers.length})</option>
+                        <option value="all">All customers ({uniqueCustomers.length})</option>
                         {uniqueCustomers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
 
