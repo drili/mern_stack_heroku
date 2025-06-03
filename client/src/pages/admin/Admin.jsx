@@ -60,13 +60,13 @@ const Admin = () => {
                 suffix="Select which feature you would like to use."
             />
 
-            <div className='grid grid-cols-12 gap-10'>
-                <section id='AdminCards' className='flex flex-col gap-4 col-span-2'>
+            <div className='grid grid-cols-4 lg:grid-cols-12 gap-0 lg:gap-10'>
+                <section id='AdminCards' className='flex flex-row xl:flex-col gap-4 col-span-12 xl:col-span-2 overflow-auto'>
                     {sections.map((section) => (
                         <div
                             key={section.name}
                             className={`
-                                rounded text-slate-800 text-sm cursor-pointer py-2 px-4 
+                                rounded text-slate-800 text-sm cursor-pointer py-2 px-4 flex
                                 ${activeComponent === section.name ? 'bg-stone-100' : ''}`
                             }
                             onClick={() => setActiveComponent(section.name)}
@@ -83,7 +83,7 @@ const Admin = () => {
                     ))}
                 </section>
 
-                <section className='flex flex-col col-span-10 w-full'>
+                <section className='flex flex-col col-span-12 xl:col-span-10 w-full'>
                     {renderComponent()}
                 </section>
             </div>

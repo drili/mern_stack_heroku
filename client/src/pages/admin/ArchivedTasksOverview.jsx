@@ -116,7 +116,7 @@ const ArchivedTasksOverview = () => {
             <p className="text-neutral-500 text-sm mb-10">Tasks grouped by verticals</p>
 
             <div className='py-4 px-5 rounded-lg bg-[#f2f3f4] relative flex flex-col w-full outline-none focus:outline-none mb-10'>
-                <section className='flex justify-end gap-4'>
+                <section className='flex flex-col lg:flex-row justify-end gap-4'>
                     <select className={`${inputClasses} min-w-[200px]`} value={selectedVertical} onChange={(e) => setSelectedVertical(e.target.value)}>
                         <option value="all">All verticals ({uniqueVertical.length})</option>
                         {uniqueVertical.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
@@ -145,23 +145,29 @@ const ArchivedTasksOverview = () => {
                             <Accordion.Title>
                                 <h3 className="text-lg font-bold text-black">{verticalName} ({tasks.length})</h3>
                             </Accordion.Title>
-                            <Accordion.Content>
+                            <Accordion.Content className='overflow-x-auto p-0'>
                                 <Table className="relative">
                                     <Table.Head>
-                                        <Table.HeadCell className="text-left text-black">Tasknavn</Table.HeadCell>
+                                        <Table.HeadCell className="text-left text-black block lg:hidden">Action</Table.HeadCell>
+                                        <Table.HeadCell className="text-left text-black">Taskname</Table.HeadCell>
                                         <Table.HeadCell className="text-left text-black">Deadline</Table.HeadCell>
-                                        <Table.HeadCell className="text-left text-black">Bruger(e)</Table.HeadCell>
-                                        <Table.HeadCell className="text-left text-black">Kunde</Table.HeadCell>
-                                        <Table.HeadCell className="text-left text-black"></Table.HeadCell>
+                                        <Table.HeadCell className="text-left text-black">User(s)</Table.HeadCell>
+                                        <Table.HeadCell className="text-left text-black">Customer</Table.HeadCell>
+                                        <Table.HeadCell className="text-left text-black lg:block hidden">Action</Table.HeadCell>
                                     </Table.Head>
                                     <Table.Body className="divide-y">
                                         {tasks.map(task => (
                                             <Table.Row key={task._id} className="bg-white">
+                                                <Table.Cell className='block lg:hidden'>
+                                                    <a onClick={() => handleTaskModal(task._id)} className="font-medium cursor-pointer text-slate-800 hover:underline">
+                                                        <p className='border border-zinc-400 rounded text-center px-2 py-1 font-bold text-xs'>Open</p>
+                                                    </a>
+                                                </Table.Cell>
                                                 <Table.Cell className="font-bold text-black whitespace-nowrap">{task.taskName}</Table.Cell>
                                                 <Table.Cell>{task.taskDeadline ? task.taskDeadline.split('T')[0] : '-'}</Table.Cell>
                                                 <Table.Cell>{task.taskPersons?.map(p => p.user?.username).join(', ') || "-"}</Table.Cell>
                                                 <Table.Cell>{task.taskCustomer?.customerName || "-"}</Table.Cell>
-                                                <Table.Cell>
+                                                <Table.Cell className='hidden lg:block'>
                                                     <a onClick={() => handleTaskModal(task._id)} className="font-medium cursor-pointer text-slate-800 hover:underline">
                                                         <p className='border border-zinc-400 rounded text-center px-2 py-1 font-bold text-xs'>Open</p>
                                                     </a>
