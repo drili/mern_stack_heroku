@@ -15,7 +15,7 @@ import PersonsOverview from './PersonsOverview'
 import Register from './Register'
 import TaskVerticalsOverview from './TaskVerticalsOverview'
 import TimeRegistrationsOverview from './TimeRegistrationsOverview'
-import ArchivedTasks from './ArchivedTasks'
+import ArchivedTasksOverview from './ArchivedTasksOverview'
 
 const Admin = () => {
     const [activeComponent, setActiveComponent] = useState("GeneralFeatures")
@@ -43,7 +43,7 @@ const Admin = () => {
             case 'Groups':
                 return <Groups />
             case 'ArchivedTasks':
-                return <ArchivedTasks />
+                return <ArchivedTasksOverview />
             case 'Holidays':
                 return <div>Holidays Component</div>;
 
