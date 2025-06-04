@@ -29,7 +29,6 @@ const ArchivedTasksOverview = () => {
     const fetchArchivedTasks = async () => {
         try {
             const response = await axios.get(`${tenantBaseURL}/tasks/fetch-task?archived=true`)
-            console.log(response);
             
             if (response.status === 200) {
                 setTimeout(() => {
