@@ -70,6 +70,14 @@ const taskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    archivedBy: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', default: null 
+    },
+    archivedTimestamp: { 
+        type: Date, 
+        default: null 
+    },
     workflowStatus: {
         type: Number,
         default: 0

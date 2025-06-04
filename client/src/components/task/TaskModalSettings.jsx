@@ -29,7 +29,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const [sprintToUse, setSprintToUse] = useState([])
 
     const { baseURL } = useContext(ConfigContext);
-    const { user } = useContext(UserContext)
+    const { user } = useContext(UserContext)    
+
     const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
 
     const imageSrc = `${baseURL}/uploads/`
@@ -296,7 +297,11 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         const archiveTaskId = taskID
 
         try {
-            const response = await axios.put(`${tenantBaseURL}/tasks/archive-task/${archiveTaskId}`)
+            const response = await axios.put(
+                `${tenantBaseURL}/tasks/archive-task/${archiveTaskId}`, 
+                { userId: user.id }
+            )
+            
             if (response.status === 200) {
                 toast(`Task ${isCurrentlyArchived ? "unarchived" : "archived"} successfully`, {
                     duration: 4000,

@@ -4,6 +4,7 @@ const {Task} = require("../models/Task")
 const {Sprints} = require("../models/Sprints")
 const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
+const {Comment} = require("../models/Comments")
 
 const slugify = (str) =>
     str
@@ -547,6 +548,9 @@ router.route("/archive-task/:taskId").put(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
+    const { userId } = req.body
+
+    console.log("🔍 Incoming userId:", req.body.userId)
 
     if (!tenantId || !taskId) {
         return res.status(400).json({ error: "tenantId & taskId is required" })
@@ -559,7 +563,31 @@ router.route("/archive-task/:taskId").put(async (req, res) => {
             return res.status(404).json({ error: "Task not found" })
         }
 
-        task.isArchived = !task.isArchived // toggle!
+        const now = new Date()
+
+        if (!task.isArchived) {
+            task.isArchived = true
+            task.archivedBy = userId
+            task.archivedTimestamp = now
+
+            await Comment.create({
+                taskId: task._id,
+                tenantId: tenantId,
+                htmlContent: `<p id="task-archived"><strong>Task archived</strong></p>`,
+                createdBy: userId
+            })
+        } else {
+            task.isArchived = false
+            task.archivedBy = null
+            task.archivedTimestamp = null
+
+            await Comment.create({
+                taskId: task._id,
+                tenantId: tenantId,
+                htmlContent: `<p id="task-archived"><strong>Task unarchived</strong></p>`,
+                createdBy: userId
+            })
+        }
         await task.save()
 
         res.json(task)
@@ -687,7 +715,8 @@ router.route("/fetch-task").get(async (req, res) => {
             .populate("taskCustomer", ["customerName", "customerColor"])
             .populate("taskSprints", ["_id", "sprintName", "sprintMonth", "sprintYear"])
             .sort({ _id: -1 })
-            .populate("taskVertical", ["_id", "verticalName"]);
+            .populate("taskVertical", ["_id", "verticalName"])
+            .populate("archivedBy", ["_id", "username", "email"]);
 
         res.json(tasks)
     } catch (error) {
