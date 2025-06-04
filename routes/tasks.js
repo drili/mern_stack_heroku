@@ -550,8 +550,6 @@ router.route("/archive-task/:taskId").put(async (req, res) => {
     const { taskId } = req.params
     const { userId } = req.body
 
-    console.log("🔍 Incoming userId:", req.body.userId)
-
     if (!tenantId || !taskId) {
         return res.status(400).json({ error: "tenantId & taskId is required" })
     }
