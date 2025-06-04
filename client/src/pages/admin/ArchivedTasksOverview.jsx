@@ -29,6 +29,8 @@ const ArchivedTasksOverview = () => {
     const fetchArchivedTasks = async () => {
         try {
             const response = await axios.get(`${tenantBaseURL}/tasks/fetch-task?archived=true`)
+            console.log(response);
+            
             if (response.status === 200) {
                 setTimeout(() => {
                     setArchivedTasks(response.data)
@@ -110,6 +112,12 @@ const ArchivedTasksOverview = () => {
         setShowModal(false)
     }
 
+    const formatDate = (dateString) => {
+        const options = { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' };
+        const date = new Date(dateString);
+        return date.toLocaleTimeString('en-US', options).replace(',', ' •');
+    };
+
     return (
         <div id="ArchivedTasksOverview">
             <h2 className="text-black text-xl font-bold mb-2">Archived tasks</h2>
@@ -150,7 +158,7 @@ const ArchivedTasksOverview = () => {
                                     <Table.Head>
                                         <Table.HeadCell className="text-left text-black block lg:hidden">Action</Table.HeadCell>
                                         <Table.HeadCell className="text-left text-black">Taskname</Table.HeadCell>
-                                        <Table.HeadCell className="text-left text-black">Deadline</Table.HeadCell>
+                                        <Table.HeadCell className="text-left text-black">Archived at</Table.HeadCell>
                                         <Table.HeadCell className="text-left text-black">User(s)</Table.HeadCell>
                                         <Table.HeadCell className="text-left text-black">Customer</Table.HeadCell>
                                         <Table.HeadCell className="text-left text-black lg:block hidden">Action</Table.HeadCell>
@@ -164,7 +172,13 @@ const ArchivedTasksOverview = () => {
                                                     </a>
                                                 </Table.Cell>
                                                 <Table.Cell className="font-bold text-black whitespace-nowrap">{task.taskName}</Table.Cell>
-                                                <Table.Cell>{task.taskDeadline ? task.taskDeadline.split('T')[0] : '-'}</Table.Cell>
+                                                <Table.Cell>
+                                                    <span className="text-xs text-gray-600">
+                                                        {task.archivedTimestamp ? formatDate(task.archivedTimestamp) : "-"}
+                                                        <br />
+                                                        {task.archivedBy?.username ? "By " + task.archivedBy?.username : "-"}
+                                                    </span>
+                                                </Table.Cell>
                                                 <Table.Cell>{task.taskPersons?.map(p => p.user?.username).join(', ') || "-"}</Table.Cell>
                                                 <Table.Cell>{task.taskCustomer?.customerName || "-"}</Table.Cell>
                                                 <Table.Cell className='hidden lg:block'>
