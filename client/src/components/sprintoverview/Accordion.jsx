@@ -183,7 +183,7 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                             </div>
                         </span>
                     </Accordion.Title>
-                    <Accordion.Content>
+                    <Accordion.Content className='overflow-x-auto p-0'>
                         {isOpen ? (
                             <div className='overflow-x-auto'>
                                 <Table className='relative min-w-full'>
@@ -208,6 +208,8 @@ const DefaultAccordion = ({ userObject, selectedSprint }) => {
                                         </Table.HeadCell>
                                         <Table.HeadCell className='text-center text-black'>
                                             Done
+                                        </Table.HeadCell>
+                                        <Table.HeadCell className='text-center text-black'>
                                         </Table.HeadCell>
                                         {/* <Table.HeadCell className='text-left'>
                                             Remaining Task Time
