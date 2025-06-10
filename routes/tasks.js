@@ -4,6 +4,16 @@ const {Task} = require("../models/Task")
 const {Sprints} = require("../models/Sprints")
 const {TimeRegistration} = require("../models/TimeRegistration")
 const mongoose = require("mongoose")
+const {Comment} = require("../models/Comments")
+
+const slugify = (str) =>
+    str
+      .toLowerCase()
+      .replace(/æ/g, "ae")
+      .replace(/ø/g, "oe")
+      .replace(/å/g, "aa")
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
 
 router.route("/recent-tasks/:userId").get(async (req, res) => {
     const baseUrl = req.baseUrl
@@ -151,22 +161,24 @@ router.route("/create").post(async (req, res) => {
             taskSprints.map(async (sprintId) => {
                 const task = new Task({
                     taskName,
-                taskTimeLow,
-                taskTimeHigh,
-                taskDescription,
-                taskCustomer,
-                taskLabel,
-                taskVertical,
-                taskPersons,
-                taskSprints: [sprintId],
-                createdBy,
-                taskDeadline,
-                estimatedTime,
-                taskType,
-                tenantId,
+                    taskTimeLow,
+                    taskTimeHigh,
+                    taskDescription,
+                    taskCustomer,
+                    taskLabel,
+                    taskVertical,
+                    taskPersons,
+                    taskSprints: [sprintId],
+                    createdBy,
+                    taskDeadline,
+                    estimatedTime,
+                    taskType,
+                    tenantId,
                 })
 
-                return await task.save()
+                task.taskHandle = `${slugify(taskName)}-${task._id}`;
+                
+                return await task.save();
             })
         )
 
@@ -536,17 +548,45 @@ router.route("/archive-task/:taskId").put(async (req, res) => {
     const baseUrl = req.baseUrl
     const tenantId = baseUrl.split("/")[1]
     const { taskId } = req.params
+    const { userId } = req.body
 
     if (!tenantId || !taskId) {
         return res.status(400).json({ error: "tenantId & taskId is required" })
     }
 
     try {
-        const task = await Task.findOneAndUpdate(
-            { _id: taskId, tenantId: tenantId }, 
-            { isArchived: true },
-            { new: true }
-        )
+        const task = await Task.findOne({ _id: taskId, tenantId: tenantId })
+
+        if (!task) {
+            return res.status(404).json({ error: "Task not found" })
+        }
+
+        const now = new Date()
+
+        if (!task.isArchived) {
+            task.isArchived = true
+            task.archivedBy = userId
+            task.archivedTimestamp = now
+
+            await Comment.create({
+                taskId: task._id,
+                tenantId: tenantId,
+                htmlContent: `<p id="task-archived"><strong>Task archived</strong></p>`,
+                createdBy: userId
+            })
+        } else {
+            task.isArchived = false
+            task.archivedBy = null
+            task.archivedTimestamp = null
+
+            await Comment.create({
+                taskId: task._id,
+                tenantId: tenantId,
+                htmlContent: `<p id="task-archived"><strong>Task unarchived</strong></p>`,
+                createdBy: userId
+            })
+        }
+        await task.save()
 
         res.json(task)
     } catch (error) {
@@ -641,5 +681,46 @@ router.get('/export-customer-sprints-to-excel', async (req, res) => {
         res.status(500).json({ error: "Internal server error" })
     }
 })
+
+router.route("/fetch-task").get(async (req, res) => {
+    const baseUrl = req.baseUrl
+    const tenantId = baseUrl.split("/")[1]
+    const { userId, archived } = req.query
+
+    if (!tenantId) {
+        return res.status(400).json({ error: "tenantId is required" })
+    }
+
+    try {
+        const filter = {
+            tenantId: tenantId
+        }
+
+        if (archived !== undefined) {
+            filter.isArchived = archived === "true"
+        }
+
+        if (userId) {
+            filter["taskPersons.user"] = new mongoose.Types.ObjectId(userId)
+        }
+
+        const tasks = await Task.find(filter)
+            .populate("createdBy", ["username", "email", "profileImage", "userRole", "userTitle"])
+            .populate({
+                path: "taskPersons.user",
+                select: ["_id", "username", "email", "profileImage", "userRole", "userTitle"]
+            })
+            .populate("taskCustomer", ["customerName", "customerColor"])
+            .populate("taskSprints", ["_id", "sprintName", "sprintMonth", "sprintYear"])
+            .sort({ _id: -1 })
+            .populate("taskVertical", ["_id", "verticalName"])
+            .populate("archivedBy", ["_id", "username", "email"]);
+
+        res.json(tasks)
+    } catch (error) {
+        console.error("Failed to fetch tasks", error);
+        res.status(500).json({ error: "Failed to fetch tasks" });
+    }
+});
 
 module.exports = router

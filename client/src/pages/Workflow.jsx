@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import axios from "axios";
 import { FaInfoCircle } from "react-icons/fa";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { UserContext } from "../context/UserContext";
 
@@ -19,9 +20,6 @@ const workflowColumnsData = {
   col1: [{ id: "col1", col: "1", name: "Doing today" }],
   col2: [{ id: "col2", col: "2", name: "Doing this week" }],
   col3: [{ id: "col3", col: "3", name: "Done" }],
-  // col4: [
-  //     { id: "col4", col: "4", name: "Deadlines next 7 days" }
-  // ]
 };
 
 const Workflow = () => {
@@ -30,14 +28,10 @@ const Workflow = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const { user } = useContext(UserContext);
   const [filteredTasksByColumn, setFilteredTasksByColumn] = useState({});
-  const { selectedTaskId, showModal, handleTaskModal, onCloseModal } =
-    useTaskModal();
+  const { selectedTaskId, showModal, handleTaskModal, onCloseModal } = useTaskModal();
   const activeSprint = getCurrentSprint();
   const [newSprintArray, setNewSprintArray] = useState(null);
-  const [deadlineTasks, setDeadlineTasks] = useState({
-    overdue: [],
-    upcoming: [],
-  });
+  const [deadlineTasks, setDeadlineTasks] = useState({ overdue: [], upcoming: [] });
   const [activeFilterUser, setActiveFilterUser] = useState("");
   const [toggleSmallCards, setToggleSmallCards] = useState(
     JSON.parse(localStorage.getItem("toggleSmallCards")) || false
@@ -45,6 +39,16 @@ const Workflow = () => {
 
   const { baseURL } = useContext(ConfigContext);
   const tenantBaseURL = `${baseURL}/${user.tenant_id}`;
+
+  const { taskHandle } = useParams();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (taskHandle) {
+      const id = taskHandle.split("-").pop();
+      handleTaskModal(id);
+    }
+  }, [taskHandle]);
 
   const fetchDeadlineTasks = async (userId) => {
     const activeUserId = userId ? userId : user.id;
@@ -54,7 +58,6 @@ const Workflow = () => {
         {
           params: {
             userId: activeUserId,
-            // sprintId: activeSprint,
           },
         }
       );
@@ -70,9 +73,7 @@ const Workflow = () => {
 
   const fetchTasksByUserAndSprint = async (activeSprintArray, userId) => {
     try {
-      const activeSprintCheck = activeSprintArray
-        ? activeSprintArray
-        : newSprintArray;
+      const activeSprintCheck = activeSprintArray ? activeSprintArray : newSprintArray;
       const activeUserId = userId ? userId : user.id;
 
       if (
@@ -103,7 +104,6 @@ const Workflow = () => {
         `${tenantBaseURL}/tasks/update-taskworkflow/${taskId}`,
         { workflowStatus }
       );
-      // console.log(response)
 
       if (response.status === 200) {
         fetchDeadlineTasks(activeFilterUser);
@@ -124,9 +124,7 @@ const Workflow = () => {
       (task) =>
         task.taskName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.taskDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.taskCustomer.customerName
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+        task.taskCustomer.customerName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     setFilteredTasks(filtered);
@@ -134,9 +132,7 @@ const Workflow = () => {
 
   const updatedFilteredTasksCustomer = async (customerName) => {
     const filtered = tasks.filter((task) =>
-      task.taskCustomer.customerName
-        .toLowerCase()
-        .includes(customerName.toLowerCase())
+      task.taskCustomer.customerName.toLowerCase().includes(customerName.toLowerCase())
     );
 
     setFilteredTasks(filtered);
@@ -173,36 +169,22 @@ const Workflow = () => {
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
 
-    if (!destination) {
-      return;
-    }
+    if (!destination) return;
 
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    ) {
-      return;
-    }
+    if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
-    // console.log(filteredTasksByColumn[source.droppableId])
-
-    // *** Remove the task from the source column
     const sourceColumnId = source.droppableId;
     const sourceColumnTasks = [...filteredTasksByColumn[sourceColumnId]];
     const taskIndexToRemove = source.index;
     sourceColumnTasks.splice(taskIndexToRemove, 1);
 
-    // *** Add the task to the destination column
     const destinationColumnId = destination.droppableId;
-    const destinationColumnTasks = [
-      ...filteredTasksByColumn[destinationColumnId],
-    ];
+    const destinationColumnTasks = [...filteredTasksByColumn[destinationColumnId]];
     const taskToMove = filteredTasksByColumn[sourceColumnId].find(
       (task) => task._id === draggableId
     );
     destinationColumnTasks.splice(destination.index, 0, taskToMove);
 
-    // *** Update filteredTasksByColumn state
     setFilteredTasksByColumn((prevFilteredTasks) => ({
       ...prevFilteredTasks,
       [sourceColumnId]: sourceColumnTasks,
@@ -235,7 +217,7 @@ const Workflow = () => {
         setActiveFilterUser={setActiveFilterUser}
         toggleSmallCards={toggleSmallCards}
         setToggleSmallCards={setToggleSmallCards}
-      ></WorkflowFilters>
+      />
 
       <DragDropContext onDragEnd={onDragEnd}>
         <section className="grid grid-cols-5 gap-3 md:flex-row">
@@ -249,50 +231,43 @@ const Workflow = () => {
                     {...provided.droppableProps}
                     className="flex flex-col gap-1 bg-stone-100 rounded-md py-2 px-2 h-full"
                   >
-                    {filteredTasksByColumn[value[0]?.col]?.map(
-                      (task, index) => (
-                        <Draggable
-                          key={task._id}
-                          draggableId={task._id}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <span
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              // className='flex flex-col border p-5'
-                              // onClick={(e) => handleTaskOnclick(e, task._id)}
-                              onClick={() => handleTaskModal(task._id)}
-                            >
-                              <TaskCard
-                                key={task._id}
-                                taskId={task._id}
-                                taskName={task.taskName}
-                                taskDescription={task.taskDescription}
-                                taskPersons={task.taskPersons}
-                                customerName={task.taskCustomer.customerName}
-                                customerColor={task.taskCustomer.customerColor}
-                                taskLow={task.taskTimeLow}
-                                taskHigh={task.taskTimeHigh}
-                                taskSprintId={task.taskSprints[0]._id}
-                                taskSprintName={task.taskSprints[0].sprintName}
-                                taskType={task.taskType}
-                                estimatedTime={task?.estimatedTime}
-                                taskDeadline={task?.taskDeadline}
-                                toggleSmallCards={toggleSmallCards}
-                                timeRegisteredTotal={task?.timeRegistrations.reduce(
-                                  (total, { timeRegistered }) =>
-                                    total + timeRegistered,
-                                  0
-                                )}
-                                // customer={task.taskCustomer}
-                              ></TaskCard>
-                            </span>
-                          )}
-                        </Draggable>
-                      )
-                    )}
+                    {filteredTasksByColumn[value[0]?.col]?.map((task, index) => (
+                      <Draggable key={task._id} draggableId={task._id} index={index}>
+                        {(provided) => (
+                          <span
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            onClick={() => {
+                              navigate(`/${user.tenant_id}/workflow/task/${task.taskHandle}`);
+                              handleTaskModal(task._id);
+                            }}
+                          >
+                            <TaskCard
+                              key={task._id}
+                              taskId={task._id}
+                              taskName={task.taskName}
+                              taskDescription={task.taskDescription}
+                              taskPersons={task.taskPersons}
+                              customerName={task.taskCustomer.customerName}
+                              customerColor={task.taskCustomer.customerColor}
+                              taskLow={task.taskTimeLow}
+                              taskHigh={task.taskTimeHigh}
+                              taskSprintId={task.taskSprints[0]._id}
+                              taskSprintName={task.taskSprints[0].sprintName}
+                              taskType={task.taskType}
+                              estimatedTime={task?.estimatedTime}
+                              taskDeadline={task?.taskDeadline}
+                              toggleSmallCards={toggleSmallCards}
+                              timeRegisteredTotal={task?.timeRegistrations.reduce(
+                                (total, { timeRegistered }) => total + timeRegistered,
+                                0
+                              )}
+                            />
+                          </span>
+                        )}
+                      </Draggable>
+                    ))}
                     {provided.placeholder}
                   </span>
                 )}
@@ -309,43 +284,13 @@ const Workflow = () => {
               Deadlines next 7 days <FaInfoCircle className="text-xs" />
             </h3>
 
-            {/* <span
-                            className='flex flex-col gap-1 bg-white outline-dashed outline-1 outline-offset-0 outline-slate-300 rounded-md py-2 px-2'
-                        > */}
-
-            {/*
-                        <span>
-                            {deadlineTasks.length > 0 && (
-                                <>
-                                    {deadlineTasks.map(task => (
-                                        <span onClick={() => handleTaskModal(task._id)} key={task._id}>
-                                            <TaskCardSmall 
-                                                taskId={task._id}
-                                                taskName={task.taskName}
-                                                taskDeadline={task.taskDeadline}
-                                                toggleSmallCards={toggleSmallCards}
-                                            />
-                                        </span>
-                                    ))}
-                                </>
-                            )}
-                            
-                            {deadlineTasks.length === 0 && (
-                                <>
-                                    <p className='font-bold text-sm text-slate-500'>No deadlines</p>
-                                </>
-                            )}
-                        </span>
-                         */}
-
-
             {deadlineTasks.upcoming.length > 0 && (
               <>
                 {deadlineTasks.upcoming.map((task) => (
-                  <span
-                    onClick={() => handleTaskModal(task._id)}
-                    key={task._id}
-                  >
+                  <span onClick={() => {
+                      navigate(`/${user.tenant_id}/workflow/task/${task.taskHandle}`);
+                      handleTaskModal(task._id);
+                    }} key={task._id}>
                     <TaskCardSmall
                       taskId={task._id}
                       taskName={task.taskName}
@@ -359,14 +304,13 @@ const Workflow = () => {
 
             {deadlineTasks.overdue.length > 0 && (
               <>
-                <p className="text-red-700 font-semibold mb-1">
-                    Missed deadlines.
-                </p>
+                <p className="text-red-700 font-semibold mb-1">Missed deadlines.</p>
                 {deadlineTasks.overdue.map((task) => (
-                  <span
-                    onClick={() => handleTaskModal(task._id)}
-                    key={task._id}
-                  >
+                  <span onClick={() => {
+                      const handle = slugify(task.taskName) + "-" + task._id;
+                      navigate(`/yourTenantId/workflow/task/${task.taskHandle}`);
+                      handleTaskModal(task._id);
+                  }} key={task._id}>
                     <TaskCardSmall
                       taskId={task._id}
                       taskName={task.taskName}
@@ -390,7 +334,6 @@ const Workflow = () => {
         <TaskModal
           taskID={selectedTaskId}
           showModalState={showModal}
-          // onCloseModal={() => setShowModal(false)}
           onCloseModal={onCloseModal}
           fetchTasks={fetchTasksByUserAndSprint}
           updateFunc={fetchWorkflow}
@@ -398,7 +341,6 @@ const Workflow = () => {
           activeSprint={activeSprint}
           activeFilterUser={activeFilterUser}
           newSprintArray={newSprintArray}
-          // fetchTasksByUserAndSprint={fetchTasksByUserAndSprint}
         />
       )}
     </div>

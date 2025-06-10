@@ -1,26 +1,52 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const useTaskModal = () => {
-    const [selectedTaskId, setSelectedTaskId] = useState(null)
-    const [showModal, setShowModal] = useState(false)
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext); // 👈 her hentes tenantId
 
-    const handleTaskModal = (taskId) => {
-        console.log({taskId});
-        setShowModal(true)
-        setSelectedTaskId(taskId)
+  useEffect(() => {
+    if (user === null) {
+      navigate(`/login`);
     }
+  }, [user, navigate]);
 
-    const onCloseModal = () => {
-        setShowModal(false)
+  const handleTaskModal = (taskId, handle) => {
+    console.log({ handle });
+    setShowModal(true);
+    setSelectedTaskId(taskId);
+
+    if (!user) {
+        return;
     }
+  
 
-    return {
-        selectedTaskId,
-        showModal,
-        setShowModal,
-        handleTaskModal,
-        onCloseModal,
+    if (user?.tenant_id && handle && taskId) {
+      navigate(`/${user.tenant_id}/workflow/task/${handle}-${taskId}`);
     }
-}
+  };
 
-export default useTaskModal
+  const onCloseModal = () => {
+    setShowModal(false);
+    setSelectedTaskId(null);
+
+    if (user?.tenant_id) {
+      navigate(`/${user.tenant_id}/workflow`);
+    } else {
+      navigate(`/workflow`);
+    }
+  };
+
+  return {
+    selectedTaskId,
+    showModal,
+    setShowModal,
+    handleTaskModal,
+    onCloseModal,
+  };
+};
+
+export default useTaskModal;

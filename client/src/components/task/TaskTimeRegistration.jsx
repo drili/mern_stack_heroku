@@ -100,8 +100,6 @@ const TaskTimeRegistration = ({ labelClasses, inputClasses, taskId, sprintId, cu
             verticalId: verticalId,
             currentTime: getFormattedDate()
         }))
-
-        console.log(getFormattedDate())
     }, [taskId, sprintId, verticalId])
 
     return (

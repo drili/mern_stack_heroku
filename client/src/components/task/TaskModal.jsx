@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { BsFillLightningChargeFill, BsXLg } from "react-icons/bs";
 import { AiOutlineClockCircle } from "react-icons/ai"
 import { FaCalendar, FaClock, FaPaperclip } from "react-icons/fa";
-import axios from 'axios'
-import toast, { Toaster } from 'react-hot-toast'
+import { HiOutlineLink } from "react-icons/hi";
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate, useParams } from "react-router-dom";
 
 import TaskModalSettings from './TaskModalSettings'
 import TaskTimeRegistration from './TaskTimeRegistration'
@@ -13,7 +15,7 @@ import { UserContext } from '../../context/UserContext';
 import LabelSmall from '../LabelSmall';
 import TaskTimeRegistrations from './TaskTimeRegistrations';
 
-const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
+const TaskModal = ({ taskID, taskHandle, showModalState, onCloseModal, fetchTasks, updateFunc, sprintOverviewFetch, fetchDeadlineTasks, activeSprint, activeFilterUser, newSprintArray }) => {
     const { user } = useContext(UserContext)
     const [showModal, setShowModal] = useState(false)
     const [task, setTask] = useState([])
@@ -56,6 +58,26 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
             })
     }
 
+    const copyShareLink = () => {
+        if (!taskID || !task[0]?.taskHandle || !user?.tenant_id) return;
+      
+        const shareURL = `${window.location.origin}/${user.tenant_id}/workflow/task/${task[0].taskHandle}`;
+        navigator.clipboard.writeText(shareURL)
+            .then(() => {
+                toast(`Link copied: ${task[0].taskHandle}`, {
+                    duration: 4000,
+                    position: 'top-center',
+                    style: {
+                        background: '#f8fafc',
+                        color: "#000"
+                    }
+                });
+            })
+            .catch((err) => {
+                console.error("Failed to copy task link:", err);
+            });
+    };
+
     const handleViewState = (value) => {
         setToggleViewState(value)
     }
@@ -97,25 +119,43 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
     }
 
     useEffect(() => {
+        const offset = 0;
+
+        const handleClickOutside = (event) => {
+            if (modalContentRef.current && !modalContentRef.current.contains(event.target)) {
+                closeModal();
+            }
+        };
+
+        const handleEscKey = (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        };
+
         if (showModalState) {
+            setShowModal(showModalState)
+            fetchTaskData(taskID)
+
             setTimeout(() => {
                 const taskElement = document.querySelector(`.taskModalComponent`)
                 if (taskElement) {
-                    const offset = -0
                     window.scroll({
                         top: taskElement.getBoundingClientRect().top + window.scrollY + offset,
                         behavior: 'smooth',
                     })
                 }
             }, 250)
+
+            document.addEventListener('mousedown', handleClickOutside);
+            document.addEventListener('keydown', handleEscKey);
         }
 
-        setShowModal(showModalState)
-        fetchTaskData(taskID)
-
-        // FIXME: Use state to check whether handleClickOutside function is active or not
-        // document.addEventListener("mousedown", handleClickOutside)
-    }, [showModalState])
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscKey);
+        };
+    }, [showModalState, taskID])
 
     const handleUpdateTask = async (event) => {
         event.preventDefault()
@@ -163,25 +203,33 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
             <>
                 {showModal ? (
                     <>
-                        <div className='absolute z-50 top-0 w-full translate-x-[-50%] left-[50%]'>
+                        <div className="fixed inset-0 z-50 flex justify-center items-start overflow-auto bg-black/50">
                             <div className="relative my-6 mx-auto max-w-screen-xl w-full taskModalComponent">
-                                <div className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                <div ref={modalContentRef} className="border-0 rounded-extra-large shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                                     <div className='flex items-center gap-2 px-4 pt-10 pb-0 rounded-t md:px-10'>
+                                        <LabelSmall>
+                                            <span
+                                                className="flex gap-2 hover:cursor-pointer items-center" onClick={copyShareLink} title="Click to copy shareable link">
+                                                Share task <HiOutlineLink />
+                                            </span>
+                                        </LabelSmall>
                                         <LabelSmall
                                             classes={``}
                                             backgroundColor=""
                                             borderColor={task[0]?.taskCustomer?.customerColor}
+                                            title="Task for customer"
                                         >
                                             {task[0]?.taskCustomer?.customerName}
                                         </LabelSmall>
 
-                                        <LabelSmall>
+                                        <LabelSmall title="Task sprint">
                                             {task[0]?.taskSprints[0]?.sprintName} <FaCalendar />
                                         </LabelSmall>
 
                                         <LabelSmall>
-                                            <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard}>ID: {taskID} <FaPaperclip /></span>
+                                            <span className='flex gap-2 hover:cursor-pointer items-center' onClick={copyToClipboard} title="Click to copy task id link">
+                                                ID: {taskID} <FaPaperclip /></span>
                                         </LabelSmall>
 
                                         {task[0]?.taskType === "quickTask" && (
@@ -320,6 +368,7 @@ const TaskModal = ({ taskID, showModalState, onCloseModal, fetchTasks, updateFun
                                                     {taskID && (
                                                         <TaskChat
                                                             taskID={taskID}
+                                                            task={task}
                                                             taskCustomer={task[0]?.taskCustomer?._id}
                                                             updateSignal={timelineRefreshKey}
                                                         />

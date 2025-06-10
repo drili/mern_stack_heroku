@@ -8,12 +8,17 @@
       {
         "title": "Tasks with deadlines",
         "type": "new",
-        "description": "Notifications send 24h before a task has deadline. New notifcations is send once a taskdeadline has been passed. In the workflow you will see missed deadline tasks in the 'Deadline next 7 days'."
+        "description": "In the workflow you will see missed deadline tasks in the 'Deadline next 7 days' column."
+      },
+      {
+        "title": "Tasks is now sharable",
+        "type": "new",
+        "description": "Task slug added to workflow task cards. This allows users to share a task with others by copying the slug and pasting it into a message. In task modal a share button is added which copies the task slug to the clipboard, when you want to share a task from other modals."
       },
       {
         "title": "Customer task eksport to .csv",
         "type": "new",
-        "description": "Introduced a export sprint function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
+        "description": "Introduced a export interval function in customer overview. Select sprint, click export, the file is ordered based on verticals and task for each vertical."
       },
       {
         "title": "Possibility to add comment on time registration",
@@ -29,6 +34,16 @@
         "title": "Release note page",
         "type": "improvement",
         "description": "Refactor of the release note page. The page is now more user-friendly and easier to navigate. The release notes are now grouped by version, and each version has its own section. Every release note now has a type (new, improvement, bug) and a description."
+      },
+      {
+        "title": "Layout of pages optimization",
+        "type": "bug",
+        "description": "Fixed a bug where the layout of some pages was not optimized for smaller screens. The layout is now responsive and adapts to the screen size."
+      },
+      {
+        "title": "Click outside of modal closes it",
+        "type": "bug",
+        "description": "Fixed a bug where clicking outside of a modal did not close it. Now, clicking outside of a modal or press ESC will close it, making it easier to navigate the application without having to manually close each modal."
       }
     ]
   },

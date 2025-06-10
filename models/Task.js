@@ -9,6 +9,11 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    taskHandle: { 
+        type: String, 
+        required: true, 
+        unique: true 
+    },
     taskTimeLow: {
         type: Number,
         required: true
@@ -64,6 +69,14 @@ const taskSchema = new mongoose.Schema({
     isArchived: {
         type: Boolean,
         default: false,
+    },
+    archivedBy: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', default: null 
+    },
+    archivedTimestamp: { 
+        type: Date, 
+        default: null 
     },
     workflowStatus: {
         type: Number,

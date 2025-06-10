@@ -159,7 +159,7 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                     </div>
                                 </span>
                             </Accordion.Title>
-                            <Accordion.Content>
+                            <Accordion.Content className='overflow-x-auto p-0'>
                                 {isOpen ? (
                                     <>
                                         <Table className='relative'>
@@ -184,6 +184,8 @@ const CustomerAccordion = ({ customerObject, selectedSprint }) => {
                                                 </Table.HeadCell>
                                                 <Table.HeadCell className='text-center text-black'>
                                                     Done
+                                                </Table.HeadCell>
+                                                <Table.HeadCell className='text-center text-black'>
                                                 </Table.HeadCell>
                                             </Table.Head>
                                             <Table.Body className="divide-y">
