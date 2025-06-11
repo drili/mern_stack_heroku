@@ -6,6 +6,11 @@
     "major": false,
     "releaseNotes": [
       {
+        "title": "Archived tasks are now available in the admin panel",
+        "type": "new",
+        "description": "Archived tasks can now be viewed in the admin panel, allowing administrators to manage and review past tasks more effectively. This feature enhances task management by providing a comprehensive overview of all tasks, including those that have been archived. There is also a abilty to restore archived tasks back to active status, ensuring that no important task data is lost and can be revisited when necessary."
+      },
+      {
         "title": "Tasks with deadlines",
         "type": "new",
         "description": "In the workflow you will see missed deadline tasks in the 'Deadline next 7 days' column."
