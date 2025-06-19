@@ -9,6 +9,7 @@ import userImage from "../assets/profile-pics/default-image.jpg"
 import Logo from '../components/Logo';
 import { ConfigContext } from '../context/ConfigContext';
 import notificationSoundFile from "../assets/sounds/short-success-sound-glockenspiel-treasure-video-game-6346.mp3";
+import NotificationDropdown from './notifications/NotificationsDropdown';
 
 const notificationSound = new Audio(notificationSoundFile);
 
@@ -151,20 +152,13 @@ const Navbar = () => {
                 <p className='font-bold'>@{username}</p>
                 <img
                     className='w-[45px] h-[45px] rounded object-cover ml-2'
-                    src={`${imageSrc}${userImg}`} /
-                >
+                    src={`${imageSrc}${userImg}`} />
             </Link>
 
             <span className='flex items-center'>
-                <Link to={`/${tenantId}/notifications`}>
-                    <div className='mr-5 ml-1 relative hover:cursor-pointer'>
-                        <FaBell className='text-slate-900' size={18} />
-
-                        {hasUnreadNotifications ? (
-                            <span className='absolute top-[-3px] right-[-1px] bg-red-500 h-[10px] w-[10px] rounded-full'></span>
-                        ) : null}
-                    </div>
-                </Link>
+                <div className='mr-5 ml-1 relative hover:cursor-pointer'>
+                    <NotificationDropdown />
+                </div>
             </span>
 
             <span className='flex items-center'>

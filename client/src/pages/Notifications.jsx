@@ -8,17 +8,11 @@ import NotificationsFilter from '../components/notifications/NotificationsFilter
 import userImageDefault from "../assets/profile-pics/default-image.jpg"
 import TaskModal from '../components/task/TaskModal'
 import WorkInProgressLabel from '../components/WorkInProgressLabel';
+import { formatTimeAgo } from '../utils/formatters';
 
 import { UserContext } from '../context/UserContext'
 import { ConfigContext } from '../context/ConfigContext';
 import TaskCard from '../components/task/TaskCard';
-
-const formatDate = (dateString) => {
-    const options = { hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' };
-    const date = new Date(dateString);
-
-    return date.toLocaleTimeString('en-US', options).replace(',', ' •');
-};
 
 const Notifications = () => {
     const [searchTerm, setSearchTerm] = useState("")
@@ -152,11 +146,12 @@ const Notifications = () => {
                                 <div
                                     onClick={() => handleTaskModal(notification.taskId._id, notification._id)}
                                     key={notification._id}
-                                    className={`notificationWrapper relative w-full flex gap-5 p-5 hover:cursor-pointer hover:bg-slate-50 
-                                        ${notification.notificationIsRead ? "bg-slate-0" : "bg-slate-200"}`}>
+                                    className={`notificationWrapper relative w-full flex gap-5 p-5 hover:cursor-pointer hover:bg-gray-200
+                                        ${notification.notificationIsRead ? "" : "bg-gray-100"}`}>
+
 
                                     {!notification.notificationIsRead ? (
-                                        <span className='block w-[10px] h-[10px] bg-blue-500 rounded-full absolute left-[15px] top-[40px]'></span>
+                                        <span className='block w-[10px] h-[10px] bg-pink-700 rounded-full absolute left-[15px] top-[40px]'></span>
                                     ) : null}
 
                                     <span className='flex ml-5'>
@@ -187,7 +182,7 @@ const Notifications = () => {
                                             )}
 
                                             <span>
-                                                <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatDate(notification.createdAt)}</p>
+                                                <p className='text-xs font-light text-slate-900 mb-2 text-right'>{formatTimeAgo(notification.createdAt)}</p>
                                                 {notification?.taskId?.isArchived ? (
                                                     <p className='bg-rose-900 text-white text-xs text-center rounded-md border-md'>archived</p>
                                                 ) : null}
