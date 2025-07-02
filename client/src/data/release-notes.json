@@ -31,6 +31,11 @@
         "description": "Added a comment field on time registration. The comment and time registration is shown in the timeline. The comment is also shown in the time registration overview."
       },
       {
+        "title": "New notification approch",
+        "type": "improvement",
+        "description": "We added a new dropdown for notifications. The dropdown is now more user-friendly and easier to navigate. We also saw the opportunity to add modal to the dropdown, so you can see a task from the page your are on, without having to open the notification page."
+      },
+      {
         "title": "Task chat overgoes to Timeline",
         "type": "improvement",
         "description": "From now on, all task chat messages will be shown in the timeline. This is to make it easier to see all messages in one place. The task chat will still be available in the task modal."
