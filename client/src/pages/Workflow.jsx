@@ -306,11 +306,12 @@ const Workflow = () => {
               <>
                 <p className="text-red-700 font-semibold mb-1">Missed deadlines.</p>
                 {deadlineTasks.overdue.map((task) => (
-                  <span onClick={() => {
-                      const handle = slugify(task.taskName) + "-" + task._id;
-                      navigate(`/yourTenantId/workflow/task/${task.taskHandle}`);
+                  <span 
+                    onClick={() => {
+                      navigate(`/${user.tenant_id}/workflow/task/${task.taskHandle}`);
                       handleTaskModal(task._id);
-                  }} key={task._id}>
+                    }}
+                    key={task._id}>
                     <TaskCardSmall
                       taskId={task._id}
                       taskName={task.taskName}
