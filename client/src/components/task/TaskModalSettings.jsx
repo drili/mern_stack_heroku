@@ -16,6 +16,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
     const [percentageValues, setPercentageValues] = useState({})
     const [totalPercentage, setTotalPercentage] = useState(0)
     const [errorPercentage, setErrorPercentage] = useState(false)
+    const [sprintYears, setSprintYears] = useState([])
+    const [selectedSprintYear, setSelectedSprintYear] = useState("")
 
     const [formDataSprint, setFormDataSprint] = useState({
         taskSprintId: ""
@@ -35,12 +37,26 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     const imageSrc = `${baseURL}/uploads/`
 
-    const fetchSprints = async () => {
+    const fetchSprints = async (yearToFetch) => {
         try {
-            const response = await axios.get(baseURL + "/sprints/fetch")
+            const activeYearToUse = yearToFetch || selectedSprintYear || user?.active_year || new Date().getFullYear()
+            const response = await axios.get(baseURL + "/sprints/fetch", {
+                params: { activeYear: activeYearToUse }
+            })
             setSprints(response.data)
         } catch (error) {
             console.error('Failed to fetch sprints', error);
+        }
+    }
+
+    const fetchSprintYears = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/sprints/fetch-sprint-years`)
+            if (response.status === 200) {
+                setSprintYears(response.data)
+            }
+        } catch (error) {
+            console.error('Failed to fetch sprint years', error)
         }
     }
 
@@ -322,13 +338,17 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
         }
     }
 
+    const handleSprintYearChange = (newYear) => {
+        setSelectedSprintYear(newYear)
+        fetchSprints(newYear)
+    }
+
     useEffect(() => {
         if (task && task[0] && task[0].taskPersons) {
             const taskPersons = task[0].taskPersons
 
             setTaskPersons(taskPersons)
             fetchUsersNotInTask(taskPersons)
-            fetchSprints()
             fetchCustomers()
             fetchVerticals()
 
@@ -348,6 +368,23 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
 
     }, [task, fetchTaskData, taskID])
 
+    useEffect(() => {
+        fetchSprintYears()
+    }, [])
+
+    useEffect(() => {
+        if (user?.active_year && !selectedSprintYear) {
+            setSelectedSprintYear(user.active_year)
+        }
+    }, [user, selectedSprintYear])
+
+    useEffect(() => {
+        const yearToFetch = selectedSprintYear || user?.active_year
+        if (yearToFetch) {
+            fetchSprints(yearToFetch)
+        }
+    }, [selectedSprintYear, user])
+
     return (
         <div className='mt-5 py-5 px-5 border-0 rounded-lg bg-stone-100 relative flex flex-col w-full outline-none focus:outline-none'>
             <h2 className='font-bold mb-5 text-lg'>Task settings</h2>
@@ -355,7 +392,24 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                 <span className='w-full'>
                     <span id='sprints'>
                         <form className='grid grid-cols-12 gap-1 mb-1' onSubmit={handleUpdateSprint}>
-                            <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task month</label>
+                            <label className={`${labelClasses} col-span-12`} htmlFor="taskCustomer">Change task month & year</label>
+                            <span className='w-[100%] col-span-6 pr-5'>
+                                <select
+                                    name="taskYear"
+                                    placeholder="Select Year"
+                                    className={`${inputClasses} min-w-[200px]`}
+                                    value={selectedSprintYear}
+                                    onChange={(e) => handleSprintYearChange(e.target.value)}
+                                >
+                                    <option value="">Select Year</option>
+                                    {sprintYears
+                                        .map((year) => (
+                                            <option value={year.sprintYear} key={year._id}>{year.sprintYear}</option>
+                                        ))
+                                    }
+                                </select>
+                            </span>
+
                             <span className='w-[100%] col-span-6 pr-5'>
                                 <select
                                     name="taskSprintId"
@@ -373,8 +427,8 @@ const TaskModalSettings = ({ labelClasses, inputClasses, taskID, fetchTaskData, 
                                 </select>
                             </span>
 
-                            <span className='w-[100%] col-span-6'>
-                                <button type="submit" className='mb-4 h-[40px] w-full rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer bg-white '>Update task month</button>
+                            <span className='w-[100%] col-span-12'>
+                                <button type="submit" className='mb-4 h-[40px] w-full rounded text-slate-800 text-sm py-2 border border-zinc-400 cursor-pointer bg-white '>Update task month/year</button>
                             </span>
                         </form>
                     </span>
